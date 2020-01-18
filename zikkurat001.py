@@ -13,7 +13,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1119, 853)
+        MainWindow.resize(1200, 800)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.Total_area = QtWidgets.QLineEdit(self.centralwidget)
@@ -74,9 +74,12 @@ class Ui_MainWindow(object):
         self.Build = QtWidgets.QPushButton(self.centralwidget)
         self.Build.setGeometry(QtCore.QRect(50, 350, 201, 71))
         self.Build.setObjectName("Build")
+        self.Test = QtWidgets.QPushButton(self.centralwidget)
+        self.Test.setGeometry(QtCore.QRect(400, 400, 211, 111))
+        self.Test.setObjectName("Test")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 1119, 26))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 1200, 21))
         self.menubar.setObjectName("menubar")
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
@@ -99,3 +102,4 @@ class Ui_MainWindow(object):
         self.label_8.setText(_translate("MainWindow", "<html><head/><body><p>Себестоимость 1 м<span style=\" vertical-align:super;\">2</span></p></body></html>"))
         self.label_9.setText(_translate("MainWindow", "<html><head/><body><p>*Стоимость проекта*</p></body></html>"))
         self.Build.setText(_translate("MainWindow", "Построить Зиккурат"))
+        self.Test.setText(_translate("MainWindow", "PushButton"))

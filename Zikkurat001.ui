@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1119</width>
-    <height>853</height>
+    <width>1200</width>
+    <height>800</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -237,14 +237,27 @@
      <string>Построить Зиккурат</string>
     </property>
    </widget>
+   <widget class="QPushButton" name="Test">
+    <property name="geometry">
+     <rect>
+      <x>400</x>
+      <y>400</y>
+      <width>211</width>
+      <height>111</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>PushButton</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1119</width>
-     <height>26</height>
+     <width>1200</width>
+     <height>21</height>
     </rect>
    </property>
   </widget>
