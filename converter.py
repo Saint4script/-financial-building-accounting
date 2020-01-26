@@ -1,14 +1,17 @@
 import sys
-
+import math
+import PyQt5.QtGui
 from PyQt5 import QtWidgets 
-from PyQt5.QtGui import QIcon
+#from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QMainWindow, QAction, qApp, QApplication
 from zikkurat001 import Ui_MainWindow 
 from Tables import Ui_NewWindow
+#TASKS:
+#СДЕЛАТЬ ПРОВЕРКУ НА ОТРИЦАТЕЛЬНЫЕ ЧИСЛА ДЛЯ ХУЙ ЗНАЕТ ЧЕГО
 
 #main window
 class mywindow(QtWidgets.QMainWindow):
-    k = S = n = s = p1 = z = c = 0 
+    k = S = n = s = p1 = z = c = build_time = own_money = 0 
     def __init__(self):
         super(mywindow, self).__init__()
         self.ui = Ui_MainWindow()
@@ -24,7 +27,9 @@ class mywindow(QtWidgets.QMainWindow):
         self.ui.Start_money.editingFinished.connect(lambda field = self.ui.Start_money: self.CheckerForFields(field))
         self.ui.Self_cost.editingFinished.connect(lambda field = self.ui.Self_cost: self.CheckerForFields(field))
         
-       
+    def get_dimensions(self):
+        l = (self.k,self.S,self.n,self.s,self.p1,self.z,self.build_time,self.own_money,self.c)
+        return l
     def BuildFunc(self):
         if(self.isnt_field_empty()): 
             if(self.ui.Project_cost.text() == ""):
@@ -38,6 +43,8 @@ class mywindow(QtWidgets.QMainWindow):
             self.s = int(self.ui.Average_area_of_apartments.text())
             self.p1 = int(self.ui.Start_cost.text())
             self.z = int(self.ui.Increasing_percentage.text())
+            self.build_time = int(self.ui.Bulding_duration.text())
+            self.own_money = int(self.ui.Start_money.text())
             
             if(start_money < total_area * self_cost * 0.1):     
                 error_dialog = QtWidgets.QErrorMessage()
@@ -95,12 +102,25 @@ class newwindow(QtWidgets.QMainWindow):
         super(newwindow, self).__init__(parent)
         self.ui = Ui_NewWindow()
         self.ui.setupUi(self)
+        #self.ui.TableWidget.setColumnCount(3)
+        #self.ui.TableWidget.setRowCount(5)
+        self.ui.TableWidget.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContents)
+        self.ui.TableWidget.resizeColumnsToContents()
+        self.ui.TableWidget.resizeRowsToContents()
         self.ui.pushButton.clicked.connect(self._exit)
-    
+        self.fill_table()
     def _exit(self):
         self.parent().show()
         self.close()
+    def fill_table(self):  
+        # k  S  n  s  p1  z  c  build_time  own_money
+        k,S,n,s,p1,z,build_time,own_money,c = mywindow.get_dimensions(self.parent())
         
+        decades = math.ceil(build_time/3)
+        print(decades)
+        print(build_time)
+        self.ui.TableWidget.setColumnCount(decades)
+        self.ui.TableWidget.setRowCount(2)
         
 app = QtWidgets.QApplication([])
 application = mywindow()
