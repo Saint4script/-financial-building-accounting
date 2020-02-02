@@ -3,7 +3,8 @@ import math
 import PyQt5.QtGui
 from PyQt5 import QtWidgets 
 #from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import QMainWindow, QAction, qApp, QApplication
+from PyQt5.QtWidgets import QMainWindow, QAction, qApp, QApplication, QTableWidgetItem
+from PyQt5.QtCore import QDate
 from zikkurat001 import Ui_MainWindow 
 from Tables import Ui_NewWindow
 #TASKS:
@@ -12,6 +13,7 @@ from Tables import Ui_NewWindow
 #main window
 class mywindow(QtWidgets.QMainWindow):
     k = S = n = s = p1 = z = c = build_time = own_money = 0 
+    date_start = QDate.currentDate()
     def __init__(self):
         super(mywindow, self).__init__()
         self.ui = Ui_MainWindow()
@@ -26,9 +28,15 @@ class mywindow(QtWidgets.QMainWindow):
         self.ui.Bulding_duration.editingFinished.connect(lambda field = self.ui.Bulding_duration: self.CheckerForFields(field))
         self.ui.Start_money.editingFinished.connect(lambda field = self.ui.Start_money: self.CheckerForFields(field))
         self.ui.Self_cost.editingFinished.connect(lambda field = self.ui.Self_cost: self.CheckerForFields(field))
+        self.ui.calendarWidget.clicked[QDate].connect(self.show_date);
+        
+    def show_date(self,date):
+        self.date_start = date
+        #print(QDate.longMonthName(date.month()))
+    
         
     def get_dimensions(self):
-        l = (self.k,self.S,self.n,self.s,self.p1,self.z,self.build_time,self.own_money,self.c)
+        l = (self.k,self.S,self.n,self.s,self.p1,self.z,self.build_time,self.own_money,self.c, self.date_start)
         return l
     def BuildFunc(self):
         if(self.isnt_field_empty()): 
@@ -98,6 +106,7 @@ class mywindow(QtWidgets.QMainWindow):
         
 #Это теперь дочерний класс класса mywindow
 class newwindow(QtWidgets.QMainWindow):
+    
     def __init__(self, parent):
         super(newwindow, self).__init__(parent)
         self.ui = Ui_NewWindow()
@@ -109,18 +118,47 @@ class newwindow(QtWidgets.QMainWindow):
         self.ui.TableWidget.resizeRowsToContents()
         self.ui.pushButton.clicked.connect(self._exit)
         self.fill_table()
+        
     def _exit(self):
         self.parent().show()
         self.close()
+        
     def fill_table(self):  
         # k  S  n  s  p1  z  c  build_time  own_money
-        k,S,n,s,p1,z,build_time,own_money,c = mywindow.get_dimensions(self.parent())
+        k,S,n,s,p1,z,build_time,own_money,c, date_start = mywindow.get_dimensions(self.parent())
         
         decades = math.ceil(build_time/3)
-        print(decades)
-        print(build_time)
+        
         self.ui.TableWidget.setColumnCount(decades)
         self.ui.TableWidget.setRowCount(2)
+        labels_decades = []
+        new_date = date_start.month()
+        price  = p1
+        avg_sum = 0
+        col = 0
+        
+        def toFixed(numObj, digits=0):    #some magic code from StackOverflow
+            return f"{numObj:.{digits}f}"
+        
+        for i in range(1, decades + 1):
+            month = QDate.longMonthName(new_date)
+            day = str(date_start.day())
+            tempStr = F"{day} {month}"
+            labels_decades.append(tempStr)
+            new_date = new_date + 3
+            if(new_date > 12):
+                new_date -= 12
+             
+            cell_info = QTableWidgetItem(str(price))    
+            self.ui.TableWidget.setItem(0 , col, cell_info)
+            col += 1
+            price = price * (1 + z/100)
+            price = float(toFixed(price, 2))
+            
+        
+        Tlabels_decades = tuple(labels_decades)
+        self.ui.TableWidget.setHorizontalHeaderLabels(Tlabels_decades)
+
         
 app = QtWidgets.QApplication([])
 application = mywindow()
