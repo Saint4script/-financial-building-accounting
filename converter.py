@@ -155,6 +155,7 @@ class newwindow(QtWidgets.QMainWindow):
             price = price * (1 + z/100)
             price = float(toFixed(price, 2))
             
+            
         
         Tlabels_decades = tuple(labels_decades)
         self.ui.TableWidget.setHorizontalHeaderLabels(Tlabels_decades)
