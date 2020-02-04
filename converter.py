@@ -134,13 +134,12 @@ class newwindow(QtWidgets.QMainWindow):
         labels_decades = []
         new_date = date_start.month()
         price  = p1
-        avg_sum = 0
-        col = 0
-        
+        avg_sum1 = avg_sum2 = avg_sum3 = 0
+        pointer = [math.floor(decades/3),decades - math.floor(decades/3)*2]
         def toFixed(numObj, digits=0):    #some magic code from StackOverflow
             return f"{numObj:.{digits}f}"
         
-        for i in range(1, decades + 1):
+        for i in range(decades):
             month = QDate.longMonthName(new_date)
             day = str(date_start.day())
             tempStr = F"{day} {month}"
@@ -148,13 +147,22 @@ class newwindow(QtWidgets.QMainWindow):
             new_date = new_date + 3
             if(new_date > 12):
                 new_date -= 12
-             
-            cell_info = QTableWidgetItem(str(price))    
-            self.ui.TableWidget.setItem(0 , col, cell_info)
-            col += 1
+            cell_info = QTableWidgetItem(str(price))
+                
+            if(i < math.floor(decades/3)):
+                avg_sum1 += price
+            elif(i < decades - math.floor(decades/3)):
+                avg_sum2 += price
+            else:
+                avg_sum3 += price
+    
+            self.ui.TableWidget.setItem(0 , i, cell_info)
             price = price * (1 + z/100)
             price = float(toFixed(price, 2))
-            
+            self.ui.TableWidget.setItem(1 , 0, QTableWidgetItem(str(avg_sum1/pointer[0])))
+            self.ui.TableWidget.setItem(1 , pointer[0], QTableWidgetItem(str(avg_sum2/pointer[1])))
+            self.ui.TableWidget.setItem(1 , pointer[0]+pointer[1], QTableWidgetItem(str(avg_sum3/pointer[0])))
+                       
             
         
         Tlabels_decades = tuple(labels_decades)
