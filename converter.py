@@ -28,7 +28,18 @@ class mywindow(QtWidgets.QMainWindow):
         self.ui.Bulding_duration.editingFinished.connect(lambda field = self.ui.Bulding_duration: self.CheckerForFields(field))
         self.ui.Start_money.editingFinished.connect(lambda field = self.ui.Start_money: self.CheckerForFields(field))
         self.ui.Self_cost.editingFinished.connect(lambda field = self.ui.Self_cost: self.CheckerForFields(field))
-        self.ui.calendarWidget.clicked[QDate].connect(self.show_date);
+        self.ui.calendarWidget.clicked[QDate].connect(self.show_date)
+
+        ##############################################
+        self.ui.Apartments_amount.setText("368")
+        self.ui.Average_area_of_apartments.setText("12")
+        self.ui.Bulding_duration.setText("30")
+        self.ui.Increasing_percentage.setText("2")
+        self.ui.Start_money.setText("12312313")
+        self.ui.Total_area.setText("12")
+        self.ui.Start_cost.setText("54000")
+        self.ui.Self_cost.setText("12")
+        
         
     def show_date(self,date):
         self.date_start = date
@@ -108,68 +119,122 @@ class mywindow(QtWidgets.QMainWindow):
 class newwindow(QtWidgets.QMainWindow):
     
     def __init__(self, parent):
+        
         super(newwindow, self).__init__(parent)
         self.ui = Ui_NewWindow()
         self.ui.setupUi(self)
-        #self.ui.TableWidget.setColumnCount(3)
-        #self.ui.TableWidget.setRowCount(5)
+
+        self.k, self.S, self.n, self.s, self.p1,self.z, self.build_time, self.own_money, self.c, self.date_start = mywindow.get_dimensions(self.parent())
+
+
         self.ui.TableWidget.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContents)
         self.ui.TableWidget.resizeColumnsToContents()
         self.ui.TableWidget.resizeRowsToContents()
         self.ui.pushButton.clicked.connect(self._exit)
         self.fill_table()
+
+        self.ui.Table_with_flat_sell_plan.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContents)
+        self.ui.Table_with_flat_sell_plan.resizeColumnsToContents()
+        self.ui.Table_with_flat_sell_plan.resizeRowsToContents()
+        self.fill_table_with_flat_sell_plan()
         
     def _exit(self):
         self.parent().show()
         self.close()
         
     def fill_table(self):  
-        # k  S  n  s  p1  z  c  build_time  own_money
-        k,S,n,s,p1,z,build_time,own_money,c, date_start = mywindow.get_dimensions(self.parent())
+        decades = math.ceil(self.build_time/3)
         
-        decades = math.ceil(build_time/3)
-        
-        self.ui.TableWidget.setColumnCount(decades)
         self.ui.TableWidget.setRowCount(2)
+        self.ui.TableWidget.setColumnCount(decades + 1)
         labels_decades = []
-        new_date = date_start.month()
-        price  = p1
-        avg_sum1 = avg_sum2 = avg_sum3 = 0
-        pointer = [math.floor(decades/3),decades - math.floor(decades/3)*2]
+        new_date = self.date_start.month()
+        price  = self.p1
+        avg_sum1 = avg_sum2 = avg_sum3 = total_avg = 0
+        self.pointer = [math.floor(decades/3),decades - math.floor(decades/3)*2]
+
         def toFixed(numObj, digits=0):    #some magic code from StackOverflow
             return f"{numObj:.{digits}f}"
         
         for i in range(decades):
             month = QDate.longMonthName(new_date)
-            day = str(date_start.day())
+            day = str(self.date_start.day())
             tempStr = F"{day} {month}"
             labels_decades.append(tempStr)
             new_date = new_date + 3
+
             if(new_date > 12):
                 new_date -= 12
             cell_info = QTableWidgetItem(str(price))
                 
             if(i < math.floor(decades/3)):
                 avg_sum1 += price
+                self.ui.TableWidget.setHorizontalHeader
             elif(i < decades - math.floor(decades/3)):
                 avg_sum2 += price
             else:
                 avg_sum3 += price
-    
-            self.ui.TableWidget.setItem(0 , i, cell_info)
-            price = price * (1 + z/100)
-            price = float(toFixed(price, 2))
-            self.ui.TableWidget.setItem(1 , 0, QTableWidgetItem(str(avg_sum1/pointer[0])))
-            self.ui.TableWidget.setItem(1 , pointer[0], QTableWidgetItem(str(avg_sum2/pointer[1])))
-            self.ui.TableWidget.setItem(1 , pointer[0]+pointer[1], QTableWidgetItem(str(avg_sum3/pointer[0])))
-                       
             
+            total_avg += price
+            self.ui.TableWidget.setItem(0 , i, cell_info)
+            price = price * (1 + self.z/100)
+            price = float(toFixed(price, 2))
         
+        avg_sum1 = toFixed(avg_sum1 / self.pointer[0], 2)
+        avg_sum2 = toFixed(avg_sum2 / self.pointer[1], 2)
+        avg_sum3 = toFixed(avg_sum3 / self.pointer[0], 2)
+        self.ui.TableWidget.setItem(1 , 0, QTableWidgetItem(avg_sum1))
+        self.ui.TableWidget.setItem(1 , self.pointer[0], QTableWidgetItem(avg_sum2))
+        self.ui.TableWidget.setItem(1 , self.pointer[0] + self.pointer[1], QTableWidgetItem(avg_sum3))
+
+        total_avg = toFixed(total_avg / decades, 2)               
+        self.ui.TableWidget.setItem(1, decades, QTableWidgetItem(total_avg))    
+        labels_decades.append("Средняя цена") 
         Tlabels_decades = tuple(labels_decades)
         self.ui.TableWidget.setHorizontalHeaderLabels(Tlabels_decades)
+        self.ui.TableWidget.setVerticalHeaderLabels(tuple([F"цена 1 кв.м. - каждый квартал увеличивается на {self.z}%", "средняя цена 1 кв.м"]))
+
+    def fill_table_with_flat_sell_plan(self): #тут заполняется вторая таблица, не лезь пока сюда
+ 
+        decades = math.ceil(self.build_time/3)
+        self.ui.Table_with_flat_sell_plan.setRowCount(4)
+        self.ui.Table_with_flat_sell_plan.setColumnCount(decades)
+        self.ui.Table_with_flat_sell_plan.setHorizontalHeaderLabels(["" for i in range(decades)])
+        self.ui.Table_with_flat_sell_plan.setVerticalHeaderLabels(["по стратегии 1 - в начале",
+                                                                    "по стратегии 2 - в середине",
+                                                                    "по стратегии 3 - в конце",
+                                                                    "по стратегии 4 - равномерно"])
+
+
+        def fill_cells(row, point):
+            flat_amount = self.n
+            flats = []
+            for i in range(point):
+                flats.append(math.ceil(flat_amount / (point - i)))
+                flat_amount -= flats[i]
+
+            for i, flat in enumerate(flats):
+                if(row == 1):
+                    self.ui.Table_with_flat_sell_plan.setItem(row, i + self.pointer[0], QTableWidgetItem(str(flat)))
+                elif(row == 2):
+                    self.ui.Table_with_flat_sell_plan.setItem(row, i + self.pointer[0] + self.pointer[1], QTableWidgetItem(str(flat)))
+                else:
+                    self.ui.Table_with_flat_sell_plan.setItem(row, i, QTableWidgetItem(str(flat)))
+       
+        fill_cells(0, self.pointer[0])
+        fill_cells(1, self.pointer[1])
+        fill_cells(2, self.pointer[0])
+        fill_cells(3, decades)
+
+    
+      
+
+            
 
         
 app = QtWidgets.QApplication([])
 application = mywindow()
 application.show()
 sys.exit(app.exec())
+
+

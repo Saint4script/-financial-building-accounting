@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>600</height>
+    <width>1102</width>
+    <height>892</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,15 +17,46 @@
    <widget class="QPushButton" name="pushButton">
     <property name="geometry">
      <rect>
-      <x>200</x>
-      <y>120</y>
-      <width>451</width>
-      <height>281</height>
+      <x>790</x>
+      <y>690</y>
+      <width>311</width>
+      <height>161</height>
      </rect>
     </property>
     <property name="text">
      <string>PushButton</string>
     </property>
+   </widget>
+   <widget class="QComboBox" name="comboBox">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>211</width>
+      <height>111</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>14</pointsize>
+     </font>
+    </property>
+    <property name="layoutDirection">
+     <enum>Qt::LeftToRight</enum>
+    </property>
+    <property name="autoFillBackground">
+     <bool>false</bool>
+    </property>
+    <item>
+     <property name="text">
+      <string>Первые 3 таблицы</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Следующие таблицы</string>
+     </property>
+    </item>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -33,7 +64,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
+     <width>1102</width>
      <height>21</height>
     </rect>
    </property>
