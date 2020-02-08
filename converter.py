@@ -157,7 +157,6 @@ class newwindow(QtWidgets.QMainWindow):
         
     def fill_table(self):  
         decades = math.ceil(self.build_time/3)
-        
         self.ui.TableWidget.setRowCount(2)
         self.ui.TableWidget.setColumnCount(decades + 1)
         labels_decades = []
@@ -168,8 +167,12 @@ class newwindow(QtWidgets.QMainWindow):
 
         def toFixed(numObj, digits=0):    #some magic code from StackOverflow
             return f"{numObj:.{digits}f}"
-
+        
+        #Объявим тут несколько глобальных массивов, которые понадобятся нам в будущем
+        self.Array_of_avg_flat_prices = []
+        self.Array_of_flat_prices = []
         for i in range(decades):
+            self.Array_of_flat_prices.append(price)
             month = QDate.longMonthName(new_date)
             day = str(self.date_start.day())
             tempStr = F"{day} {month}"
@@ -178,11 +181,10 @@ class newwindow(QtWidgets.QMainWindow):
 
             if(new_date > 12):
                 new_date -= 12
-            cell_info = QTableWidgetItem(str(price))
+            cell_info = QTableWidgetItem(str(round(price, 2)))
                 
             if(i < math.floor(decades/3)):
                 avg_sum1 += price
-                self.ui.TableWidget.setHorizontalHeader
             elif(i < decades - math.floor(decades/3)):
                 avg_sum2 += price
             else:
@@ -191,7 +193,6 @@ class newwindow(QtWidgets.QMainWindow):
             total_avg += price
             self.ui.TableWidget.setItem(0 , i, cell_info)
             price = price * (1 + self.z/100)
-            price = round(price, 10)
         
         avg_sum1 = avg_sum1 / self.pointer[0]
         avg_sum2 = avg_sum2 / self.pointer[1]
@@ -200,7 +201,9 @@ class newwindow(QtWidgets.QMainWindow):
         self.ui.TableWidget.setItem(1 , self.pointer[0], QTableWidgetItem(str(round(avg_sum2,2))))
         self.ui.TableWidget.setItem(1 , self.pointer[0] + self.pointer[1], QTableWidgetItem(str(round(avg_sum3,2))))
 
-        total_avg = total_avg / decades              
+        total_avg = total_avg / decades   
+        self.Array_of_avg_flat_prices = [avg_sum1, avg_sum2 , avg_sum3, total_avg]   #Да, я переопределил тут массив, но мне пофиг, там хотя бы видно, зачем он создан
+          
         self.ui.TableWidget.setItem(1, decades, QTableWidgetItem(str(round(total_avg,2))))    
         labels_decades.append("Средняя цена") 
         Tlabels_decades = tuple(labels_decades)
@@ -208,8 +211,6 @@ class newwindow(QtWidgets.QMainWindow):
         self.ui.TableWidget.setVerticalHeaderLabels(tuple([F"цена 1 кв.м. - каждый квартал увеличивается на {self.z}%", "средняя цена 1 кв.м"]))
 
     def fill_table_with_flat_sell_plan(self): # план продаж в количестве квартир
-        
-
         self.iterator = 0
         decades = math.ceil(self.build_time/3)
         self.ui.Table_with_flat_sell_plan.setRowCount(14)
@@ -230,25 +231,55 @@ class newwindow(QtWidgets.QMainWindow):
                                                                     "по стратегии 3 - в конце",
                                                                     "по стратегии 4 - равномерно"])
 
+        #Определяем тут глобальные массивы, которые понадобятся в будущем
+        self.flats_amount_first_three_strategies = []
+        self.flats_amount_fourth_strategy = []
+        self.sell_plan_in_rub_first_three_strategies = []
+        self.sell_plan_in_rub_fourth_strategy = []
+        self.escrow_amount_of_money_first_three_strategies = []
+        self.escrow_amount_of_money_fourth_strategy = []
 
+        
+        
         def fill_cells(row, point):
+            labels_names = []
+            new_date = self.date_start.month()
             flat_amount = self.n
             avg_flat_area = self.s
-            one_meter_cost = self.p1
             flats = []
             sum1 = 0
-            percent = self.z
-            
-            for i in range(point):
-                flats.append(math.ceil(flat_amount / (point - i)))
-                flat_amount -= flats[i]
 
+            for i in range(point):
+                amount = math.ceil(flat_amount / (point - i))
+                if(row < 3):
+                    self.flats_amount_first_three_strategies.append(amount)
+                else:
+                    self.flats_amount_fourth_strategy.append(amount)
+                    month = QDate.longMonthName(new_date)
+                    day = str(self.date_start.day())
+                    tempStr = F"{day} {month}"
+                    labels_names.append(tempStr)
+                    new_date = new_date + 3
+                    if(new_date > 12):
+                        new_date -= 12
+                
+                flats.append(amount)
+                flat_amount -= flats[i]
+            self.ui.Table_with_flat_sell_plan.setHorizontalHeaderLabels(labels_names)
             for i, flat in enumerate(flats):
-                perc = float(self.ui.TableWidget.item(0,self.iterator).text()) # пересчет стоимости квадратного метра каждый квартал
-                print(perc)
+                #perc = float(self.ui.TableWidget.item(0, self.iterator).text()) # пересчет стоимости квадратного метра каждый квартал
+                perc = self.Array_of_flat_prices[self.iterator]
                 tmp = flat*(perc)*avg_flat_area # план продаж
                 self.iterator += 1
                 sum1 += tmp # количество денег на отдельном эскроу-счете
+
+                if(row < 3):
+                    self.sell_plan_in_rub_first_three_strategies.append(tmp)
+                    self.escrow_amount_of_money_first_three_strategies.append(sum1)
+                else:
+                    self.sell_plan_in_rub_fourth_strategy.append(tmp)
+                    self.escrow_amount_of_money_fourth_strategy.append(sum1)
+
                 if(row == 1):
                     self.ui.Table_with_flat_sell_plan.setItem(row, i + self.pointer[0], QTableWidgetItem(str(flat)))
                     self.ui.Table_with_flat_sell_plan.setItem(row+5, i + self.pointer[0], QTableWidgetItem(str(round(tmp,1))))
@@ -261,12 +292,14 @@ class newwindow(QtWidgets.QMainWindow):
                     self.ui.Table_with_flat_sell_plan.setItem(row, i, QTableWidgetItem(str(flat)))
                     self.ui.Table_with_flat_sell_plan.setItem(row+5, i, QTableWidgetItem(str((round(tmp,1)))))
                     self.ui.Table_with_flat_sell_plan.setItem(row+10, i, QTableWidgetItem(str(round(sum1,1))))
-
+        
+        
         fill_cells(0, self.pointer[0])
         fill_cells(1, self.pointer[1])
         fill_cells(2, self.pointer[0])
         self.iterator = 0
         fill_cells(3, decades) # хз, почема decades, мне это больно осознавать, но главное - работает правильно
+
 
 
 app = QtWidgets.QApplication([])
