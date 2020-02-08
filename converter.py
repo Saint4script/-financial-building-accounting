@@ -125,18 +125,31 @@ class newwindow(QtWidgets.QMainWindow):
         self.ui.setupUi(self)
 
         self.k, self.S, self.n, self.s, self.p1,self.z, self.build_time, self.own_money, self.c, self.date_start = mywindow.get_dimensions(self.parent())
+        list_of_tables = []
 
-
+        self.ui.TableWidget = QtWidgets.QTableWidget(self.ui.centralwidget)
+        self.ui.TableWidget.setObjectName("Table_decade")
+        self.ui.TableWidget.move(0,120) 
         self.ui.TableWidget.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContents)
         self.ui.TableWidget.resizeColumnsToContents()
         self.ui.TableWidget.resizeRowsToContents()
         self.ui.pushButton.clicked.connect(self._exit)
         self.fill_table()
 
+        self.ui.Table_with_flat_sell_plan = QtWidgets.QTableWidget(self.ui.centralwidget)
+        self.ui.Table_with_flat_sell_plan.setObjectName("Table_with_flat_sell_plan")  
+        self.ui.Table_with_flat_sell_plan.move(0,300) 
         self.ui.Table_with_flat_sell_plan.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContents)
         self.ui.Table_with_flat_sell_plan.resizeColumnsToContents()
         self.ui.Table_with_flat_sell_plan.resizeRowsToContents()
         self.fill_table_with_flat_sell_plan()
+        
+
+        list_of_tables.append(self.ui.TableWidget)
+        list_of_tables.append(self.ui.Table_with_flat_sell_plan)
+        for elem in list_of_tables:
+            self.ui.comboBox.addItem("")
+
         
     def _exit(self):
         self.parent().show()
@@ -194,13 +207,23 @@ class newwindow(QtWidgets.QMainWindow):
         self.ui.TableWidget.setHorizontalHeaderLabels(Tlabels_decades)
         self.ui.TableWidget.setVerticalHeaderLabels(tuple([F"цена 1 кв.м. - каждый квартал увеличивается на {self.z}%", "средняя цена 1 кв.м"]))
 
-    def fill_table_with_flat_sell_plan(self): #тут заполняется вторая таблица, не лезь пока сюда
+    def fill_table_with_flat_sell_plan(self): # план продаж в количестве квартир
  
         decades = math.ceil(self.build_time/3)
-        self.ui.Table_with_flat_sell_plan.setRowCount(4)
+        self.ui.Table_with_flat_sell_plan.setRowCount(14)
         self.ui.Table_with_flat_sell_plan.setColumnCount(decades)
         self.ui.Table_with_flat_sell_plan.setHorizontalHeaderLabels(["" for i in range(decades)])
-        self.ui.Table_with_flat_sell_plan.setVerticalHeaderLabels(["по стратегии 1 - в начале",
+        self.ui.Table_with_flat_sell_plan.setVerticalHeaderLabels([ "по стратегии 1 - в начале",
+                                                                    "по стратегии 2 - в середине",
+                                                                    "по стратегии 3 - в конце",
+                                                                    "по стратегии 4 - равномерно",
+                                                                    "план продаж в руб. по ценам:",
+                                                                    "по стратегии 1 - в начале",
+                                                                    "по стратегии 2 - в середине",
+                                                                    "по стратегии 3 - в конце",
+                                                                    "по стратегии 4 - равномерно",
+                                                                    "количество денег на эскроу счетах:",
+                                                                    "по стратегии 1 - в начале",
                                                                     "по стратегии 2 - в середине",
                                                                     "по стратегии 3 - в конце",
                                                                     "по стратегии 4 - равномерно"])
@@ -208,30 +231,37 @@ class newwindow(QtWidgets.QMainWindow):
 
         def fill_cells(row, point):
             flat_amount = self.n
+            avg_flat_area = self.s
+            one_meter_cost = self.p1
             flats = []
+            sum1 = 0
+
             for i in range(point):
                 flats.append(math.ceil(flat_amount / (point - i)))
                 flat_amount -= flats[i]
 
             for i, flat in enumerate(flats):
+                tmp = flat*(one_meter_cost^i)*avg_flat_area # план продаж
+                sum1 += tmp # количество денег на отдельном эскроу-счете
                 if(row == 1):
                     self.ui.Table_with_flat_sell_plan.setItem(row, i + self.pointer[0], QTableWidgetItem(str(flat)))
+                    self.ui.Table_with_flat_sell_plan.setItem(row+5, i + self.pointer[0], QTableWidgetItem(str(tmp)))
+                    self.ui.Table_with_flat_sell_plan.setItem(row+10, i + self.pointer[0], QTableWidgetItem(str(sum1)))
                 elif(row == 2):
                     self.ui.Table_with_flat_sell_plan.setItem(row, i + self.pointer[0] + self.pointer[1], QTableWidgetItem(str(flat)))
+                    self.ui.Table_with_flat_sell_plan.setItem(row+5, i + self.pointer[0] + self.pointer[1], QTableWidgetItem(str(tmp)))
+                    self.ui.Table_with_flat_sell_plan.setItem(row+10, i + self.pointer[0], QTableWidgetItem(str(sum1)))
                 else:
                     self.ui.Table_with_flat_sell_plan.setItem(row, i, QTableWidgetItem(str(flat)))
-       
+                    self.ui.Table_with_flat_sell_plan.setItem(row+5, i, QTableWidgetItem(str((tmp))))
+                    self.ui.Table_with_flat_sell_plan.setItem(row+10, i, QTableWidgetItem(str(sum1)))
+
         fill_cells(0, self.pointer[0])
         fill_cells(1, self.pointer[1])
         fill_cells(2, self.pointer[0])
-        fill_cells(3, decades)
+        fill_cells(3, decades) # хз, почема decades, мне это больно осознавать, но главное - работает правильно
 
-    
-      
 
-            
-
-        
 app = QtWidgets.QApplication([])
 application = mywindow()
 application.show()
