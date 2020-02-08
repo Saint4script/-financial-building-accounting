@@ -32,11 +32,11 @@ class mywindow(QtWidgets.QMainWindow):
 
         ##############################################
         self.ui.Apartments_amount.setText("368")
-        self.ui.Average_area_of_apartments.setText("12")
+        self.ui.Average_area_of_apartments.setText("66")
         self.ui.Bulding_duration.setText("30")
         self.ui.Increasing_percentage.setText("2")
-        self.ui.Start_money.setText("12312313")
-        self.ui.Total_area.setText("12")
+        self.ui.Start_money.setText("1231231399")
+        self.ui.Total_area.setText("24000")
         self.ui.Start_cost.setText("54000")
         self.ui.Self_cost.setText("12")
         
@@ -168,7 +168,7 @@ class newwindow(QtWidgets.QMainWindow):
 
         def toFixed(numObj, digits=0):    #some magic code from StackOverflow
             return f"{numObj:.{digits}f}"
-        
+
         for i in range(decades):
             month = QDate.longMonthName(new_date)
             day = str(self.date_start.day())
@@ -191,24 +191,26 @@ class newwindow(QtWidgets.QMainWindow):
             total_avg += price
             self.ui.TableWidget.setItem(0 , i, cell_info)
             price = price * (1 + self.z/100)
-            price = float(toFixed(price, 2))
+            price = round(price, 10)
         
-        avg_sum1 = toFixed(avg_sum1 / self.pointer[0], 2)
-        avg_sum2 = toFixed(avg_sum2 / self.pointer[1], 2)
-        avg_sum3 = toFixed(avg_sum3 / self.pointer[0], 2)
-        self.ui.TableWidget.setItem(1 , 0, QTableWidgetItem(avg_sum1))
-        self.ui.TableWidget.setItem(1 , self.pointer[0], QTableWidgetItem(avg_sum2))
-        self.ui.TableWidget.setItem(1 , self.pointer[0] + self.pointer[1], QTableWidgetItem(avg_sum3))
+        avg_sum1 = avg_sum1 / self.pointer[0]
+        avg_sum2 = avg_sum2 / self.pointer[1]
+        avg_sum3 = avg_sum3 / self.pointer[0]
+        self.ui.TableWidget.setItem(1 , 0, QTableWidgetItem(str(round(avg_sum1,2))))
+        self.ui.TableWidget.setItem(1 , self.pointer[0], QTableWidgetItem(str(round(avg_sum2,2))))
+        self.ui.TableWidget.setItem(1 , self.pointer[0] + self.pointer[1], QTableWidgetItem(str(round(avg_sum3,2))))
 
-        total_avg = toFixed(total_avg / decades, 2)               
-        self.ui.TableWidget.setItem(1, decades, QTableWidgetItem(total_avg))    
+        total_avg = total_avg / decades              
+        self.ui.TableWidget.setItem(1, decades, QTableWidgetItem(str(round(total_avg,2))))    
         labels_decades.append("Средняя цена") 
         Tlabels_decades = tuple(labels_decades)
         self.ui.TableWidget.setHorizontalHeaderLabels(Tlabels_decades)
         self.ui.TableWidget.setVerticalHeaderLabels(tuple([F"цена 1 кв.м. - каждый квартал увеличивается на {self.z}%", "средняя цена 1 кв.м"]))
 
     def fill_table_with_flat_sell_plan(self): # план продаж в количестве квартир
- 
+        
+
+        self.iterator = 0
         decades = math.ceil(self.build_time/3)
         self.ui.Table_with_flat_sell_plan.setRowCount(14)
         self.ui.Table_with_flat_sell_plan.setColumnCount(decades)
@@ -235,30 +237,35 @@ class newwindow(QtWidgets.QMainWindow):
             one_meter_cost = self.p1
             flats = []
             sum1 = 0
-
+            percent = self.z
+            
             for i in range(point):
                 flats.append(math.ceil(flat_amount / (point - i)))
                 flat_amount -= flats[i]
 
             for i, flat in enumerate(flats):
-                tmp = flat*(one_meter_cost^i)*avg_flat_area # план продаж
+                perc = float(self.ui.TableWidget.item(0,self.iterator).text()) # пересчет стоимости квадратного метра каждый квартал
+                print(perc)
+                tmp = flat*(perc)*avg_flat_area # план продаж
+                self.iterator += 1
                 sum1 += tmp # количество денег на отдельном эскроу-счете
                 if(row == 1):
                     self.ui.Table_with_flat_sell_plan.setItem(row, i + self.pointer[0], QTableWidgetItem(str(flat)))
-                    self.ui.Table_with_flat_sell_plan.setItem(row+5, i + self.pointer[0], QTableWidgetItem(str(tmp)))
-                    self.ui.Table_with_flat_sell_plan.setItem(row+10, i + self.pointer[0], QTableWidgetItem(str(sum1)))
+                    self.ui.Table_with_flat_sell_plan.setItem(row+5, i + self.pointer[0], QTableWidgetItem(str(round(tmp,1))))
+                    self.ui.Table_with_flat_sell_plan.setItem(row+10, i + self.pointer[0], QTableWidgetItem(str(round(sum1,1))))
                 elif(row == 2):
                     self.ui.Table_with_flat_sell_plan.setItem(row, i + self.pointer[0] + self.pointer[1], QTableWidgetItem(str(flat)))
-                    self.ui.Table_with_flat_sell_plan.setItem(row+5, i + self.pointer[0] + self.pointer[1], QTableWidgetItem(str(tmp)))
-                    self.ui.Table_with_flat_sell_plan.setItem(row+10, i + self.pointer[0], QTableWidgetItem(str(sum1)))
+                    self.ui.Table_with_flat_sell_plan.setItem(row+5, i + self.pointer[0] + self.pointer[1], QTableWidgetItem(str(round(tmp,1))))
+                    self.ui.Table_with_flat_sell_plan.setItem(row+10, i + self.pointer[0] + self.pointer[1], QTableWidgetItem(str(round(sum1,1))))
                 else:
                     self.ui.Table_with_flat_sell_plan.setItem(row, i, QTableWidgetItem(str(flat)))
-                    self.ui.Table_with_flat_sell_plan.setItem(row+5, i, QTableWidgetItem(str((tmp))))
-                    self.ui.Table_with_flat_sell_plan.setItem(row+10, i, QTableWidgetItem(str(sum1)))
+                    self.ui.Table_with_flat_sell_plan.setItem(row+5, i, QTableWidgetItem(str((round(tmp,1)))))
+                    self.ui.Table_with_flat_sell_plan.setItem(row+10, i, QTableWidgetItem(str(round(sum1,1))))
 
         fill_cells(0, self.pointer[0])
         fill_cells(1, self.pointer[1])
         fill_cells(2, self.pointer[0])
+        self.iterator = 0
         fill_cells(3, decades) # хз, почема decades, мне это больно осознавать, но главное - работает правильно
 
 
