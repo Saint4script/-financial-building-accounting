@@ -38,7 +38,7 @@ class mywindow(QtWidgets.QMainWindow):
         self.ui.Start_money.setText("1231231399")
         self.ui.Total_area.setText("24000")
         self.ui.Start_cost.setText("54000")
-        self.ui.Self_cost.setText("12")
+        self.ui.Self_cost.setText("51900")
         
         
     def show_date(self,date):
@@ -47,12 +47,12 @@ class mywindow(QtWidgets.QMainWindow):
     
         
     def get_dimensions(self):
-        l = (self.k,self.S,self.n,self.s,self.p1,self.z,self.build_time,self.own_money,self.c, self.date_start)
+        l = (self.k,self.S,self.n,self.s,self.p1,self.z,self.build_time,self.own_money,self.c, self.date_start, self.Project_cost)
         return l
     def BuildFunc(self):
         if(self.isnt_field_empty()): 
             if(self.ui.Project_cost.text() == ""):
-               tmp = int(self.ui.Self_cost.text())*int(self.ui.Total_area.text())
+               tmp = int(self.ui.Self_cost.text())*int(self.ui.Apartments_amount.text()) * int(self.ui.Average_area_of_apartments.text())
                self.ui.Project_cost.setText(str(tmp))
             
             start_money = int(self.ui.Start_money.text())
@@ -64,6 +64,7 @@ class mywindow(QtWidgets.QMainWindow):
             self.z = int(self.ui.Increasing_percentage.text())
             self.build_time = int(self.ui.Bulding_duration.text())
             self.own_money = int(self.ui.Start_money.text())
+            self.Project_cost = int(self.ui.Project_cost.text())
             
             if(start_money < total_area * self_cost * 0.1):     
                 error_dialog = QtWidgets.QErrorMessage()
@@ -117,6 +118,7 @@ class mywindow(QtWidgets.QMainWindow):
         
 #Это теперь дочерний класс класса mywindow
 class newwindow(QtWidgets.QMainWindow):
+
     
     def __init__(self, parent):
         
@@ -124,8 +126,9 @@ class newwindow(QtWidgets.QMainWindow):
         self.ui = Ui_NewWindow()
         self.ui.setupUi(self)
 
-        self.k, self.S, self.n, self.s, self.p1,self.z, self.build_time, self.own_money, self.c, self.date_start = mywindow.get_dimensions(self.parent())
+        self.k, self.S, self.n, self.s, self.p1,self.z, self.build_time, self.own_money, self.c, self.date_start, self.project_cost = mywindow.get_dimensions(self.parent())
         list_of_tables = []
+        self.credit_money = self.project_cost * 0.85 #заемные средства 
 
         self.ui.TableWidget = QtWidgets.QTableWidget(self.ui.centralwidget)
         self.ui.TableWidget.setObjectName("Table_decade")
@@ -138,12 +141,21 @@ class newwindow(QtWidgets.QMainWindow):
 
         self.ui.Table_with_flat_sell_plan = QtWidgets.QTableWidget(self.ui.centralwidget)
         self.ui.Table_with_flat_sell_plan.setObjectName("Table_with_flat_sell_plan")  
-        self.ui.Table_with_flat_sell_plan.move(0,300) 
+        self.ui.Table_with_flat_sell_plan.move(0,250) 
         self.ui.Table_with_flat_sell_plan.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContents)
         self.ui.Table_with_flat_sell_plan.resizeColumnsToContents()
         self.ui.Table_with_flat_sell_plan.resizeRowsToContents()
         self.fill_table_with_flat_sell_plan()
+
+        self.ui.escrow_rate = QtWidgets.QTableWidget(self.ui.centralwidget)
+        self.ui.escrow_rate.setObjectName("escrow_rate")  
+        self.ui.escrow_rate.move(0,720) 
+        self.ui.escrow_rate.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContents)
+        self.ui.escrow_rate.resizeColumnsToContents()
+        self.ui.escrow_rate.resizeRowsToContents()
+        self.fill_escrow_rate()
         
+
 
         list_of_tables.append(self.ui.TableWidget)
         list_of_tables.append(self.ui.Table_with_flat_sell_plan)
@@ -299,8 +311,109 @@ class newwindow(QtWidgets.QMainWindow):
         fill_cells(2, self.pointer[0])
         self.iterator = 0
         fill_cells(3, decades) # хз, почема decades, мне это больно осознавать, но главное - работает правильно
+    
+    def fill_escrow_rate(self):
+        #и тут тоже объявим пару массивов
+        self.ui.escrow_rate_first_strategy = []
+        self.ui.escrow_rate_second_strategy = []
+        self.ui.escrow_rate_third_strategy = []
+        self.ui.escrow_rate_fourth_strategy = []
+        
+        decades = math.ceil(self.build_time / 3)
+        new_date = self.date_start.month()
+        self.ui.escrow_rate.setRowCount(4)
+        self.ui.escrow_rate.setColumnCount(decades)
+        self.ui.escrow_rate.setVerticalHeaderLabels([ "по стратегии 1 - в начале",
+                                                            "по стратегии 2 - в середине",
+                                                            "по стратегии 3 - в конце",
+                                                            "по стратегии 4 - равномерно"])
 
+        #ЗАПОЛНЯЕМ ПЕРВУЮ СТРОЧКУ
+        for i in range(decades):
+            if(self.escrow_amount_of_money_first_three_strategies[i] < self.credit_money / 2 and i < self.pointer[0]):
+                cell_info = QTableWidgetItem("0.12")
+                self.ui.escrow_rate.setItem(0, i, cell_info)
 
+            elif(self.escrow_amount_of_money_first_three_strategies[i] < self.credit_money * 0.75 and i < self.pointer[0]):
+                cell_info = QTableWidgetItem("0.09")
+                self.ui.escrow_rate.setItem(0, i, cell_info)
+
+            elif(self.escrow_amount_of_money_first_three_strategies[i] < self.credit_money  and i < self.pointer[0]):
+                cell_info = QTableWidgetItem("0.6")
+                self.ui.escrow_rate.setItem(0, i, cell_info)
+
+            elif(self.escrow_amount_of_money_first_three_strategies[i] < self.credit_money * 1.5 or i >= self.pointer[0]):
+                cell_info = QTableWidgetItem("0.03")
+                self.ui.escrow_rate.setItem(0, i, cell_info)     
+
+        #ЗАПОЛНЯЕМ ВТОРУЮ СТРОЧКУ
+        for i in range(self.pointer[0]):
+            cell_info = QTableWidgetItem("0.12")
+            self.ui.escrow_rate.setItem(1, i, cell_info)
+
+        for i in range(self.pointer[0], decades - self.pointer[0]):
+            if(self.escrow_amount_of_money_first_three_strategies[i] < self.credit_money / 2 ):
+                cell_info = QTableWidgetItem("0.12")
+                self.ui.escrow_rate.setItem(1, i, cell_info) 
+            elif(self.escrow_amount_of_money_first_three_strategies[i] < self.credit_money * 0.75):
+                cell_info = QTableWidgetItem("0.09")
+                self.ui.escrow_rate.setItem(1, i, cell_info)
+            elif(self.escrow_amount_of_money_first_three_strategies[i] < self.credit_money):
+                cell_info = QTableWidgetItem("0.6")
+                self.ui.escrow_rate.setItem(1, i, cell_info)
+            elif(self.escrow_amount_of_money_first_three_strategies[i] < self.credit_money * 1.5):
+                cell_info = QTableWidgetItem("0.03")
+                self.ui.escrow_rate.setItem(1, i, cell_info)  
+        
+        for i in range(decades - self.pointer[0], decades):
+            cell_info = QTableWidgetItem("0.3")
+            self.ui.escrow_rate.setItem(1, i, cell_info)
+
+        #ЗАПОЛНЯЕМ ТРЕТЬЮ СТРОЧКУ
+
+        for i in range(decades - self.pointer[0]):
+            cell_info = QTableWidgetItem("0.12")
+            self.ui.escrow_rate.setItem(2, i, cell_info)
+        
+        for i in range(decades - self.pointer[0], decades):
+            if(self.escrow_amount_of_money_first_three_strategies[i] < self.credit_money / 2 ):
+                cell_info = QTableWidgetItem("0.12")
+                self.ui.escrow_rate.setItem(2, i, cell_info) 
+            elif(self.escrow_amount_of_money_first_three_strategies[i] < self.credit_money * 0.75):
+                cell_info = QTableWidgetItem("0.09")
+                self.ui.escrow_rate.setItem(2, i, cell_info)
+            elif(self.escrow_amount_of_money_first_three_strategies[i] < self.credit_money):
+                cell_info = QTableWidgetItem("0.6")
+                self.ui.escrow_rate.setItem(2, i, cell_info)
+            elif(self.escrow_amount_of_money_first_three_strategies[i] < self.credit_money * 1.5):
+                cell_info = QTableWidgetItem("0.03")
+                self.ui.escrow_rate.setItem(2, i, cell_info) 
+             
+        #ЗАПОЛНЯЕМ ЧЕТВЕРТУЮ СТРОЧКУ
+        labels_names = []
+        for i in range(decades):
+            month = QDate.longMonthName(new_date)
+            day = str(self.date_start.day())
+            tempStr = F"{day} {month}"
+            labels_names.append(tempStr)
+            new_date = new_date + 3
+            if(new_date > 12):
+                new_date -= 12
+
+            if(self.escrow_amount_of_money_fourth_strategy[i] < self.credit_money / 2 ):
+                cell_info = QTableWidgetItem("0.12")
+                self.ui.escrow_rate.setItem(3, i, cell_info) 
+            elif(self.escrow_amount_of_money_fourth_strategy[i] < self.credit_money * 0.75):
+                cell_info = QTableWidgetItem("0.09")
+                self.ui.escrow_rate.setItem(3, i, cell_info)
+            elif(self.escrow_amount_of_money_fourth_strategy[i] < self.credit_money):
+                cell_info = QTableWidgetItem("0.6")
+                self.ui.escrow_rate.setItem(3, i, cell_info)
+            elif(self.escrow_amount_of_money_fourth_strategy[i] < self.credit_money * 1.5):
+                cell_info = QTableWidgetItem("0.03")
+                self.ui.escrow_rate.setItem(3, i, cell_info)
+
+        self.ui.escrow_rate.setHorizontalHeaderLabels(labels_names)
 
 app = QtWidgets.QApplication([])
 application = mywindow()

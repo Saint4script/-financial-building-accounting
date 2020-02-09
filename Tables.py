@@ -28,6 +28,10 @@ class Ui_NewWindow(object):
         self.statusbar.setObjectName("statusbar")
         MainWindow.setStatusBar(self.statusbar)
 
+        self.pushButton = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButton.setGeometry(QtCore.QRect(200, 0, 100, 100))
+        self.pushButton.setObjectName("pushButton")
+
         self.comboBox = QtWidgets.QComboBox(self.centralwidget)
         self.comboBox.setGeometry(QtCore.QRect(0, 0, 200, 120))
         font = QtGui.QFont()
