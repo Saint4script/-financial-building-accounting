@@ -3,7 +3,7 @@ import math
 import PyQt5.QtGui
 from PyQt5 import QtWidgets 
 #from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import QMainWindow, QAction, qApp, QApplication, QTableWidgetItem
+from PyQt5.QtWidgets import QMainWindow, QAction, qApp, QApplication, QTableWidgetItem, QDesktopWidget, QWidget
 from PyQt5.QtCore import QDate
 from zikkurat001 import Ui_MainWindow 
 from Tables import Ui_NewWindow
@@ -118,30 +118,47 @@ class mywindow(QtWidgets.QMainWindow):
         
 #Это теперь дочерний класс класса mywindow
 class newwindow(QtWidgets.QMainWindow):
-
+    
     
     def __init__(self, parent):
         
+
+
         super(newwindow, self).__init__(parent)
         self.ui = Ui_NewWindow()
         self.ui.setupUi(self)
 
         self.k, self.S, self.n, self.s, self.p1,self.z, self.build_time, self.own_money, self.c, self.date_start, self.project_cost = mywindow.get_dimensions(self.parent())
-        list_of_tables = []
-        self.credit_money = self.project_cost * 0.85 #заемные средства 
+        self.q = QDesktopWidget().availableGeometry()
+        print(self.q.center())
+
+
+        rect = self.ui.centralwidget.frameGeometry()
+        print(rect)
+        rect.moveCenter(QDesktopWidget().availableGeometry().center())
+        self.ui.centralwidget.move(rect.topLeft())
+        
+        self.credit_money = self.project_cost * 0.85 #заемные средства !!!!!!!!!!!!!!!!!!!!!!!!!! FIX IT !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
         self.ui.TableWidget = QtWidgets.QTableWidget(self.ui.centralwidget)
         self.ui.TableWidget.setObjectName("Table_decade")
-        self.ui.TableWidget.move(0,120) 
+        self.ui.TableWidget.move(-3000,-3000) 
         self.ui.TableWidget.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContents)
         self.ui.TableWidget.resizeColumnsToContents()
         self.ui.TableWidget.resizeRowsToContents()
         self.ui.pushButton.clicked.connect(self._exit)
+        self.ui.show_tables.clicked.connect(self.choose_tables)
+        self.ui.clear_tables.clicked.connect(self.clear_tables)
         self.fill_table()
 
         self.ui.Table_with_flat_sell_plan = QtWidgets.QTableWidget(self.ui.centralwidget)
         self.ui.Table_with_flat_sell_plan.setObjectName("Table_with_flat_sell_plan")  
-        self.ui.Table_with_flat_sell_plan.move(0,250) 
+        self.ui.Table_with_flat_sell_plan.move(-3000,-3000) 
         self.ui.Table_with_flat_sell_plan.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContents)
         self.ui.Table_with_flat_sell_plan.resizeColumnsToContents()
         self.ui.Table_with_flat_sell_plan.resizeRowsToContents()
@@ -149,20 +166,43 @@ class newwindow(QtWidgets.QMainWindow):
 
         self.ui.escrow_rate = QtWidgets.QTableWidget(self.ui.centralwidget)
         self.ui.escrow_rate.setObjectName("escrow_rate")  
-        self.ui.escrow_rate.move(0,720) 
+        self.ui.escrow_rate.move(-3000,-3000) 
         self.ui.escrow_rate.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContents)
         self.ui.escrow_rate.resizeColumnsToContents()
         self.ui.escrow_rate.resizeRowsToContents()
         self.fill_escrow_rate()
         
+        #self.ui.escrow_rate.resize(1600, self.ui.escrow_rate.height())
 
 
-        list_of_tables.append(self.ui.TableWidget)
-        list_of_tables.append(self.ui.Table_with_flat_sell_plan)
-        for elem in list_of_tables:
-            self.ui.comboBox.addItem("")
+    def clear_tables(self):
+        tables = self.ui.centralwidget.findChildren(QtWidgets.QTableWidget)
+        for table in tables:
+            table.move(-3000,-3000)
+    def choose_tables(self):
+        current_height = 100
+        tables = self.ui.centralwidget.findChildren(QtWidgets.QTableWidget)
+        for table in tables:
+            table.move(-3000,-3000)
+        selected_items = self.ui.listWidget.selectedItems()
+        for elem in selected_items:
+            if(elem.text() == 'Цена 1м^2'):
+                self.ui.TableWidget.move(0,current_height)
+                current_height += self.ui.TableWidget.height() + 10
+                self.ui.TableWidget.resize(1600, self.ui.TableWidget.height())
+            elif(elem.text() == 'План продаж'):
+                self.ui.Table_with_flat_sell_plan.move(0,current_height)
+                current_height += self.ui.Table_with_flat_sell_plan.height() + 10
+                self.ui.Table_with_flat_sell_plan.resize(1600, self.ui.Table_with_flat_sell_plan.height())
+            elif(elem.text() == 'Определение процентной ставки на эскроу'):
+                self.ui.escrow_rate.move(0,current_height)
+                current_height += self.ui.escrow_rate.height() + 10
+                self.ui.escrow_rate.resize(1600, self.ui.escrow_rate.height())
+                
 
-        
+
+            
+
     def _exit(self):
         self.parent().show()
         self.close()
@@ -327,6 +367,8 @@ class newwindow(QtWidgets.QMainWindow):
                                                             "по стратегии 2 - в середине",
                                                             "по стратегии 3 - в конце",
                                                             "по стратегии 4 - равномерно"])
+
+
 
         #ЗАПОЛНЯЕМ ПЕРВУЮ СТРОЧКУ
         for i in range(decades):
