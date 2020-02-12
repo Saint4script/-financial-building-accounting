@@ -129,15 +129,10 @@ class newwindow(QtWidgets.QMainWindow):
         self.ui.setupUi(self)
 
         self.k, self.S, self.n, self.s, self.p1,self.z, self.build_time, self.own_money, self.c, self.date_start, self.project_cost = mywindow.get_dimensions(self.parent())
-        self.q = QDesktopWidget().availableGeometry()
-        print(self.q.center())
-
-
-        rect = self.ui.centralwidget.frameGeometry()
-        print(rect)
-        rect.moveCenter(QDesktopWidget().availableGeometry().center())
-        self.ui.centralwidget.move(rect.topLeft())
-        
+    
+        cp = QDesktopWidget().availableGeometry().center()
+        self.move(int(round(cp.x() - self.width() / 2)), int(round(cp.y() - self.height() / 2 - 20)))
+    
         self.credit_money = self.project_cost * 0.85 #заемные средства !!!!!!!!!!!!!!!!!!!!!!!!!! FIX IT !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -154,7 +149,9 @@ class newwindow(QtWidgets.QMainWindow):
         self.ui.pushButton.clicked.connect(self._exit)
         self.ui.show_tables.clicked.connect(self.choose_tables)
         self.ui.clear_tables.clicked.connect(self.clear_tables)
+
         self.fill_table()
+      
 
         self.ui.Table_with_flat_sell_plan = QtWidgets.QTableWidget(self.ui.centralwidget)
         self.ui.Table_with_flat_sell_plan.setObjectName("Table_with_flat_sell_plan")  

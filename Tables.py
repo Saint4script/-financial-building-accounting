@@ -10,10 +10,12 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
+
 class Ui_NewWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1800, 1200)
+        MainWindow.resize(1600, 1000)
+        MainWindow.setFixedSize(1600,1000)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.pushButton = QtWidgets.QPushButton(self.centralwidget)
