@@ -6,12 +6,21 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1800</width>
-    <height>1200</height>
+    <width>1600</width>
+    <height>1000</height>
    </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>1600</width>
+    <height>1000</height>
+   </size>
   </property>
   <property name="windowTitle">
    <string>AdditionalWindow</string>
+  </property>
+  <property name="layoutDirection">
+   <enum>Qt::LeftToRight</enum>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QPushButton" name="pushButton">
@@ -32,8 +41,8 @@
      <rect>
       <x>0</x>
       <y>0</y>
-      <width>441</width>
-      <height>71</height>
+      <width>651</width>
+      <height>91</height>
      </rect>
     </property>
     <property name="selectionMode">
@@ -52,6 +61,21 @@
     <item>
      <property name="text">
       <string>Определение процентной ставки на эскроу</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>если кредит получен единовременно в начале, то платежи по процентам за пользование заемными средствами в конце периода</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>если кредитная линия выбирается равномерно в течении срока строительства, то платежи по процентам за пользование заемными средствами в конце периода</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>если кредитная линия выбирается по мере необходимости строительного процесса, то платежи по процентам за пользование заемными средствами в конце периода</string>
      </property>
     </item>
    </widget>
@@ -87,8 +111,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1800</width>
-     <height>26</height>
+     <width>1600</width>
+     <height>21</height>
     </rect>
    </property>
   </widget>

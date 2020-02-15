@@ -1,7 +1,6 @@
 import sys
 import math
-import PyQt5.QtGui
-from PyQt5 import QtWidgets 
+from PyQt5 import QtWidgets, QtCore, QtGui
 #from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QMainWindow, QAction, qApp, QApplication, QTableWidgetItem, QDesktopWidget, QWidget
 from PyQt5.QtCore import QDate
@@ -119,11 +118,7 @@ class mywindow(QtWidgets.QMainWindow):
 #Это теперь дочерний класс класса mywindow
 class newwindow(QtWidgets.QMainWindow):
     
-    
     def __init__(self, parent):
-        
-
-
         super(newwindow, self).__init__(parent)
         self.ui = Ui_NewWindow()
         self.ui.setupUi(self)
@@ -140,74 +135,213 @@ class newwindow(QtWidgets.QMainWindow):
         #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-        self.ui.TableWidget = QtWidgets.QTableWidget(self.ui.centralwidget)
-        self.ui.TableWidget.setObjectName("Table_decade")
-        self.ui.TableWidget.move(-3000,-3000) 
-        self.ui.TableWidget.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContents)
-        self.ui.TableWidget.resizeColumnsToContents()
-        self.ui.TableWidget.resizeRowsToContents()
+        def read_only_tables(table):
+            for i in range(table.rowCount()):
+                for j in range(table.columnCount()):
+                    if(table.item(i, j) != None): # Если не сделать проверку на None(NULL), то когда он пытается обратиться к пустой ячейке, он падает, т.к она NoneType -_-
+                        table.item(i, j).setFlags(QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsEnabled)
+                    else:
+                        table.setItem(i, j, QTableWidgetItem(""))  #Поэтому надо положить в нее хотя бы пустую строку
+                        table.item(i, j).setFlags(QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsEnabled)
+
+        self.TableWidget = QtWidgets.QTableWidget(self.ui.centralwidget)
+        self.TableWidget.setObjectName("Table_decade")
+        self.TableWidget.move(-3000,-3000) 
+        self.TableWidget.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContents)
+        self.TableWidget.resizeColumnsToContents()
+        self.TableWidget.resizeRowsToContents()
+        self.fill_table()
+
+        read_only_tables(self.TableWidget)
+        
+
+        self.Table_with_flat_sell_plan = QtWidgets.QTableWidget(self.ui.centralwidget)
+        self.Table_with_flat_sell_plan.setObjectName("Table_with_flat_sell_plan")  
+        self.Table_with_flat_sell_plan.move(-3000,-3000) 
+        self.Table_with_flat_sell_plan.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContents)
+        self.Table_with_flat_sell_plan.resizeColumnsToContents()
+        self.Table_with_flat_sell_plan.resizeRowsToContents()
+        self.fill_table_with_flat_sell_plan()
+
+        read_only_tables(self.Table_with_flat_sell_plan)
+
+        self.escrow_rate = QtWidgets.QTableWidget(self.ui.centralwidget)
+        self.escrow_rate.setObjectName("escrow_rate")  
+        self.escrow_rate.move(-3000,-3000) 
+        self.escrow_rate.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContents)
+        self.escrow_rate.resizeColumnsToContents()
+        self.escrow_rate.resizeRowsToContents()
+        self.fill_escrow_rate()
+        
+        read_only_tables(self.escrow_rate)
+        
+
+        self.credit_is_got_fully_at_the_beginning = QtWidgets.QTableWidget(self.ui.centralwidget)
+        self.credit_is_got_fully_at_the_beginning.setObjectName("credit_is_got_fully_atThe_beginning")  
+        self.credit_is_got_fully_at_the_beginning.move(-3000,-3000) 
+        self.credit_is_got_fully_at_the_beginning.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContents)
+        self.credit_is_got_fully_at_the_beginning.resizeColumnsToContents()
+        self.credit_is_got_fully_at_the_beginning.resizeRowsToContents()
+    
+        self.fill_credit_is_got_fully_at_the_beginning()
+        read_only_tables(self.credit_is_got_fully_at_the_beginning)
+      
+        self.credit_line_chooses_evenly = QtWidgets.QTableWidget(self.ui.centralwidget)
+        self.credit_line_chooses_evenly.setObjectName("credit_line_chooses_evenly")  
+        self.credit_line_chooses_evenly.move(-3000,-3000) 
+        self.credit_line_chooses_evenly.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContents)
+        self.credit_line_chooses_evenly.resizeColumnsToContents()
+        self.credit_line_chooses_evenly.resizeRowsToContents()
+    
+        self.fill_credit_line_chooses_evenly()
+        read_only_tables(self.credit_line_chooses_evenly)
+
+        self.mini_table_for_necessary_percents = QtWidgets.QTableWidget(self.ui.centralwidget)
+        self.mini_table_for_necessary_percents.setObjectName("mini_table_for_necessary_percents")  
+        self.mini_table_for_necessary_percents.move(-3000,-3000) 
+        self.mini_table_for_necessary_percents.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContents)
+        self.mini_table_for_necessary_percents.resizeColumnsToContents()
+        self.mini_table_for_necessary_percents.resizeRowsToContents()
+        self.mini_table_for_necessary_percents.setRowCount(1)
+        self.mini_table_for_necessary_percents.setColumnCount(math.ceil(self.build_time / 3))
+        self.mini_table_for_necessary_percents.setVerticalHeaderLabels(["процент потребности в деньгах от стоимости проекта"])
+
+        self.main_table_necessary_percents = QtWidgets.QTableWidget(self.ui.centralwidget)
+        self.main_table_necessary_percents.setObjectName("main_table_necessary_percents")  
+        self.main_table_necessary_percents.move(-3000,-3000) 
+        self.main_table_necessary_percents.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContents)
+        self.main_table_necessary_percents.resizeColumnsToContents()
+        self.main_table_necessary_percents.resizeRowsToContents()
+        self.main_table_necessary_percents.setRowCount(7)
+        self.main_table_necessary_percents.setColumnCount(math.ceil(self.build_time / 3) + 1)
+        self.main_table_necessary_percents.setVerticalHeaderLabels(["потребность в денежныж средствах для реализации проекта", 
+                                                                    "заемных средств, которые нужно взять у банка", 
+                                                                    "количество заемных средств",
+                                                                    "по 1 стратегии - в начале",
+                                                                    "по 2 стратегии - в середине", 
+                                                                    "по 3 стратегии - в конце", 
+                                                                    "по 4 стратегии - равномерно"])
+
+        self.show_main_table = QtWidgets.QPushButton(self.ui.centralwidget)
+        self.show_main_table.setText("Заполнить таблицу")
+        self.show_main_table.move(-3000, -3000)
+
+        
         self.ui.pushButton.clicked.connect(self._exit)
         self.ui.show_tables.clicked.connect(self.choose_tables)
         self.ui.clear_tables.clicked.connect(self.clear_tables)
+        self.show_main_table.clicked.connect(self.fill_main_table)
+    
 
-        self.fill_table()
-      
-
-        self.ui.Table_with_flat_sell_plan = QtWidgets.QTableWidget(self.ui.centralwidget)
-        self.ui.Table_with_flat_sell_plan.setObjectName("Table_with_flat_sell_plan")  
-        self.ui.Table_with_flat_sell_plan.move(-3000,-3000) 
-        self.ui.Table_with_flat_sell_plan.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContents)
-        self.ui.Table_with_flat_sell_plan.resizeColumnsToContents()
-        self.ui.Table_with_flat_sell_plan.resizeRowsToContents()
-        self.fill_table_with_flat_sell_plan()
-
-        self.ui.escrow_rate = QtWidgets.QTableWidget(self.ui.centralwidget)
-        self.ui.escrow_rate.setObjectName("escrow_rate")  
-        self.ui.escrow_rate.move(-3000,-3000) 
-        self.ui.escrow_rate.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContents)
-        self.ui.escrow_rate.resizeColumnsToContents()
-        self.ui.escrow_rate.resizeRowsToContents()
-        self.fill_escrow_rate()
+    #МНЕ КОРОЧЕ НАДОЕЛО НА СЕГОДНЯ ПИСАТЬ ЭТУ ФУНКЦИЮ, ПОЭТОМУ ОНА КРИВАЯ ЕЩЕ. НАДО СДЕЛАТЬ РЕПЛЕЙС ВСЕХ ЗАПЯТЫХ НА ТОЧКИ, ИНАЧЕ НЕ ПЕРЕВЕСТИ ВО ФЛОАТ
+    def fill_main_table(self):
+        percents_sum = 0
+        for i in range(self.mini_table_for_necessary_percents.columnCount()):
+            if(self.mini_table_for_necessary_percents.item(0, i) == None):
+                message = 'Вы не заполнили все ячейки'
+                QtWidgets.QMessageBox.warning(self, 'Уведомление', message,
+                                                        QtWidgets.QMessageBox.Ok)
+                return
+            else:
+                percents_sum += float(self.mini_table_for_necessary_percents.item(0, i).text())
+        if(percents_sum != 100):
+            message = f'Сумма процентов не равна 100 ({percents_sum})'
+            QtWidgets.QMessageBox.warning(self, 'Уведомление', message,
+                                                        QtWidgets.QMessageBox.Ok)
+            return
         
-        #self.ui.escrow_rate.resize(1600, self.ui.escrow_rate.height())
+        amount_of_credit_money = 0
+        for i in range(self.mini_table_for_necessary_percents.columnCount()):
+            self.main_table_necessary_percents.setItem(2, i, QTableWidgetItem(str(amount_of_credit_money)))
+            cell_info = self.project_cost * float(self.mini_table_for_necessary_percents.item(0, i)) / 100
+            amount_of_credit_money += cell_info
+            self.main_table_necessary_percents.setItem(0, i, QTableWidgetItem(str(cell_info)))
+            self.main_table_necessary_percents.setItem(1, i, QTableWidgetItem(str(cell_info)))
 
+        self.main_table_necessary_percents.setItem(1, 0, QTableWidgetItem(str(0)))
+        self.main_table_necessary_percents.setItem(1, 1, QTableWidgetItem(str(78859731,95)))
 
     def clear_tables(self):
         tables = self.ui.centralwidget.findChildren(QtWidgets.QTableWidget)
         for table in tables:
             table.move(-3000,-3000)
+
     def choose_tables(self):
+
         current_height = 100
         tables = self.ui.centralwidget.findChildren(QtWidgets.QTableWidget)
+        self.show_main_table.move(-3000, -3000)
         for table in tables:
             table.move(-3000,-3000)
         selected_items = self.ui.listWidget.selectedItems()
+
+        def check_height(height):
+            if(height > 1000):
+                message = 'Слишком много таблиц'
+                QtWidgets.QMessageBox.warning(self, 'Уведомление', message,
+                                                        QtWidgets.QMessageBox.Ok)
+                
+                return False
+            return True
+
         for elem in selected_items:
             if(elem.text() == 'Цена 1м^2'):
-                self.ui.TableWidget.move(0,current_height)
-                current_height += self.ui.TableWidget.height() + 10
-                self.ui.TableWidget.resize(1600, self.ui.TableWidget.height())
+                if(check_height(current_height + self.TableWidget.height() + 10)):
+                    self.TableWidget.move(0,current_height)
+                    current_height += self.TableWidget.height() + 10
+                    self.TableWidget.resize(1600, self.TableWidget.height())
+                else:
+                    break
             elif(elem.text() == 'План продаж'):
-                self.ui.Table_with_flat_sell_plan.move(0,current_height)
-                current_height += self.ui.Table_with_flat_sell_plan.height() + 10
-                self.ui.Table_with_flat_sell_plan.resize(1600, self.ui.Table_with_flat_sell_plan.height())
+                if(check_height(current_height + self.Table_with_flat_sell_plan.height() + 10)):
+                    self.Table_with_flat_sell_plan.move(0,current_height)
+                    current_height += self.Table_with_flat_sell_plan.height() + 10
+                    self.Table_with_flat_sell_plan.resize(1600, self.Table_with_flat_sell_plan.height())
+                else:
+                    break
             elif(elem.text() == 'Определение процентной ставки на эскроу'):
-                self.ui.escrow_rate.move(0,current_height)
-                current_height += self.ui.escrow_rate.height() + 10
-                self.ui.escrow_rate.resize(1600, self.ui.escrow_rate.height())
+                if(check_height(current_height + self.escrow_rate.height() + 10)):
+                    self.escrow_rate.move(0,current_height)
+                    current_height += self.escrow_rate.height() + 10
+                    self.escrow_rate.resize(1600, self.escrow_rate.height())
+                else:
+                    break
+            elif(elem.text() == "если кредит получен единовременно в начале, то платежи по процентам за пользование заемными средствами в конце периода"):
+                if(check_height(current_height + self.credit_is_got_fully_at_the_beginning.height() + 10)):
+                    self.credit_is_got_fully_at_the_beginning.move(0, current_height)
+                    current_height += self.credit_is_got_fully_at_the_beginning.height() + 10
+                    self.credit_is_got_fully_at_the_beginning.resize(1600, self.credit_is_got_fully_at_the_beginning.height())
+                else:
+                    break
+            elif(elem.text() == "если кредитная линия выбирается равномерно в течении срока строительства, то платежи по процентам за пользование заемными средствами в конце периода"):
+                if(check_height(current_height + self.credit_line_chooses_evenly.height() + 10)):
+                    self.credit_line_chooses_evenly.move(0, current_height)
+                    current_height += self.credit_line_chooses_evenly.height() + 10
+                    self.credit_line_chooses_evenly.resize(1600, self.credit_line_chooses_evenly.height())
+                else:
+                    break
+            elif(elem.text() == "если кредитная линия выбирается по мере необходимости строительного процесса, то платежи по процентам за пользование заемными средствами в конце периода"):
+                if(check_height(current_height + self.mini_table_for_necessary_percents.height() + 10 + self.main_table_necessary_percents.height() + 10)):
+                    self.mini_table_for_necessary_percents.move(0, current_height)
+                    self.mini_table_for_necessary_percents.resize(1300, self.mini_table_for_necessary_percents.height())
+                    self.show_main_table.move(self.mini_table_for_necessary_percents.width() + 10, current_height)
+                    current_height += self.mini_table_for_necessary_percents.height() + 10
+                    
+
+                    self.main_table_necessary_percents.move(0, current_height)
+                    self.main_table_necessary_percents.resize(1600, self.main_table_necessary_percents.height())
+                    current_height += self.main_table_necessary_percents.height() + 10
+                else:
+                    break
                 
-
-
-            
-
     def _exit(self):
         self.parent().show()
         self.close()
         
     def fill_table(self):  
         decades = math.ceil(self.build_time/3)
-        self.ui.TableWidget.setRowCount(2)
-        self.ui.TableWidget.setColumnCount(decades + 1)
+        self.TableWidget.setRowCount(2)
+        self.TableWidget.setColumnCount(decades + 1)
         labels_decades = []
         new_date = self.date_start.month()
         price  = self.p1
@@ -240,32 +374,32 @@ class newwindow(QtWidgets.QMainWindow):
                 avg_sum3 += price
             
             total_avg += price
-            self.ui.TableWidget.setItem(0 , i, cell_info)
+            self.TableWidget.setItem(0 , i, cell_info)
             price = price * (1 + self.z/100)
         
         avg_sum1 = avg_sum1 / self.pointer[0]
         avg_sum2 = avg_sum2 / self.pointer[1]
         avg_sum3 = avg_sum3 / self.pointer[0]
-        self.ui.TableWidget.setItem(1 , 0, QTableWidgetItem(str(round(avg_sum1,2))))
-        self.ui.TableWidget.setItem(1 , self.pointer[0], QTableWidgetItem(str(round(avg_sum2,2))))
-        self.ui.TableWidget.setItem(1 , self.pointer[0] + self.pointer[1], QTableWidgetItem(str(round(avg_sum3,2))))
+        self.TableWidget.setItem(1 , 0, QTableWidgetItem(str(round(avg_sum1,2))))
+        self.TableWidget.setItem(1 , self.pointer[0], QTableWidgetItem(str(round(avg_sum2,2))))
+        self.TableWidget.setItem(1 , self.pointer[0] + self.pointer[1], QTableWidgetItem(str(round(avg_sum3,2))))
 
         total_avg = total_avg / decades   
         self.Array_of_avg_flat_prices = [avg_sum1, avg_sum2 , avg_sum3, total_avg]   #Да, я переопределил тут массив, но мне пофиг, там хотя бы видно, зачем он создан
           
-        self.ui.TableWidget.setItem(1, decades, QTableWidgetItem(str(round(total_avg,2))))    
+        self.TableWidget.setItem(1, decades, QTableWidgetItem(str(round(total_avg,2))))    
         labels_decades.append("Средняя цена") 
-        Tlabels_decades = tuple(labels_decades)
-        self.ui.TableWidget.setHorizontalHeaderLabels(Tlabels_decades)
-        self.ui.TableWidget.setVerticalHeaderLabels(tuple([F"цена 1 кв.м. - каждый квартал увеличивается на {self.z}%", "средняя цена 1 кв.м"]))
+        Tlabels_decades = labels_decades
+        self.TableWidget.setHorizontalHeaderLabels(Tlabels_decades)
+        self.TableWidget.setVerticalHeaderLabels(tuple([F"цена 1 кв.м. - каждый квартал увеличивается на {self.z}%", "средняя цена 1 кв.м"]))
 
     def fill_table_with_flat_sell_plan(self): # план продаж в количестве квартир
         self.iterator = 0
         decades = math.ceil(self.build_time/3)
-        self.ui.Table_with_flat_sell_plan.setRowCount(14)
-        self.ui.Table_with_flat_sell_plan.setColumnCount(decades)
-        self.ui.Table_with_flat_sell_plan.setHorizontalHeaderLabels(["" for i in range(decades)])
-        self.ui.Table_with_flat_sell_plan.setVerticalHeaderLabels([ "по стратегии 1 - в начале",
+        self.Table_with_flat_sell_plan.setRowCount(14)
+        self.Table_with_flat_sell_plan.setColumnCount(decades)
+        self.Table_with_flat_sell_plan.setHorizontalHeaderLabels(["" for i in range(decades)])
+        self.Table_with_flat_sell_plan.setVerticalHeaderLabels([ "по стратегии 1 - в начале",
                                                                     "по стратегии 2 - в середине",
                                                                     "по стратегии 3 - в конце",
                                                                     "по стратегии 4 - равномерно",
@@ -314,7 +448,7 @@ class newwindow(QtWidgets.QMainWindow):
                 
                 flats.append(amount)
                 flat_amount -= flats[i]
-            self.ui.Table_with_flat_sell_plan.setHorizontalHeaderLabels(labels_names)
+            self.Table_with_flat_sell_plan.setHorizontalHeaderLabels(labels_names)
             for i, flat in enumerate(flats):
                 #perc = float(self.ui.TableWidget.item(0, self.iterator).text()) # пересчет стоимости квадратного метра каждый квартал
                 perc = self.Array_of_flat_prices[self.iterator]
@@ -330,17 +464,17 @@ class newwindow(QtWidgets.QMainWindow):
                     self.escrow_amount_of_money_fourth_strategy.append(sum1)
 
                 if(row == 1):
-                    self.ui.Table_with_flat_sell_plan.setItem(row, i + self.pointer[0], QTableWidgetItem(str(flat)))
-                    self.ui.Table_with_flat_sell_plan.setItem(row+5, i + self.pointer[0], QTableWidgetItem(str(round(tmp,1))))
-                    self.ui.Table_with_flat_sell_plan.setItem(row+10, i + self.pointer[0], QTableWidgetItem(str(round(sum1,1))))
+                    self.Table_with_flat_sell_plan.setItem(row, i + self.pointer[0], QTableWidgetItem(str(flat)))
+                    self.Table_with_flat_sell_plan.setItem(row+5, i + self.pointer[0], QTableWidgetItem(str(round(tmp,1))))
+                    self.Table_with_flat_sell_plan.setItem(row+10, i + self.pointer[0], QTableWidgetItem(str(round(sum1,1))))
                 elif(row == 2):
-                    self.ui.Table_with_flat_sell_plan.setItem(row, i + self.pointer[0] + self.pointer[1], QTableWidgetItem(str(flat)))
-                    self.ui.Table_with_flat_sell_plan.setItem(row+5, i + self.pointer[0] + self.pointer[1], QTableWidgetItem(str(round(tmp,1))))
-                    self.ui.Table_with_flat_sell_plan.setItem(row+10, i + self.pointer[0] + self.pointer[1], QTableWidgetItem(str(round(sum1,1))))
+                    self.Table_with_flat_sell_plan.setItem(row, i + self.pointer[0] + self.pointer[1], QTableWidgetItem(str(flat)))
+                    self.Table_with_flat_sell_plan.setItem(row+5, i + self.pointer[0] + self.pointer[1], QTableWidgetItem(str(round(tmp,1))))
+                    self.Table_with_flat_sell_plan.setItem(row+10, i + self.pointer[0] + self.pointer[1], QTableWidgetItem(str(round(sum1,1))))
                 else:
-                    self.ui.Table_with_flat_sell_plan.setItem(row, i, QTableWidgetItem(str(flat)))
-                    self.ui.Table_with_flat_sell_plan.setItem(row+5, i, QTableWidgetItem(str((round(tmp,1)))))
-                    self.ui.Table_with_flat_sell_plan.setItem(row+10, i, QTableWidgetItem(str(round(sum1,1))))
+                    self.Table_with_flat_sell_plan.setItem(row, i, QTableWidgetItem(str(flat)))
+                    self.Table_with_flat_sell_plan.setItem(row+5, i, QTableWidgetItem(str((round(tmp,1)))))
+                    self.Table_with_flat_sell_plan.setItem(row+10, i, QTableWidgetItem(str(round(sum1,1))))
         
         
         fill_cells(0, self.pointer[0])
@@ -350,17 +484,11 @@ class newwindow(QtWidgets.QMainWindow):
         fill_cells(3, decades) # хз, почема decades, мне это больно осознавать, но главное - работает правильно
     
     def fill_escrow_rate(self):
-        #и тут тоже объявим пару массивов
-        self.ui.escrow_rate_first_strategy = []
-        self.ui.escrow_rate_second_strategy = []
-        self.ui.escrow_rate_third_strategy = []
-        self.ui.escrow_rate_fourth_strategy = []
-        
         decades = math.ceil(self.build_time / 3)
         new_date = self.date_start.month()
-        self.ui.escrow_rate.setRowCount(4)
-        self.ui.escrow_rate.setColumnCount(decades)
-        self.ui.escrow_rate.setVerticalHeaderLabels([ "по стратегии 1 - в начале",
+        self.escrow_rate.setRowCount(4)
+        self.escrow_rate.setColumnCount(decades)
+        self.escrow_rate.setVerticalHeaderLabels([ "по стратегии 1 - в начале",
                                                             "по стратегии 2 - в середине",
                                                             "по стратегии 3 - в конце",
                                                             "по стратегии 4 - равномерно"])
@@ -371,62 +499,62 @@ class newwindow(QtWidgets.QMainWindow):
         for i in range(decades):
             if(self.escrow_amount_of_money_first_three_strategies[i] < self.credit_money / 2 and i < self.pointer[0]):
                 cell_info = QTableWidgetItem("0.12")
-                self.ui.escrow_rate.setItem(0, i, cell_info)
+                self.escrow_rate.setItem(0, i, cell_info)
 
             elif(self.escrow_amount_of_money_first_three_strategies[i] < self.credit_money * 0.75 and i < self.pointer[0]):
                 cell_info = QTableWidgetItem("0.09")
-                self.ui.escrow_rate.setItem(0, i, cell_info)
+                self.escrow_rate.setItem(0, i, cell_info)
 
             elif(self.escrow_amount_of_money_first_three_strategies[i] < self.credit_money  and i < self.pointer[0]):
-                cell_info = QTableWidgetItem("0.6")
-                self.ui.escrow_rate.setItem(0, i, cell_info)
+                cell_info = QTableWidgetItem("0.06")
+                self.escrow_rate.setItem(0, i, cell_info)
 
             elif(self.escrow_amount_of_money_first_three_strategies[i] < self.credit_money * 1.5 or i >= self.pointer[0]):
                 cell_info = QTableWidgetItem("0.03")
-                self.ui.escrow_rate.setItem(0, i, cell_info)     
+                self.escrow_rate.setItem(0, i, cell_info)     
 
         #ЗАПОЛНЯЕМ ВТОРУЮ СТРОЧКУ
         for i in range(self.pointer[0]):
             cell_info = QTableWidgetItem("0.12")
-            self.ui.escrow_rate.setItem(1, i, cell_info)
+            self.escrow_rate.setItem(1, i, cell_info)
 
         for i in range(self.pointer[0], decades - self.pointer[0]):
             if(self.escrow_amount_of_money_first_three_strategies[i] < self.credit_money / 2 ):
                 cell_info = QTableWidgetItem("0.12")
-                self.ui.escrow_rate.setItem(1, i, cell_info) 
+                self.escrow_rate.setItem(1, i, cell_info) 
             elif(self.escrow_amount_of_money_first_three_strategies[i] < self.credit_money * 0.75):
                 cell_info = QTableWidgetItem("0.09")
-                self.ui.escrow_rate.setItem(1, i, cell_info)
+                self.escrow_rate.setItem(1, i, cell_info)
             elif(self.escrow_amount_of_money_first_three_strategies[i] < self.credit_money):
-                cell_info = QTableWidgetItem("0.6")
-                self.ui.escrow_rate.setItem(1, i, cell_info)
+                cell_info = QTableWidgetItem("0.06")
+                self.escrow_rate.setItem(1, i, cell_info)
             elif(self.escrow_amount_of_money_first_three_strategies[i] < self.credit_money * 1.5):
                 cell_info = QTableWidgetItem("0.03")
-                self.ui.escrow_rate.setItem(1, i, cell_info)  
+                self.escrow_rate.setItem(1, i, cell_info)  
         
         for i in range(decades - self.pointer[0], decades):
-            cell_info = QTableWidgetItem("0.3")
-            self.ui.escrow_rate.setItem(1, i, cell_info)
+            cell_info = QTableWidgetItem("0.03")
+            self.escrow_rate.setItem(1, i, cell_info)
 
         #ЗАПОЛНЯЕМ ТРЕТЬЮ СТРОЧКУ
 
         for i in range(decades - self.pointer[0]):
             cell_info = QTableWidgetItem("0.12")
-            self.ui.escrow_rate.setItem(2, i, cell_info)
+            self.escrow_rate.setItem(2, i, cell_info)
         
         for i in range(decades - self.pointer[0], decades):
             if(self.escrow_amount_of_money_first_three_strategies[i] < self.credit_money / 2 ):
                 cell_info = QTableWidgetItem("0.12")
-                self.ui.escrow_rate.setItem(2, i, cell_info) 
+                self.escrow_rate.setItem(2, i, cell_info) 
             elif(self.escrow_amount_of_money_first_three_strategies[i] < self.credit_money * 0.75):
                 cell_info = QTableWidgetItem("0.09")
-                self.ui.escrow_rate.setItem(2, i, cell_info)
+                self.escrow_rate.setItem(2, i, cell_info)
             elif(self.escrow_amount_of_money_first_three_strategies[i] < self.credit_money):
-                cell_info = QTableWidgetItem("0.6")
-                self.ui.escrow_rate.setItem(2, i, cell_info)
+                cell_info = QTableWidgetItem("0.06")
+                self.escrow_rate.setItem(2, i, cell_info)
             elif(self.escrow_amount_of_money_first_three_strategies[i] < self.credit_money * 1.5):
                 cell_info = QTableWidgetItem("0.03")
-                self.ui.escrow_rate.setItem(2, i, cell_info) 
+                self.escrow_rate.setItem(2, i, cell_info) 
              
         #ЗАПОЛНЯЕМ ЧЕТВЕРТУЮ СТРОЧКУ
         labels_names = []
@@ -441,18 +569,136 @@ class newwindow(QtWidgets.QMainWindow):
 
             if(self.escrow_amount_of_money_fourth_strategy[i] < self.credit_money / 2 ):
                 cell_info = QTableWidgetItem("0.12")
-                self.ui.escrow_rate.setItem(3, i, cell_info) 
+                self.escrow_rate.setItem(3, i, cell_info) 
             elif(self.escrow_amount_of_money_fourth_strategy[i] < self.credit_money * 0.75):
                 cell_info = QTableWidgetItem("0.09")
-                self.ui.escrow_rate.setItem(3, i, cell_info)
+                self.escrow_rate.setItem(3, i, cell_info)
             elif(self.escrow_amount_of_money_fourth_strategy[i] < self.credit_money):
-                cell_info = QTableWidgetItem("0.6")
-                self.ui.escrow_rate.setItem(3, i, cell_info)
+                cell_info = QTableWidgetItem("0.06")
+                self.escrow_rate.setItem(3, i, cell_info)
             elif(self.escrow_amount_of_money_fourth_strategy[i] < self.credit_money * 1.5):
                 cell_info = QTableWidgetItem("0.03")
-                self.ui.escrow_rate.setItem(3, i, cell_info)
+                self.escrow_rate.setItem(3, i, cell_info)
 
-        self.ui.escrow_rate.setHorizontalHeaderLabels(labels_names)
+        self.escrow_rate.setHorizontalHeaderLabels(labels_names)
+
+    def fill_credit_is_got_fully_at_the_beginning(self):
+        #Объявим несколько массивов
+        self.first_strategy_payment = []
+        self.second_strategy_payment = []
+        self.third_strategy_payment = []
+        self.fourth_strategy_payment = []
+
+        decades = math.ceil(self.build_time / 3)
+        new_date = self.date_start.month()
+        self.credit_is_got_fully_at_the_beginning.setRowCount(4)
+        self.credit_is_got_fully_at_the_beginning.setColumnCount(decades + 1)
+        self.credit_is_got_fully_at_the_beginning.setVerticalHeaderLabels([ "по стратегии 1 - в начале",
+                                                            "по стратегии 2 - в середине",
+                                                            "по стратегии 3 - в конце",
+                                                            "по стратегии 4 - равномерно"])
+
+        labels_names = []
+        for i in range(4):
+            for j in range(decades):
+                if(i == 0):
+                    month = QDate.longMonthName(new_date)
+                    day = str(self.date_start.day())
+                    tempStr = F"{day} {month}"
+                    labels_names.append(tempStr)
+                    new_date = new_date + 3
+                    if(new_date > 12):
+                        new_date -= 12
+                
+                cell_info = self.credit_money  / 4 * float(self.escrow_rate.item(i, j).text())
+                self.credit_is_got_fully_at_the_beginning.setItem(i, j, QTableWidgetItem(str(round(cell_info, 2))))
+                if(i == 0):
+                    self.first_strategy_payment.append(cell_info)
+                elif(i == 1):
+                    self.second_strategy_payment.append(cell_info)
+                elif(i == 2):
+                    self.third_strategy_payment.append(cell_info)
+                elif(i == 3):
+                    self.fourth_strategy_payment.append(cell_info)
+        
+        self.credit_is_got_fully_at_the_beginning.setItem(0, decades, QTableWidgetItem(str(round(sum(self.first_strategy_payment), 2))))
+        self.credit_is_got_fully_at_the_beginning.setItem(1, decades, QTableWidgetItem(str(round(sum(self.second_strategy_payment), 2))))
+        self.credit_is_got_fully_at_the_beginning.setItem(2, decades, QTableWidgetItem(str(round(sum(self.third_strategy_payment), 2))))
+        self.credit_is_got_fully_at_the_beginning.setItem(3, decades, QTableWidgetItem(str(round(sum(self.fourth_strategy_payment), 2))))
+
+        # self.credit_is_got_fully_at_the_beginning.setItem(0, decades + 1, QTableWidgetItem(str(round(sum(self.first_strategy_payment) / self.credit_money * 100, 2))))
+        # self.credit_is_got_fully_at_the_beginning.setItem(1, decades + 1, QTableWidgetItem(str(round(sum(self.second_strategy_payment) / self.credit_money * 100, 2))))
+        # self.credit_is_got_fully_at_the_beginning.setItem(2, decades + 1, QTableWidgetItem(str(round(sum(self.third_strategy_payment) / self.credit_money * 100, 2))))
+        # self.credit_is_got_fully_at_the_beginning.setItem(3, decades + 1, QTableWidgetItem(str(round(sum(self.fourth_strategy_payment) / self.credit_money * 100, 2))))
+
+
+        
+
+        labels_names.append("Сумма платежей")
+        # labels_names.append("Средневзвешенная процентная ставка")
+        # labels_names.append("Эффект финансового рычага")
+        # labels_names.append("Рентабильность собственного капиатала")
+        # labels_names.append("Итого")
+        self.credit_is_got_fully_at_the_beginning.setHorizontalHeaderLabels(labels_names)
+
+    def fill_credit_line_chooses_evenly(self):
+         #Объявим несколько массивов
+        self.first_strategy_credit_line = []
+        self.second_strategy_credit_line = []
+        self.third_strategy_credit_line = []
+        self.fourth_strategy_credit_line = []
+
+        decades = math.ceil(self.build_time / 3)
+        new_date = self.date_start.month()
+        self.credit_line_chooses_evenly.setRowCount(4)
+        self.credit_line_chooses_evenly.setColumnCount(decades + 1)
+        self.credit_line_chooses_evenly.setVerticalHeaderLabels([ "по стратегии 1 - в начале",
+                                                            "по стратегии 2 - в середине",
+                                                            "по стратегии 3 - в конце",
+                                                            "по стратегии 4 - равномерно"])
+
+        labels_names = []
+        for i in range(4):
+            for j in range(decades):
+                if(i == 0):
+                    month = QDate.longMonthName(new_date)
+                    day = str(self.date_start.day())
+                    tempStr = F"{day} {month}"
+                    labels_names.append(tempStr)
+                    new_date = new_date + 3
+                    if(new_date > 12):
+                        new_date -= 12
+                
+                cell_info = self.credit_money  / (2.5 * 4) * float(self.escrow_rate.item(i, j).text()) 
+                self.credit_line_chooses_evenly.setItem(i, j, QTableWidgetItem(str(round(cell_info, 2))))
+                if(i == 0):
+                    self.first_strategy_credit_line.append(cell_info)
+                elif(i == 1):
+                    self.second_strategy_credit_line.append(cell_info)
+                elif(i == 2):
+                    self.third_strategy_credit_line.append(cell_info)
+                elif(i == 3):
+                    self.fourth_strategy_credit_line.append(cell_info)
+        
+        self.credit_line_chooses_evenly.setItem(0, decades, QTableWidgetItem(str(round(sum(self.first_strategy_credit_line), 2))))
+        self.credit_line_chooses_evenly.setItem(1, decades, QTableWidgetItem(str(round(sum(self.second_strategy_credit_line), 2))))
+        self.credit_line_chooses_evenly.setItem(2, decades, QTableWidgetItem(str(round(sum(self.third_strategy_credit_line), 2))))
+        self.credit_line_chooses_evenly.setItem(3, decades, QTableWidgetItem(str(round(sum(self.fourth_strategy_credit_line), 2))))
+
+        # self.credit_is_got_fully_at_the_beginning.setItem(0, decades + 1, QTableWidgetItem(str(round(sum(self.first_strategy_payment) / self.credit_money * 100, 2))))
+        # self.credit_is_got_fully_at_the_beginning.setItem(1, decades + 1, QTableWidgetItem(str(round(sum(self.second_strategy_payment) / self.credit_money * 100, 2))))
+        # self.credit_is_got_fully_at_the_beginning.setItem(2, decades + 1, QTableWidgetItem(str(round(sum(self.third_strategy_payment) / self.credit_money * 100, 2))))
+        # self.credit_is_got_fully_at_the_beginning.setItem(3, decades + 1, QTableWidgetItem(str(round(sum(self.fourth_strategy_payment) / self.credit_money * 100, 2))))
+
+
+        
+
+        labels_names.append("Сумма платежей")
+        # labels_names.append("Средневзвешенная процентная ставка")
+        # labels_names.append("Эффект финансового рычага")
+        # labels_names.append("Рентабильность собственного капиатала")
+        # labels_names.append("Итого")
+        self.credit_line_chooses_evenly.setHorizontalHeaderLabels(labels_names)
 
 app = QtWidgets.QApplication([])
 application = mywindow()
