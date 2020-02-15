@@ -7,7 +7,7 @@ from PyQt5.QtCore import QDate
 from zikkurat001 import Ui_MainWindow 
 from Tables import Ui_NewWindow
 #TASKS:
-#СДЕЛАТЬ ПРОВЕРКУ НА ОТРИЦАТЕЛЬНЫЕ ЧИСЛА ДЛЯ ХУЙ ЗНАЕТ ЧЕГО
+#СДЕЛАТЬ ПРОВЕРКУ НА ОТРИЦАТЕЛЬНЫЕ ЧИСЛА ДЛЯ не ЗНАю ЧЕГО
 
 #main window
 class mywindow(QtWidgets.QMainWindow):
@@ -135,15 +135,17 @@ class newwindow(QtWidgets.QMainWindow):
         #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
+        #делаем все ячейки в таблицe read-only
         def read_only_tables(table):
             for i in range(table.rowCount()):
                 for j in range(table.columnCount()):
-                    if(table.item(i, j) != None): # Если не сделать проверку на None(NULL), то когда он пытается обратиться к пустой ячейке, он падает, т.к она NoneType -_-
+                    if(table.item(i, j) != None): # Если не сделать проверку на None(NULL), то когда он пытается обратиться к пустой ячейке, он падает, 
+                                                  #т.к она NoneType -_-
                         table.item(i, j).setFlags(QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsEnabled)
                     else:
                         table.setItem(i, j, QTableWidgetItem(""))  #Поэтому надо положить в нее хотя бы пустую строку
                         table.item(i, j).setFlags(QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsEnabled)
-
+        #
         self.TableWidget = QtWidgets.QTableWidget(self.ui.centralwidget)
         self.TableWidget.setObjectName("Table_decade")
         self.TableWidget.move(-3000,-3000) 
@@ -162,8 +164,10 @@ class newwindow(QtWidgets.QMainWindow):
         self.Table_with_flat_sell_plan.resizeColumnsToContents()
         self.Table_with_flat_sell_plan.resizeRowsToContents()
         self.fill_table_with_flat_sell_plan()
+        self.fill_horizontal_headers(self.Table_with_flat_sell_plan)
 
         read_only_tables(self.Table_with_flat_sell_plan)
+
 
         self.escrow_rate = QtWidgets.QTableWidget(self.ui.centralwidget)
         self.escrow_rate.setObjectName("escrow_rate")  
@@ -186,6 +190,7 @@ class newwindow(QtWidgets.QMainWindow):
         self.fill_credit_is_got_fully_at_the_beginning()
         read_only_tables(self.credit_is_got_fully_at_the_beginning)
       
+
         self.credit_line_chooses_evenly = QtWidgets.QTableWidget(self.ui.centralwidget)
         self.credit_line_chooses_evenly.setObjectName("credit_line_chooses_evenly")  
         self.credit_line_chooses_evenly.move(-3000,-3000) 
@@ -196,6 +201,7 @@ class newwindow(QtWidgets.QMainWindow):
         self.fill_credit_line_chooses_evenly()
         read_only_tables(self.credit_line_chooses_evenly)
 
+
         self.mini_table_for_necessary_percents = QtWidgets.QTableWidget(self.ui.centralwidget)
         self.mini_table_for_necessary_percents.setObjectName("mini_table_for_necessary_percents")  
         self.mini_table_for_necessary_percents.move(-3000,-3000) 
@@ -205,6 +211,7 @@ class newwindow(QtWidgets.QMainWindow):
         self.mini_table_for_necessary_percents.setRowCount(1)
         self.mini_table_for_necessary_percents.setColumnCount(math.ceil(self.build_time / 3))
         self.mini_table_for_necessary_percents.setVerticalHeaderLabels(["процент потребности в деньгах от стоимости проекта"])
+
 
         self.main_table_necessary_percents = QtWidgets.QTableWidget(self.ui.centralwidget)
         self.main_table_necessary_percents.setObjectName("main_table_necessary_percents")  
@@ -388,9 +395,8 @@ class newwindow(QtWidgets.QMainWindow):
         self.Array_of_avg_flat_prices = [avg_sum1, avg_sum2 , avg_sum3, total_avg]   #Да, я переопределил тут массив, но мне пофиг, там хотя бы видно, зачем он создан
           
         self.TableWidget.setItem(1, decades, QTableWidgetItem(str(round(total_avg,2))))    
-        labels_decades.append("Средняя цена") 
-        Tlabels_decades = labels_decades
-        self.TableWidget.setHorizontalHeaderLabels(Tlabels_decades)
+        labels_decades.append("Средняя цена")
+        self.fill_horizontal_headers(self.TableWidget)
         self.TableWidget.setVerticalHeaderLabels(tuple([F"цена 1 кв.м. - каждый квартал увеличивается на {self.z}%", "средняя цена 1 кв.м"]))
 
     def fill_table_with_flat_sell_plan(self): # план продаж в количестве квартир
@@ -448,7 +454,7 @@ class newwindow(QtWidgets.QMainWindow):
                 
                 flats.append(amount)
                 flat_amount -= flats[i]
-            self.Table_with_flat_sell_plan.setHorizontalHeaderLabels(labels_names)
+            #self.Table_with_flat_sell_plan.setHorizontalHeaderLabels(labels_names)
             for i, flat in enumerate(flats):
                 #perc = float(self.ui.TableWidget.item(0, self.iterator).text()) # пересчет стоимости квадратного метра каждый квартал
                 perc = self.Array_of_flat_prices[self.iterator]
@@ -481,7 +487,7 @@ class newwindow(QtWidgets.QMainWindow):
         fill_cells(1, self.pointer[1])
         fill_cells(2, self.pointer[0])
         self.iterator = 0
-        fill_cells(3, decades) # хз, почема decades, мне это больно осознавать, но главное - работает правильно
+        fill_cells(3, decades)
     
     def fill_escrow_rate(self):
         decades = math.ceil(self.build_time / 3)
@@ -582,6 +588,21 @@ class newwindow(QtWidgets.QMainWindow):
 
         self.escrow_rate.setHorizontalHeaderLabels(labels_names)
 
+    def fill_horizontal_headers(self,table):
+        decades = math.ceil(self.build_time / 3)
+        new_date = self.date_start.month()
+        labels_names = []
+        for j in range(decades+1):
+            month = QDate.longMonthName(new_date)
+            day = str(self.date_start.day())
+            tempStr = F"{day} {month}"
+            labels_names.append(tempStr)
+            new_date = new_date + 3
+            if(new_date > 12):
+                new_date -= 12
+        table.setHorizontalHeaderLabels(labels_names)
+
+
     def fill_credit_is_got_fully_at_the_beginning(self):
         #Объявим несколько массивов
         self.first_strategy_payment = []
@@ -594,9 +615,9 @@ class newwindow(QtWidgets.QMainWindow):
         self.credit_is_got_fully_at_the_beginning.setRowCount(4)
         self.credit_is_got_fully_at_the_beginning.setColumnCount(decades + 1)
         self.credit_is_got_fully_at_the_beginning.setVerticalHeaderLabels([ "по стратегии 1 - в начале",
-                                                            "по стратегии 2 - в середине",
-                                                            "по стратегии 3 - в конце",
-                                                            "по стратегии 4 - равномерно"])
+                                                                            "по стратегии 2 - в середине",
+                                                                            "по стратегии 3 - в конце",
+                                                                            "по стратегии 4 - равномерно"])
 
         labels_names = []
         for i in range(4):
@@ -637,7 +658,7 @@ class newwindow(QtWidgets.QMainWindow):
         labels_names.append("Сумма платежей")
         # labels_names.append("Средневзвешенная процентная ставка")
         # labels_names.append("Эффект финансового рычага")
-        # labels_names.append("Рентабильность собственного капиатала")
+        # labels_names.append("Рентабильность собственного капитала")
         # labels_names.append("Итого")
         self.credit_is_got_fully_at_the_beginning.setHorizontalHeaderLabels(labels_names)
 
