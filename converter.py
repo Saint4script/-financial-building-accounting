@@ -211,6 +211,17 @@ class newwindow(QtWidgets.QMainWindow):
         self.mini_table_for_necessary_percents.setRowCount(1)
         self.mini_table_for_necessary_percents.setColumnCount(math.ceil(self.build_time / 3))
         self.mini_table_for_necessary_percents.setVerticalHeaderLabels(["процент потребности в деньгах от стоимости проекта"])
+        #сделаем пока автозаполнение процентов
+        self.mini_table_for_necessary_percents.setItem(0,0,QTableWidgetItem("9,68508804395618"))
+        self.mini_table_for_necessary_percents.setItem(0,1,QTableWidgetItem("11,570903952796"))
+        self.mini_table_for_necessary_percents.setItem(0,2,QTableWidgetItem("14,9494931029218"))
+        self.mini_table_for_necessary_percents.setItem(0,3,QTableWidgetItem("11,0695162827756"))
+        self.mini_table_for_necessary_percents.setItem(0,4,QTableWidgetItem("13,3757296894168"))
+        self.mini_table_for_necessary_percents.setItem(0,5,QTableWidgetItem("13,0110106892431"))
+        self.mini_table_for_necessary_percents.setItem(0,6,QTableWidgetItem("13,3302211572039"))
+        self.mini_table_for_necessary_percents.setItem(0,7,QTableWidgetItem("3,32028347130497"))
+        self.mini_table_for_necessary_percents.setItem(0,8,QTableWidgetItem("3,93512861368219"))
+        self.mini_table_for_necessary_percents.setItem(0,9,QTableWidgetItem("5,75262499669945")) # по идее тут вместо самой последней 5 должно +3 , т.е 8. Надо было для подсчета нормального так сделать
 
 
         self.main_table_necessary_percents = QtWidgets.QTableWidget(self.ui.centralwidget)
@@ -228,6 +239,8 @@ class newwindow(QtWidgets.QMainWindow):
                                                                     "по 2 стратегии - в середине", 
                                                                     "по 3 стратегии - в конце", 
                                                                     "по 4 стратегии - равномерно"])
+        self.fill_horizontal_headers(self.main_table_necessary_percents)
+        self.main_table_necessary_percents.setHorizontalHeaderItem(math.ceil(self.build_time / 3), QTableWidgetItem("Сумма платежей"))
 
         self.show_main_table = QtWidgets.QPushButton(self.ui.centralwidget)
         self.show_main_table.setText("Заполнить таблицу")
@@ -240,8 +253,10 @@ class newwindow(QtWidgets.QMainWindow):
         self.show_main_table.clicked.connect(self.fill_main_table)
     
 
-    #МНЕ КОРОЧЕ НАДОЕЛО НА СЕГОДНЯ ПИСАТЬ ЭТУ ФУНКЦИЮ, ПОЭТОМУ ОНА КРИВАЯ ЕЩЕ. НАДО СДЕЛАТЬ РЕПЛЕЙС ВСЕХ ЗАПЯТЫХ НА ТОЧКИ, ИНАЧЕ НЕ ПЕРЕВЕСТИ ВО ФЛОАТ
+    #КОРОЧЕ. ТУТ ВСЕ СОСТОИТ ИЗ КОСТЫЛЕЙ. КГДА ВСЕ СДЕЛАЕМ, НАДО СПРОСИТЬ ПАРУ МОМЕНТОВ И ЗАПОЛНЯТЬ ЕЕ НОРМАЛЬНО
+
     def fill_main_table(self):
+        
         percents_sum = 0
         for i in range(self.mini_table_for_necessary_percents.columnCount()):
             if(self.mini_table_for_necessary_percents.item(0, i) == None):
@@ -250,24 +265,43 @@ class newwindow(QtWidgets.QMainWindow):
                                                         QtWidgets.QMessageBox.Ok)
                 return
             else:
-                percents_sum += float(self.mini_table_for_necessary_percents.item(0, i).text())
+                percent = float(self.mini_table_for_necessary_percents.item(0, i).text().replace(',', '.'))
+                # percent = int(percent * 100)
+                # print(percent)
+                percents_sum += percent
+                # print(percents_sum)
+        
         if(percents_sum != 100):
             message = f'Сумма процентов не равна 100 ({percents_sum})'
             QtWidgets.QMessageBox.warning(self, 'Уведомление', message,
                                                         QtWidgets.QMessageBox.Ok)
             return
         
-        amount_of_credit_money = 0
         for i in range(self.mini_table_for_necessary_percents.columnCount()):
-            self.main_table_necessary_percents.setItem(2, i, QTableWidgetItem(str(amount_of_credit_money)))
-            cell_info = self.project_cost * float(self.mini_table_for_necessary_percents.item(0, i)) / 100
-            amount_of_credit_money += cell_info
+            TableItem = self.mini_table_for_necessary_percents.item(0, i).text().replace(',', '.') #это надо из-за того, что дробные числа в питоне пишутся через точку, а ввести могут с запятыми 
+            cell_info = self.project_cost * float(TableItem) / 100
             self.main_table_necessary_percents.setItem(0, i, QTableWidgetItem(str(cell_info)))
             self.main_table_necessary_percents.setItem(1, i, QTableWidgetItem(str(cell_info)))
 
-        self.main_table_necessary_percents.setItem(1, 0, QTableWidgetItem(str(0)))
-        self.main_table_necessary_percents.setItem(1, 1, QTableWidgetItem(str(78859731,95)))
+        self.main_table_necessary_percents.setItem(1, 0, QTableWidgetItem('0'))
+        self.main_table_necessary_percents.setItem(1, 1, QTableWidgetItem('78859731.95'))
+        
+        self.main_table_necessary_percents.update()
+        tmp_sum = 0
+        for i in range(self.mini_table_for_necessary_percents.columnCount()):
+            tmp_sum += float(self.main_table_necessary_percents.item(1, i).text())
+            self.main_table_necessary_percents.setItem(2, i, QTableWidgetItem(str(tmp_sum)))
 
+        for i in range(4):
+            row_sum = 0
+            for j in range(1, math.ceil(self.build_time / 3)):
+                tmp = float(self.main_table_necessary_percents.item(2, j).text())
+                percent = float(self.escrow_rate.item(i,j).text())
+                row_sum += tmp * percent / 4
+                self.main_table_necessary_percents.setItem(i + 3, j, QTableWidgetItem(str(tmp *percent / 4 )))
+            self.main_table_necessary_percents.setItem(i + 3, math.ceil(self.build_time / 3), QTableWidgetItem(str(row_sum)))
+
+        
     def clear_tables(self):
         tables = self.ui.centralwidget.findChildren(QtWidgets.QTableWidget)
         for table in tables:
@@ -592,7 +626,7 @@ class newwindow(QtWidgets.QMainWindow):
         decades = math.ceil(self.build_time / 3)
         new_date = self.date_start.month()
         labels_names = []
-        for j in range(decades+1):
+        for j in range(decades):
             month = QDate.longMonthName(new_date)
             day = str(self.date_start.day())
             tempStr = F"{day} {month}"
