@@ -247,7 +247,7 @@ class newwindow(QtWidgets.QMainWindow):
         self.main_table_necessary_percents.resizeColumnsToContents()
         self.main_table_necessary_percents.resizeRowsToContents()
         self.main_table_necessary_percents.setRowCount(7)
-        self.main_table_necessary_percents.setColumnCount(math.ceil(self.build_time / 3) + 1)
+        self.main_table_necessary_percents.setColumnCount(self.decades + 5)
         self.main_table_necessary_percents.setVerticalHeaderLabels(["потребность в денежныж средствах для реализации проекта", 
                                                                     "заемных средств, которые нужно взять у банка", 
                                                                     "количество заемных средств",
@@ -256,7 +256,14 @@ class newwindow(QtWidgets.QMainWindow):
                                                                     "по 3 стратегии - в конце", 
                                                                     "по 4 стратегии - равномерно"])
         self.fill_horizontal_headers(self.main_table_necessary_percents)
-        self.main_table_necessary_percents.setHorizontalHeaderItem(math.ceil(self.build_time / 3), QTableWidgetItem("Сумма платежей"))
+        self.main_table_necessary_percents.setHorizontalHeaderItem(self.decades, QTableWidgetItem("Сумма платежей"))
+        self.main_table_necessary_percents.setHorizontalHeaderItem(self.decades + 1, QTableWidgetItem("Средневзвешенная процентная ставка"))
+        self.main_table_necessary_percents.setHorizontalHeaderItem(self.decades + 2, QTableWidgetItem("Эффект финансового рычага"))
+        self.main_table_necessary_percents.setHorizontalHeaderItem(self.decades + 3, QTableWidgetItem("Рентабильность собственного капиатала"))
+        self.main_table_necessary_percents.setHorizontalHeaderItem(self.decades + 4, QTableWidgetItem("Итого"))
+        self.main_table_necessary_percents.setColumnWidth(self.decades + 1, 230)
+        self.main_table_necessary_percents.setColumnWidth(self.decades + 2, 180)
+        self.main_table_necessary_percents.setColumnWidth(self.decades + 3, 240)
         align_items(self.main_table_necessary_percents)
         read_only_tables(self.main_table_necessary_percents)
 
@@ -284,6 +291,9 @@ class newwindow(QtWidgets.QMainWindow):
 
 
     #КОРОЧЕ. ТУТ ВСЕ СОСТОИТ ИЗ КОСТЫЛЕЙ. КГДА ВСЕ СДЕЛАЕМ, НАДО СПРОСИТЬ ПАРУ МОМЕНТОВ И ЗАПОЛНЯТЬ ЕЕ НОРМАЛЬНО
+    # ЕЩЕ ВАЖНЫЙ КОМЕНТ!!!!!!! ТУТ СУММИРОВАНИЕ ИДЕТ НЕ ПО ВСЕМ СТОБЦАМ ТАБЛИЦЫ, А ТОЛЬКО КОНКРЕТНЫЕ ПЛАТЕЖИ!!!!
+    #НАДО ПОТОМ СПРОСИТЬ КАК ПРАВИЛЬНОО, ЩАС ПРОСТО ОСТАВИМ ТАК, ЧТОБЫ ЧИСЛА СХОДИЛИСЬ!!!!!!!!!!!!
+    #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
     def fill_main_table(self):
         
@@ -324,12 +334,29 @@ class newwindow(QtWidgets.QMainWindow):
 
         for i in range(4):
             row_sum = 0
-            for j in range(1, math.ceil(self.build_time / 3)):
+            for j in range(1, self.decades):
                 tmp = float(self.main_table_necessary_percents.item(2, j).text())
                 percent = float(self.escrow_rate.item(i,j).text())
                 row_sum += tmp * percent / 4
                 self.main_table_necessary_percents.setItem(i + 3, j, QTableWidgetItem(str(tmp *percent / 4 )))
             self.main_table_necessary_percents.setItem(i + 3, self.decades, QTableWidgetItem(str(row_sum)))
+            self.main_table_necessary_percents.setItem(i + 3, self.decades + 1, QTableWidgetItem(str(round(row_sum / self.credit_money * 100 , 2))))
+        
+        for i in range(4):
+            rent = float(self.Table_with_flat_sell_plan.item(i + 5, self.decades + 2).text())
+            rate = float(self.main_table_necessary_percents.item(i + 3, self.decades + 1).text())
+            effect = 0.8 * (rent - rate / 100) * self.credit_money / self.own_money
+            self.main_table_necessary_percents.setItem(i + 3, self.decades + 2, QTableWidgetItem(str(effect))) # Эффект финансового рычага
+            self.main_table_necessary_percents.setItem(i + 3, self.decades + 3, QTableWidgetItem(str(0.8 * rent + effect))) # Рентабильность собственного капитала
+            
+        for i in range(4):
+            total_sum = 0
+            for j in range(2,self.decades):
+                total_sum += float(self.main_table_necessary_percents.item(i + 3, j).text())
+            
+            total_sum += self.credit_money + self.own_money
+            self.main_table_necessary_percents.setItem(i + 3, self.decades + 4, QTableWidgetItem(str(round(total_sum, 2)))) #Итого
+        
         self.fill_general_table_bank_position()
 
         
@@ -687,7 +714,7 @@ class newwindow(QtWidgets.QMainWindow):
         decades = math.ceil(self.build_time / 3)
         new_date = self.date_start.month()
         self.credit_is_got_fully_at_the_beginning.setRowCount(4)
-        self.credit_is_got_fully_at_the_beginning.setColumnCount(decades + 1)
+        self.credit_is_got_fully_at_the_beginning.setColumnCount(decades + 5)
         self.credit_is_got_fully_at_the_beginning.setVerticalHeaderLabels([ "по стратегии 1 - в начале",
                                                                             "по стратегии 2 - в середине",
                                                                             "по стратегии 3 - в конце",
@@ -721,19 +748,35 @@ class newwindow(QtWidgets.QMainWindow):
         self.credit_is_got_fully_at_the_beginning.setItem(2, decades, QTableWidgetItem(str(round(sum(self.third_strategy_payment), 2))))
         self.credit_is_got_fully_at_the_beginning.setItem(3, decades, QTableWidgetItem(str(round(sum(self.fourth_strategy_payment), 2))))
 
-        # self.credit_is_got_fully_at_the_beginning.setItem(0, decades + 1, QTableWidgetItem(str(round(sum(self.first_strategy_payment) / self.credit_money * 100, 2))))
-        # self.credit_is_got_fully_at_the_beginning.setItem(1, decades + 1, QTableWidgetItem(str(round(sum(self.second_strategy_payment) / self.credit_money * 100, 2))))
-        # self.credit_is_got_fully_at_the_beginning.setItem(2, decades + 1, QTableWidgetItem(str(round(sum(self.third_strategy_payment) / self.credit_money * 100, 2))))
-        # self.credit_is_got_fully_at_the_beginning.setItem(3, decades + 1, QTableWidgetItem(str(round(sum(self.fourth_strategy_payment) / self.credit_money * 100, 2))))
+        self.credit_is_got_fully_at_the_beginning.setItem(0, decades + 1, QTableWidgetItem(str(round(sum(self.first_strategy_payment) / self.credit_money * 100, 2))))
+        self.credit_is_got_fully_at_the_beginning.setItem(1, decades + 1, QTableWidgetItem(str(round(sum(self.second_strategy_payment) / self.credit_money * 100, 2))))
+        self.credit_is_got_fully_at_the_beginning.setItem(2, decades + 1, QTableWidgetItem(str(round(sum(self.third_strategy_payment) / self.credit_money * 100, 2))))
+        self.credit_is_got_fully_at_the_beginning.setItem(3, decades + 1, QTableWidgetItem(str(round(sum(self.fourth_strategy_payment) / self.credit_money * 100, 2))))
 
 
-        
+        for i in range(4):
+            rent = float(self.Table_with_flat_sell_plan.item(i + 5, decades + 2).text())
+            rate = float(self.credit_is_got_fully_at_the_beginning.item(i, decades + 1).text())
+            effect = 0.8 * (rent - rate / 100) * self.credit_money / self.own_money
+            self.credit_is_got_fully_at_the_beginning.setItem(i, decades + 2, QTableWidgetItem(str(effect))) # Эффект финансового рычага
+            self.credit_is_got_fully_at_the_beginning.setItem(i, decades + 3, QTableWidgetItem(str(0.8 * rent + effect))) # Рентабильность собственного капитала
+            
+        for i in range(4):
+            total_sum = 0
+            for j in range(decades + 3):
+                total_sum += float(self.credit_is_got_fully_at_the_beginning.item(i, j).text())
+            
+            total_sum += self.credit_money + self.own_money
+            self.credit_is_got_fully_at_the_beginning.setItem(i, decades + 4, QTableWidgetItem(str(round(total_sum, 2)))) #Итого
 
         labels_names.append("Сумма платежей")
-        # labels_names.append("Средневзвешенная процентная ставка")
-        # labels_names.append("Эффект финансового рычага")
-        # labels_names.append("Рентабильность собственного капитала")
-        # labels_names.append("Итого")
+        labels_names.append("средневзвешенная процентная ставка")
+        labels_names.append("Эффект финансового рычага")
+        labels_names.append("Рентабильность собственного капитала")
+        labels_names.append("Итого")
+        self.credit_is_got_fully_at_the_beginning.setColumnWidth(decades + 1, 230)
+        self.credit_is_got_fully_at_the_beginning.setColumnWidth(decades + 2, 180)
+        self.credit_is_got_fully_at_the_beginning.setColumnWidth(decades + 3, 230)
         self.credit_is_got_fully_at_the_beginning.setHorizontalHeaderLabels(labels_names)
 
     def fill_credit_line_chooses_evenly(self):
@@ -746,7 +789,7 @@ class newwindow(QtWidgets.QMainWindow):
         decades = math.ceil(self.build_time / 3)
         new_date = self.date_start.month()
         self.credit_line_chooses_evenly.setRowCount(4)
-        self.credit_line_chooses_evenly.setColumnCount(decades + 1)
+        self.credit_line_chooses_evenly.setColumnCount(decades + 5)
         self.credit_line_chooses_evenly.setVerticalHeaderLabels([ "по стратегии 1 - в начале",
                                                             "по стратегии 2 - в середине",
                                                             "по стратегии 3 - в конце",
@@ -780,19 +823,38 @@ class newwindow(QtWidgets.QMainWindow):
         self.credit_line_chooses_evenly.setItem(2, decades, QTableWidgetItem(str(round(sum(self.third_strategy_credit_line), 2))))
         self.credit_line_chooses_evenly.setItem(3, decades, QTableWidgetItem(str(round(sum(self.fourth_strategy_credit_line), 2))))
 
-        # self.credit_is_got_fully_at_the_beginning.setItem(0, decades + 1, QTableWidgetItem(str(round(sum(self.first_strategy_payment) / self.credit_money * 100, 2))))
-        # self.credit_is_got_fully_at_the_beginning.setItem(1, decades + 1, QTableWidgetItem(str(round(sum(self.second_strategy_payment) / self.credit_money * 100, 2))))
-        # self.credit_is_got_fully_at_the_beginning.setItem(2, decades + 1, QTableWidgetItem(str(round(sum(self.third_strategy_payment) / self.credit_money * 100, 2))))
-        # self.credit_is_got_fully_at_the_beginning.setItem(3, decades + 1, QTableWidgetItem(str(round(sum(self.fourth_strategy_payment) / self.credit_money * 100, 2))))
+        self.credit_line_chooses_evenly.setItem(0, decades + 1, QTableWidgetItem(str(round(sum(self.first_strategy_credit_line) / self.credit_money * 100, 2))))
+        self.credit_line_chooses_evenly.setItem(1, decades + 1, QTableWidgetItem(str(round(sum(self.second_strategy_credit_line) / self.credit_money * 100, 2))))
+        self.credit_line_chooses_evenly.setItem(2, decades + 1, QTableWidgetItem(str(round(sum(self.third_strategy_credit_line) / self.credit_money * 100, 2))))
+        self.credit_line_chooses_evenly.setItem(3, decades + 1, QTableWidgetItem(str(round(sum(self.fourth_strategy_credit_line) / self.credit_money * 100, 2))))
+
+        for i in range(4):
+            rent = float(self.Table_with_flat_sell_plan.item(i + 5, decades + 2).text())
+            rate = float(self.credit_line_chooses_evenly.item(i, decades + 1).text())
+            effect = 0.8 * (rent - rate / 100) * self.credit_money / self.own_money
+            self.credit_line_chooses_evenly.setItem(i, decades + 2, QTableWidgetItem(str(effect))) # Эффект финансового рычага
+            self.credit_line_chooses_evenly.setItem(i, decades + 3, QTableWidgetItem(str(0.8 * rent + effect))) # Рентабильность собственного капитала
+            
+        for i in range(4):
+            total_sum = 0
+            for j in range(decades + 3):
+                total_sum += float(self.credit_line_chooses_evenly.item(i, j).text())
+            
+            total_sum += self.credit_money + self.own_money
+            self.credit_line_chooses_evenly.setItem(i, decades + 4, QTableWidgetItem(str(round(total_sum, 2)))) #Итого
 
 
-        
+
+
+        self.credit_line_chooses_evenly.setColumnWidth(decades + 1, 230)
+        self.credit_line_chooses_evenly.setColumnWidth(decades + 2, 180)
+        self.credit_line_chooses_evenly.setColumnWidth(decades + 3, 240)
 
         labels_names.append("Сумма платежей")
-        # labels_names.append("Средневзвешенная процентная ставка")
-        # labels_names.append("Эффект финансового рычага")
-        # labels_names.append("Рентабильность собственного капиатала")
-        # labels_names.append("Итого")
+        labels_names.append("Средневзвешенная процентная ставка")
+        labels_names.append("Эффект финансового рычага")
+        labels_names.append("Рентабильность собственного капиатала")
+        labels_names.append("Итого")
         self.credit_line_chooses_evenly.setHorizontalHeaderLabels(labels_names)
 
     def fill_general_table_bank_position(self):
