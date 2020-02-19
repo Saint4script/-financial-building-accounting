@@ -34,7 +34,7 @@ class mywindow(QtWidgets.QMainWindow):
         self.ui.Average_area_of_apartments.setText("66")
         self.ui.Bulding_duration.setText("30")
         self.ui.Increasing_percentage.setText("2")
-        self.ui.Start_money.setText("1231231399")
+        self.ui.Start_money.setText("189082080")
         self.ui.Total_area.setText("24000")
         self.ui.Start_cost.setText("54000")
         self.ui.Self_cost.setText("51900")
@@ -124,16 +124,11 @@ class newwindow(QtWidgets.QMainWindow):
         self.ui.setupUi(self)
 
         self.k, self.S, self.n, self.s, self.p1,self.z, self.build_time, self.own_money, self.c, self.date_start, self.project_cost = mywindow.get_dimensions(self.parent())
-    
+        self.decades = math.ceil(self.build_time / 3)
         cp = QDesktopWidget().availableGeometry().center()
         self.move(int(round(cp.x() - self.width() / 2)), int(round(cp.y() - self.height() / 2 - 20)))
     
-        self.credit_money = self.project_cost * 0.85 #заемные средства !!!!!!!!!!!!!!!!!!!!!!!!!! FIX IT !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        self.credit_money = self.project_cost - self.own_money #заемные средства 
 
         #делаем все ячейки в таблицe read-only
         def read_only_tables(table):
@@ -145,6 +140,16 @@ class newwindow(QtWidgets.QMainWindow):
                     else:
                         table.setItem(i, j, QTableWidgetItem(""))  #Поэтому надо положить в нее хотя бы пустую строку
                         table.item(i, j).setFlags(QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsEnabled)
+
+        def align_items(table):
+            for i in range(table.rowCount()):
+                for j in range(table.columnCount()):
+                    if(table.item(i, j) != None): # Если не сделать проверку на None(NULL), то когда он пытается обратиться к пустой ячейке, он падает, 
+                                                  #т.к она NoneType -_-
+                        table.item(i, j).setTextAlignment(QtCore.Qt.AlignVCenter | QtCore.Qt.AlignHCenter)
+                    else:
+                        table.setItem(i, j, QTableWidgetItem(""))  #Поэтому надо положить в нее хотя бы пустую строку
+                        table.item(i, j).setTextAlignment(QtCore.Qt.AlignVCenter | QtCore.Qt.AlignHCenter)
         #
         self.TableWidget = QtWidgets.QTableWidget(self.ui.centralwidget)
         self.TableWidget.setObjectName("Table_decade")
@@ -153,8 +158,10 @@ class newwindow(QtWidgets.QMainWindow):
         self.TableWidget.resizeColumnsToContents()
         self.TableWidget.resizeRowsToContents()
         self.fill_table()
-
+        self.fill_horizontal_headers(self.TableWidget)
+        self.TableWidget.setHorizontalHeaderItem( self.decades, QTableWidgetItem("Средняя цена"))
         read_only_tables(self.TableWidget)
+        align_items(self.TableWidget)
         
 
         self.Table_with_flat_sell_plan = QtWidgets.QTableWidget(self.ui.centralwidget)
@@ -165,9 +172,14 @@ class newwindow(QtWidgets.QMainWindow):
         self.Table_with_flat_sell_plan.resizeRowsToContents()
         self.fill_table_with_flat_sell_plan()
         self.fill_horizontal_headers(self.Table_with_flat_sell_plan)
+        self.Table_with_flat_sell_plan.setHorizontalHeaderItem(math.ceil(self.build_time / 3), QTableWidgetItem("Итого"))
+        self.Table_with_flat_sell_plan.setHorizontalHeaderItem(math.ceil(self.build_time / 3 + 1), QTableWidgetItem("потеря прибыли у строительной организации"))
+        self.Table_with_flat_sell_plan.setColumnWidth(self.decades + 1, 200)
+        self.Table_with_flat_sell_plan.setHorizontalHeaderItem( self.decades+ 2, QTableWidgetItem("рентабильность активов"))
+        self.Table_with_flat_sell_plan.setColumnWidth( self.decades + 2, 150)
 
         read_only_tables(self.Table_with_flat_sell_plan)
-
+        align_items(self.Table_with_flat_sell_plan)
 
         self.escrow_rate = QtWidgets.QTableWidget(self.ui.centralwidget)
         self.escrow_rate.setObjectName("escrow_rate")  
@@ -178,6 +190,7 @@ class newwindow(QtWidgets.QMainWindow):
         self.fill_escrow_rate()
         
         read_only_tables(self.escrow_rate)
+        align_items(self.escrow_rate)
         
 
         self.credit_is_got_fully_at_the_beginning = QtWidgets.QTableWidget(self.ui.centralwidget)
@@ -189,7 +202,7 @@ class newwindow(QtWidgets.QMainWindow):
     
         self.fill_credit_is_got_fully_at_the_beginning()
         read_only_tables(self.credit_is_got_fully_at_the_beginning)
-      
+        align_items(self.credit_is_got_fully_at_the_beginning)
 
         self.credit_line_chooses_evenly = QtWidgets.QTableWidget(self.ui.centralwidget)
         self.credit_line_chooses_evenly.setObjectName("credit_line_chooses_evenly")  
@@ -200,7 +213,7 @@ class newwindow(QtWidgets.QMainWindow):
     
         self.fill_credit_line_chooses_evenly()
         read_only_tables(self.credit_line_chooses_evenly)
-
+        align_items(self.credit_line_chooses_evenly)
 
         self.mini_table_for_necessary_percents = QtWidgets.QTableWidget(self.ui.centralwidget)
         self.mini_table_for_necessary_percents.setObjectName("mini_table_for_necessary_percents")  
@@ -222,7 +235,7 @@ class newwindow(QtWidgets.QMainWindow):
         self.mini_table_for_necessary_percents.setItem(0,7,QTableWidgetItem("3,32028347130497"))
         self.mini_table_for_necessary_percents.setItem(0,8,QTableWidgetItem("3,93512861368219"))
         self.mini_table_for_necessary_percents.setItem(0,9,QTableWidgetItem("5,75262499669945")) # по идее тут вместо самой последней 5 должно +3 , т.е 8. Надо было для подсчета нормального так сделать
-
+        align_items(self.mini_table_for_necessary_percents)
 
         self.main_table_necessary_percents = QtWidgets.QTableWidget(self.ui.centralwidget)
         self.main_table_necessary_percents.setObjectName("main_table_necessary_percents")  
@@ -241,6 +254,8 @@ class newwindow(QtWidgets.QMainWindow):
                                                                     "по 4 стратегии - равномерно"])
         self.fill_horizontal_headers(self.main_table_necessary_percents)
         self.main_table_necessary_percents.setHorizontalHeaderItem(math.ceil(self.build_time / 3), QTableWidgetItem("Сумма платежей"))
+        align_items(self.main_table_necessary_percents)
+        read_only_tables(self.main_table_necessary_percents)
 
         self.show_main_table = QtWidgets.QPushButton(self.ui.centralwidget)
         self.show_main_table.setText("Заполнить таблицу")
@@ -383,8 +398,6 @@ class newwindow(QtWidgets.QMainWindow):
         decades = math.ceil(self.build_time/3)
         self.TableWidget.setRowCount(2)
         self.TableWidget.setColumnCount(decades + 1)
-        labels_decades = []
-        new_date = self.date_start.month()
         price  = self.p1
         avg_sum1 = avg_sum2 = avg_sum3 = total_avg = 0
         self.pointer = [math.floor(decades/3),decades - math.floor(decades/3)*2]
@@ -397,14 +410,6 @@ class newwindow(QtWidgets.QMainWindow):
         self.Array_of_flat_prices = []
         for i in range(decades):
             self.Array_of_flat_prices.append(price)
-            month = QDate.longMonthName(new_date)
-            day = str(self.date_start.day())
-            tempStr = F"{day} {month}"
-            labels_decades.append(tempStr)
-            new_date = new_date + 3
-
-            if(new_date > 12):
-                new_date -= 12
             cell_info = QTableWidgetItem(str(round(price, 2)))
                 
             if(i < math.floor(decades/3)):
@@ -429,15 +434,15 @@ class newwindow(QtWidgets.QMainWindow):
         self.Array_of_avg_flat_prices = [avg_sum1, avg_sum2 , avg_sum3, total_avg]   #Да, я переопределил тут массив, но мне пофиг, там хотя бы видно, зачем он создан
           
         self.TableWidget.setItem(1, decades, QTableWidgetItem(str(round(total_avg,2))))    
-        labels_decades.append("Средняя цена")
-        self.fill_horizontal_headers(self.TableWidget)
-        self.TableWidget.setVerticalHeaderLabels(tuple([F"цена 1 кв.м. - каждый квартал увеличивается на {self.z}%", "средняя цена 1 кв.м"]))
+
+        
+        self.TableWidget.setVerticalHeaderLabels([F"цена 1 кв.м. - каждый квартал увеличивается на {self.z}%", "средняя цена 1 кв.м"])
 
     def fill_table_with_flat_sell_plan(self): # план продаж в количестве квартир
         self.iterator = 0
         decades = math.ceil(self.build_time/3)
         self.Table_with_flat_sell_plan.setRowCount(14)
-        self.Table_with_flat_sell_plan.setColumnCount(decades)
+        self.Table_with_flat_sell_plan.setColumnCount(decades + 3)
         self.Table_with_flat_sell_plan.setHorizontalHeaderLabels(["" for i in range(decades)])
         self.Table_with_flat_sell_plan.setVerticalHeaderLabels([ "по стратегии 1 - в начале",
                                                                     "по стратегии 2 - в середине",
@@ -461,12 +466,10 @@ class newwindow(QtWidgets.QMainWindow):
         self.sell_plan_in_rub_fourth_strategy = []
         self.escrow_amount_of_money_first_three_strategies = []
         self.escrow_amount_of_money_fourth_strategy = []
+        #Переменные для хранения сумм
+        self.sell_plan_sum_of_each_str  = [0, 0, 0, 0]
 
-        
-        
         def fill_cells(row, point):
-            labels_names = []
-            new_date = self.date_start.month()
             flat_amount = self.n
             avg_flat_area = self.s
             flats = []
@@ -478,19 +481,11 @@ class newwindow(QtWidgets.QMainWindow):
                     self.flats_amount_first_three_strategies.append(amount)
                 else:
                     self.flats_amount_fourth_strategy.append(amount)
-                    month = QDate.longMonthName(new_date)
-                    day = str(self.date_start.day())
-                    tempStr = F"{day} {month}"
-                    labels_names.append(tempStr)
-                    new_date = new_date + 3
-                    if(new_date > 12):
-                        new_date -= 12
-                
+                 
                 flats.append(amount)
                 flat_amount -= flats[i]
-            #self.Table_with_flat_sell_plan.setHorizontalHeaderLabels(labels_names)
+    
             for i, flat in enumerate(flats):
-                #perc = float(self.ui.TableWidget.item(0, self.iterator).text()) # пересчет стоимости квадратного метра каждый квартал
                 perc = self.Array_of_flat_prices[self.iterator]
                 tmp = flat*(perc)*avg_flat_area # план продаж
                 self.iterator += 1
@@ -522,6 +517,28 @@ class newwindow(QtWidgets.QMainWindow):
         fill_cells(2, self.pointer[0])
         self.iterator = 0
         fill_cells(3, decades)
+        #Заполняем сумму по квартирам в каждой стратегии 
+        self.Table_with_flat_sell_plan.setItem(0, decades, QTableWidgetItem(str(sum(self.flats_amount_first_three_strategies[: self.pointer[0]]))))
+        self.Table_with_flat_sell_plan.setItem(1, decades, QTableWidgetItem(str(sum(self.flats_amount_first_three_strategies[self.pointer[0]: decades - self.pointer[0]]))))
+        self.Table_with_flat_sell_plan.setItem(2, decades, QTableWidgetItem(str(sum(self.flats_amount_first_three_strategies[-self.pointer[0] : ]))))
+        self.Table_with_flat_sell_plan.setItem(3, decades, QTableWidgetItem(str(sum(self.flats_amount_fourth_strategy))))
+        #Заполняем сумму по плану продаж 
+        self.sell_plan_sum_of_each_str[0] = sum(self.sell_plan_in_rub_first_three_strategies[: self.pointer[0]])
+        self.Table_with_flat_sell_plan.setItem(5, decades, QTableWidgetItem(str(round( self.sell_plan_sum_of_each_str[0], 2))))
+
+        self.sell_plan_sum_of_each_str[1] = sum(self.sell_plan_in_rub_first_three_strategies[self.pointer[0]: decades - self.pointer[0]])
+        self.Table_with_flat_sell_plan.setItem(6, decades, QTableWidgetItem(str(round(self.sell_plan_sum_of_each_str[1], 2))))
+
+        self.sell_plan_sum_of_each_str[2] = sum(self.sell_plan_in_rub_first_three_strategies[-self.pointer[0] : ])
+        self.Table_with_flat_sell_plan.setItem(7, decades, QTableWidgetItem(str(round(self.sell_plan_sum_of_each_str[3], 2))))
+
+        self.sell_plan_sum_of_each_str[3] = sum(self.sell_plan_in_rub_fourth_strategy)
+        self.Table_with_flat_sell_plan.setItem(8, decades, QTableWidgetItem(str(round(self.sell_plan_sum_of_each_str[3], 2))))
+
+        #Заполним рентабилность активов 
+        for i in range(4):
+            value = (self.sell_plan_sum_of_each_str[i] - self.S * self.c) / (self.own_money + self.credit_money)
+            self.Table_with_flat_sell_plan.setItem(i + 5, decades + 2, QTableWidgetItem(str(value)))
     
     def fill_escrow_rate(self):
         decades = math.ceil(self.build_time / 3)
