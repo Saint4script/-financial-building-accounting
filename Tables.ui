@@ -78,6 +78,11 @@
       <string>если кредитная линия выбирается по мере необходимости строительного процесса, то платежи по процентам за пользование заемными средствами в конце периода</string>
      </property>
     </item>
+    <item>
+     <property name="text">
+      <string>Процентные выплаты, которые получит банк</string>
+     </property>
+    </item>
    </widget>
    <widget class="QPushButton" name="show_tables">
     <property name="geometry">

@@ -4,6 +4,7 @@ from PyQt5 import QtWidgets, QtCore, QtGui
 #from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QMainWindow, QAction, qApp, QApplication, QTableWidgetItem, QDesktopWidget, QWidget
 from PyQt5.QtCore import QDate
+
 from zikkurat001 import Ui_MainWindow 
 from Tables import Ui_NewWindow
 #TASKS:
@@ -163,6 +164,8 @@ class newwindow(QtWidgets.QMainWindow):
         read_only_tables(self.TableWidget)
         align_items(self.TableWidget)
         
+        #self.TableWidget.setStyleSheet("QTableCornerButton::section{border-image:url(Corner.png)}")
+        
 
         self.Table_with_flat_sell_plan = QtWidgets.QTableWidget(self.ui.centralwidget)
         self.Table_with_flat_sell_plan.setObjectName("Table_with_flat_sell_plan")  
@@ -222,7 +225,7 @@ class newwindow(QtWidgets.QMainWindow):
         self.mini_table_for_necessary_percents.resizeColumnsToContents()
         self.mini_table_for_necessary_percents.resizeRowsToContents()
         self.mini_table_for_necessary_percents.setRowCount(1)
-        self.mini_table_for_necessary_percents.setColumnCount(math.ceil(self.build_time / 3))
+        self.mini_table_for_necessary_percents.setColumnCount(self.decades)
         self.mini_table_for_necessary_percents.setVerticalHeaderLabels(["процент потребности в деньгах от стоимости проекта"])
         #сделаем пока автозаполнение процентов
         self.mini_table_for_necessary_percents.setItem(0,0,QTableWidgetItem("9,68508804395618"))
@@ -261,12 +264,24 @@ class newwindow(QtWidgets.QMainWindow):
         self.show_main_table.setText("Заполнить таблицу")
         self.show_main_table.move(-3000, -3000)
 
-        
+        self.general_table_bank_position = QtWidgets.QTableWidget(self.ui.centralwidget)
+        self.general_table_bank_position.setObjectName("general_table_bank_position")  
+        self.general_table_bank_position.move(-3000,-3000) 
+        self.general_table_bank_position.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContents)
+        self.general_table_bank_position.resizeColumnsToContents()
+        self.general_table_bank_position.resizeRowsToContents()
+        self.general_table_bank_position.setRowCount(3)
+        self.general_table_bank_position.setColumnCount(4)
+        self.general_table_bank_position.setVerticalHeaderLabels(["в начале строительства", "равномерно в течение строительства", "по мере необходимости"])
+        self.general_table_bank_position.setHorizontalHeaderLabels(["в начале", "в середине", "в конце", "равномерно"])
+        #Заполняется эта таблица при вызое fill_main_table т.к часть данных берется оттуда
+
         self.ui.pushButton.clicked.connect(self._exit)
         self.ui.show_tables.clicked.connect(self.choose_tables)
         self.ui.clear_tables.clicked.connect(self.clear_tables)
         self.show_main_table.clicked.connect(self.fill_main_table)
-    
+
+
 
     #КОРОЧЕ. ТУТ ВСЕ СОСТОИТ ИЗ КОСТЫЛЕЙ. КГДА ВСЕ СДЕЛАЕМ, НАДО СПРОСИТЬ ПАРУ МОМЕНТОВ И ЗАПОЛНЯТЬ ЕЕ НОРМАЛЬНО
 
@@ -314,7 +329,8 @@ class newwindow(QtWidgets.QMainWindow):
                 percent = float(self.escrow_rate.item(i,j).text())
                 row_sum += tmp * percent / 4
                 self.main_table_necessary_percents.setItem(i + 3, j, QTableWidgetItem(str(tmp *percent / 4 )))
-            self.main_table_necessary_percents.setItem(i + 3, math.ceil(self.build_time / 3), QTableWidgetItem(str(row_sum)))
+            self.main_table_necessary_percents.setItem(i + 3, self.decades, QTableWidgetItem(str(row_sum)))
+        self.fill_general_table_bank_position()
 
         
     def clear_tables(self):
@@ -387,6 +403,13 @@ class newwindow(QtWidgets.QMainWindow):
                     self.main_table_necessary_percents.move(0, current_height)
                     self.main_table_necessary_percents.resize(1600, self.main_table_necessary_percents.height())
                     current_height += self.main_table_necessary_percents.height() + 10
+                else:
+                    break
+            elif(elem.text() == "Процентные выплаты, которые получит банк"):
+                if(check_height(current_height + self.general_table_bank_position.height() + 10 + self.general_table_bank_position.height() + 10)):
+                    self.general_table_bank_position.move(0, current_height)
+                    self.general_table_bank_position.resize(700, self.general_table_bank_position.height())
+                    current_height += self.general_table_bank_position.height() + 10
                 else:
                     break
                 
@@ -771,6 +794,22 @@ class newwindow(QtWidgets.QMainWindow):
         # labels_names.append("Рентабильность собственного капиатала")
         # labels_names.append("Итого")
         self.credit_line_chooses_evenly.setHorizontalHeaderLabels(labels_names)
+
+    def fill_general_table_bank_position(self):
+        self.general_table_bank_position.setItem(0, 0, QTableWidgetItem(str(round(sum(self.first_strategy_payment),2))))
+        self.general_table_bank_position.setItem(0, 1, QTableWidgetItem(str(round(sum(self.second_strategy_payment),2))))
+        self.general_table_bank_position.setItem(0, 2, QTableWidgetItem(str(round(sum(self.third_strategy_payment),2))))
+        self.general_table_bank_position.setItem(0, 3, QTableWidgetItem(str(round(sum(self.fourth_strategy_payment),2))))
+
+        self.general_table_bank_position.setItem(1, 0, QTableWidgetItem(str(round(sum(self.first_strategy_credit_line),2))))
+        self.general_table_bank_position.setItem(1, 1, QTableWidgetItem(str(round(sum(self.second_strategy_credit_line),2))))
+        self.general_table_bank_position.setItem(1, 2, QTableWidgetItem(str(round(sum(self.third_strategy_credit_line),2))))
+        self.general_table_bank_position.setItem(1, 3, QTableWidgetItem(str(round(sum(self.fourth_strategy_credit_line),2))))
+
+        self.general_table_bank_position.setItem(2, 0, QTableWidgetItem(self.main_table_necessary_percents.item(3, self.decades).text()))
+        self.general_table_bank_position.setItem(2, 1, QTableWidgetItem(self.main_table_necessary_percents.item(4, self.decades).text()))
+        self.general_table_bank_position.setItem(2, 2, QTableWidgetItem(self.main_table_necessary_percents.item(5, self.decades).text()))
+        self.general_table_bank_position.setItem(2, 3, QTableWidgetItem(self.main_table_necessary_percents.item(6, self.decades).text()))
 
 app = QtWidgets.QApplication([])
 application = mywindow()
