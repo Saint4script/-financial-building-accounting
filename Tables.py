@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'Tables.ui'
 #
-# Created by: PyQt5 UI code generator 5.13.2
+# Created by: PyQt5 UI code generator 5.13.0
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -39,6 +39,8 @@ class Ui_NewWindow(object):
         self.listWidget.addItem(item)
         item = QtWidgets.QListWidgetItem()
         self.listWidget.addItem(item)
+        item = QtWidgets.QListWidgetItem()
+        self.listWidget.addItem(item)
         self.show_tables = QtWidgets.QPushButton(self.centralwidget)
         self.show_tables.setGeometry(QtCore.QRect(670, 20, 131, 28))
         self.show_tables.setObjectName("show_tables")
@@ -47,7 +49,7 @@ class Ui_NewWindow(object):
         self.clear_tables.setObjectName("clear_tables")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 1600, 21))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 1600, 26))
         self.menubar.setObjectName("menubar")
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
@@ -77,6 +79,8 @@ class Ui_NewWindow(object):
         item.setText(_translate("MainWindow", "если кредитная линия выбирается по мере необходимости строительного процесса, то платежи по процентам за пользование заемными средствами в конце периода"))
         item = self.listWidget.item(6)
         item.setText(_translate("MainWindow", "Процентные выплаты, которые получит банк"))
+        item = self.listWidget.item(7)
+        item.setText(_translate("MainWindow", "Прибыль с использованием заемных средств в объеме 85 % от стоимости проекта"))
         self.listWidget.setSortingEnabled(__sortingEnabled)
         self.show_tables.setText(_translate("MainWindow", "Показать выбранные"))
         self.clear_tables.setText(_translate("MainWindow", "Скрыть таблицы"))

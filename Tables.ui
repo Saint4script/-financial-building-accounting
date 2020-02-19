@@ -83,6 +83,11 @@
       <string>Процентные выплаты, которые получит банк</string>
      </property>
     </item>
+    <item>
+     <property name="text">
+      <string>Прибыль с использованием заемных средств в объеме 85 % от стоимости проекта</string>
+     </property>
+    </item>
    </widget>
    <widget class="QPushButton" name="show_tables">
     <property name="geometry">
@@ -117,7 +122,7 @@
      <x>0</x>
      <y>0</y>
      <width>1600</width>
-     <height>21</height>
+     <height>26</height>
     </rect>
    </property>
   </widget>

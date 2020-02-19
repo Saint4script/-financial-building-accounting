@@ -271,6 +271,24 @@ class newwindow(QtWidgets.QMainWindow):
         self.show_main_table.setText("Заполнить таблицу")
         self.show_main_table.move(-3000, -3000)
 
+
+        #Прибыль до налогообложения строительной организации при различных стратегиях
+        #продаж с использованием заемных средств в объеме 85 % от стоимости проекта.
+        #таблица №2 из статьи, задание 14
+        self.table_85_percent_debt_money = QtWidgets.QTableWidget(self.ui.centralwidget)
+        self.table_85_percent_debt_money.setObjectName("table_85_percent_debt_money")  
+        self.table_85_percent_debt_money.move(-3000,-3000) 
+        self.table_85_percent_debt_money.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContents)
+        self.table_85_percent_debt_money.resizeColumnsToContents()
+        self.table_85_percent_debt_money.resizeRowsToContents()
+        self.table_85_percent_debt_money.setRowCount(3)
+        self.table_85_percent_debt_money.setColumnCount(4)
+        self.table_85_percent_debt_money.setVerticalHeaderLabels(["в начале строительства", "равномерно в течение строительства", "по мере необходимости"])
+        self.table_85_percent_debt_money.setHorizontalHeaderLabels(["в начале", "в середине", "в конце", "равномерно"])
+        self.fill_table_85_percent_debt_money()
+        align_items(self.table_85_percent_debt_money)
+        read_only_tables(self.table_85_percent_debt_money)
+
         self.general_table_bank_position = QtWidgets.QTableWidget(self.ui.centralwidget)
         self.general_table_bank_position.setObjectName("general_table_bank_position")  
         self.general_table_bank_position.move(-3000,-3000) 
@@ -281,7 +299,7 @@ class newwindow(QtWidgets.QMainWindow):
         self.general_table_bank_position.setColumnCount(4)
         self.general_table_bank_position.setVerticalHeaderLabels(["в начале строительства", "равномерно в течение строительства", "по мере необходимости"])
         self.general_table_bank_position.setHorizontalHeaderLabels(["в начале", "в середине", "в конце", "равномерно"])
-        #Заполняется эта таблица при вызое fill_main_table т.к часть данных берется оттуда
+        #Заполняется эта таблица при вызове fill_main_table т.к часть данных берется оттуда
 
         self.ui.pushButton.clicked.connect(self._exit)
         self.ui.show_tables.clicked.connect(self.choose_tables)
@@ -290,9 +308,9 @@ class newwindow(QtWidgets.QMainWindow):
 
 
 
-    #КОРОЧЕ. ТУТ ВСЕ СОСТОИТ ИЗ КОСТЫЛЕЙ. КГДА ВСЕ СДЕЛАЕМ, НАДО СПРОСИТЬ ПАРУ МОМЕНТОВ И ЗАПОЛНЯТЬ ЕЕ НОРМАЛЬНО
+    #КОРОЧЕ. ТУТ ВСЕ СОСТОИТ ИЗ КОСТЫЛЕЙ. КOГДА ВСЕ СДЕЛАЕМ, НАДО СПРОСИТЬ ПАРУ МОМЕНТОВ И ЗАПОЛНЯТЬ ЕЕ НОРМАЛЬНО
     # ЕЩЕ ВАЖНЫЙ КОМЕНТ!!!!!!! ТУТ СУММИРОВАНИЕ ИДЕТ НЕ ПО ВСЕМ СТОБЦАМ ТАБЛИЦЫ, А ТОЛЬКО КОНКРЕТНЫЕ ПЛАТЕЖИ!!!!
-    #НАДО ПОТОМ СПРОСИТЬ КАК ПРАВИЛЬНОО, ЩАС ПРОСТО ОСТАВИМ ТАК, ЧТОБЫ ЧИСЛА СХОДИЛИСЬ!!!!!!!!!!!!
+    #НАДО ПОТОМ СПРОСИТЬ КАК ПРАВИЛЬНО, ЩАС ПРОСТО ОСТАВИМ ТАК, ЧТОБЫ ЧИСЛА СХОДИЛИСЬ!!!!!!!!!!!!
     #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
     def fill_main_table(self):
@@ -358,8 +376,7 @@ class newwindow(QtWidgets.QMainWindow):
             self.main_table_necessary_percents.setItem(i + 3, self.decades + 4, QTableWidgetItem(str(round(total_sum, 2)))) #Итого
         
         self.fill_general_table_bank_position()
-
-        
+ 
     def clear_tables(self):
         tables = self.ui.centralwidget.findChildren(QtWidgets.QTableWidget)
         for table in tables:
@@ -437,6 +454,13 @@ class newwindow(QtWidgets.QMainWindow):
                     self.general_table_bank_position.move(0, current_height)
                     self.general_table_bank_position.resize(700, self.general_table_bank_position.height())
                     current_height += self.general_table_bank_position.height() + 10
+                else:
+                    break
+            elif(elem.text() == "Прибыль с использованием заемных средств в объеме 85 % от стоимости проекта"):
+                if(check_height(current_height + self.table_85_percent_debt_money.height() + 10 + self.table_85_percent_debt_money.height() + 10)):
+                    self.table_85_percent_debt_money.move(0, current_height)
+                    self.table_85_percent_debt_money.resize(700, self.table_85_percent_debt_money.height())
+                    current_height += self.table_85_percent_debt_money.height() + 10
                 else:
                     break
                 
@@ -703,7 +727,6 @@ class newwindow(QtWidgets.QMainWindow):
                 new_date -= 12
         table.setHorizontalHeaderLabels(labels_names)
 
-
     def fill_credit_is_got_fully_at_the_beginning(self):
         #Объявим несколько массивов
         self.first_strategy_payment = []
@@ -872,7 +895,29 @@ class newwindow(QtWidgets.QMainWindow):
         self.general_table_bank_position.setItem(2, 1, QTableWidgetItem(self.main_table_necessary_percents.item(4, self.decades).text()))
         self.general_table_bank_position.setItem(2, 2, QTableWidgetItem(self.main_table_necessary_percents.item(5, self.decades).text()))
         self.general_table_bank_position.setItem(2, 3, QTableWidgetItem(self.main_table_necessary_percents.item(6, self.decades).text()))
-
+    #ДОДЕЛАТЬ 3 СТРОКУ!!!
+    # ПРОБЛЕМА В ТАБЛИЦЕ, ЗАПОЛНЯЮЩЕЙСЯ ПО КНОПКЕ!
+    def fill_table_85_percent_debt_money(self):
+        #заполняем первую строку
+        for i in range(4):
+            item1 = float(self.Table_with_flat_sell_plan.item(i+5, self.decades).text())
+            item2 = float(self.credit_is_got_fully_at_the_beginning.item(i, self.decades + 4).text())
+            res = QTableWidgetItem(str((item1 - item2)))
+            self.table_85_percent_debt_money.setItem(0, i, res)
+            #заполняем вторую строку
+        for i in range(4):
+            item1 = float(self.Table_with_flat_sell_plan.item(i+5, self.decades).text())
+            item2 = float(self.credit_line_chooses_evenly.item(i, self.decades + 4).text())
+            res = QTableWidgetItem(str((item1 - item2)))
+            self.table_85_percent_debt_money.setItem(1, i, res)
+            #заполняем третью строку
+        for i in range(4):
+            pass
+            item1 = float(self.Table_with_flat_sell_plan.item(i+5, self.decades).text())
+            item2 = float(self.main_table_necessary_percents.item(i+3, self.decades + 4).text())
+            res = QTableWidgetItem(str((item1 - item2)))
+            self.table_85_percent_debt_money.setItem(2, i, res)
+        pass
 app = QtWidgets.QApplication([])
 application = mywindow()
 application.show()
