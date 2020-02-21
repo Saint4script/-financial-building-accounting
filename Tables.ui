@@ -88,6 +88,41 @@
       <string>Прибыль с использованием заемных средств в объеме 85 % от стоимости проекта</string>
      </property>
     </item>
+    <item>
+     <property name="text">
+      <string>Финансовый рычаг при различных стратегиях продаж с использованием заемных средств</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Рентабельность собственного капитала при различных стратегиях продаж с использованием заемных средств</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Процентные выплаты, получаемые банком за предоставление кредита</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Средневзвешенная процентная ставка по заемному капиталу строительной организации </string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Увеличение себестоимости 1м2  при кредитовании строительной организации</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Увеличение себестоимости 1м2  при кредитовании строительной организации в %</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Прикидка поступления денежных средств в бюджет за счет налоговых отчислений от строительной организации и банка</string>
+     </property>
+    </item>
    </widget>
    <widget class="QPushButton" name="show_tables">
     <property name="geometry">

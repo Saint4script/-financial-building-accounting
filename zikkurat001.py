@@ -78,7 +78,7 @@ class Ui_MainWindow(object):
         self.Test.setGeometry(QtCore.QRect(400, 400, 211, 111))
         self.Test.setObjectName("Test")
         self.calendarWidget = QtWidgets.QCalendarWidget(self.centralwidget)
-        self.calendarWidget.setGeometry(QtCore.QRect(500, 150, 312, 183))
+        self.calendarWidget.setGeometry(QtCore.QRect(500, 150, 400, 250))
         self.calendarWidget.setObjectName("calendarWidget")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
