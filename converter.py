@@ -1158,11 +1158,36 @@ class newwindow(QtWidgets.QMainWindow):
         for i in range(3):
             for j in range(4):
                 item = float(self.table_encrease_owncost_area.item(i,j).text())
-                print(self.c, " ",item," ",str(float(item/self.c)))
                 self.table_encrease_owncost_area_percentage.setItem(i, j, QTableWidgetItem(str(round(float(item/self.c*100),1))))
 
     def fill_table_budget_money_income(self):
-        pass
+        for j in range(3):
+            for i in range(4):
+                if(j == 0):
+                    q5 = float(self.credit_is_got_fully_at_the_beginning.item(i, self.decades+4).text())
+                elif(j == 1):
+                    q5 = float(self.credit_line_chooses_evenly.item(i, self.decades+4).text())
+                else:
+                    q5 = float(self.main_table_necessary_percents.item(i + 3, self.decades+4).text())
+                q2 = float(self.Table_with_flat_sell_plan.item(i+5, self.decades).text())
+                item1 = (float(self.table_bank_money_all_time.item(j, i).text()) - self.credit_money*0.05) * 0.24
+                item2 = (q2 - q5)*0.2
+                
+                if(item1 > 0.0 and item2 > 0.0):
+                    elem = QTableWidgetItem(str(round(item1 + item2)))
+                elif(item1 < 0.0 and item2 > 0.0):
+                    elem = QTableWidgetItem(str(round(item2)))
+                elif(item1 > 0.0 and item2 < 0.0):
+                    elem = QTableWidgetItem(str(round(item1)))
+                else:
+                    elem = QTableWidgetItem('0')
+                self.table_budget_money_income.setItem(j, i, elem)
+                
+            
+       
+
+
+
 app = QtWidgets.QApplication([])
 application = mywindow()
 application.show()
