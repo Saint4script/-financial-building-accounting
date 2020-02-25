@@ -33,13 +33,13 @@ class mywindow(QtWidgets.QMainWindow):
         ##Написать проверку заполнения при вызове Build_func
         self.mini_table_for_necessary_percents = QtWidgets.QTableWidget(self.ui.centralwidget)
         self.mini_table_for_necessary_percents.setObjectName("mini_table_for_necessary_percents")  
-        self.mini_table_for_necessary_percents.move(-3000,-3000) 
+        self.mini_table_for_necessary_percents.move(0,500) 
         self.mini_table_for_necessary_percents.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContents)
         self.mini_table_for_necessary_percents.resizeColumnsToContents()
         self.mini_table_for_necessary_percents.resizeRowsToContents()
         self.mini_table_for_necessary_percents.setRowCount(1)
         self.mini_table_for_necessary_percents.setColumnCount(10)
-        self.mini_table_for_necessary_percents.setVerticalHeaderLabels(["процент потребности в деньгах от стоимости проекта"])
+        self.mini_table_for_necessary_percents.setVerticalHeaderLabels(["Потребность в деньгах от\t стоимости проекта(%)"])
         #сделаем пока автозаполнение процентов
         self.mini_table_for_necessary_percents.setItem(0,0,QTableWidgetItem("9,68508804395618"))
         self.mini_table_for_necessary_percents.setItem(0,1,QTableWidgetItem("11,570903952796"))
@@ -61,12 +61,29 @@ class mywindow(QtWidgets.QMainWindow):
         self.ui.Start_cost.setText("54000")
         self.ui.Self_cost.setText("51900")
         
+    def fill_mini_table_for_necessary_percents(self):
+        percents_sum = 0
+        for i in range(self.mini_table_for_necessary_percents.columnCount()):
+            if(self.mini_table_for_necessary_percents.item(0, i) == None):
+                message = 'Вы не заполнили все ячейки'
+                QtWidgets.QMessageBox.warning(self, 'Уведомление', message, QtWidgets.QMessageBox.Ok)
+                return False
+            else:
+                percent = float(self.mini_table_for_necessary_percents.item(0, i).text().replace(',', '.'))
+                percents_sum += percent
+        
+        if(percents_sum != 100):
+            message = f'Сумма процентов не равна 100 ({percents_sum})'
+            QtWidgets.QMessageBox.warning(self, 'Уведомление', message,
+                                                        QtWidgets.QMessageBox.Ok)
+            return False
+        else:
+            return True
         
     def show_date(self,date):
         self.date_start = date
         print(QDate.longMonthName(date.month()))
-    
-        
+           
     def get_dimensions(self):
         l = (self.k,self.S,self.n,self.s,self.p1,self.z,self.build_time,self.own_money,self.c, self.date_start, self.Project_cost)
         return l
@@ -92,7 +109,7 @@ class mywindow(QtWidgets.QMainWindow):
                 error_dialog = QtWidgets.QErrorMessage()
                 error_dialog.showMessage("Здесь.Не.Строят")
                 error_dialog.exec_()
-            else:
+            elif(self.fill_mini_table_for_necessary_percents()):
                  self.k = total_area * self_cost - start_money
                  application = newwindow(self)
                  application.show()
@@ -443,15 +460,11 @@ class newwindow(QtWidgets.QMainWindow):
         for i in range(self.parent().mini_table_for_necessary_percents.columnCount()):
             if(self.parent().mini_table_for_necessary_percents.item(0, i) == None):
                 message = 'Вы не заполнили все ячейки'
-                QtWidgets.QMessageBox.warning(self, 'Уведомление', message,
-                                                        QtWidgets.QMessageBox.Ok)
+                QtWidgets.QMessageBox.warning(self, 'Уведомление', message, QtWidgets.QMessageBox.Ok)
                 return
             else:
                 percent = float(self.parent().mini_table_for_necessary_percents.item(0, i).text().replace(',', '.'))
-                # percent = int(percent * 100)
-                # print(percent)
                 percents_sum += percent
-                # print(percents_sum)
         
         if(percents_sum != 100):
             message = f'Сумма процентов не равна 100 ({percents_sum})'
@@ -460,7 +473,8 @@ class newwindow(QtWidgets.QMainWindow):
             return
         
         for i in range(self.parent().mini_table_for_necessary_percents.columnCount()):
-            TableItem = self.parent().mini_table_for_necessary_percents.item(0, i).text().replace(',', '.') #это надо из-за того, что дробные числа в питоне пишутся через точку, а ввести могут с запятыми 
+            TableItem = self.parent().mini_table_for_necessary_percents.item(0, i).text().replace(',', '.') #это надо из-за того,
+            # что дробные числа в питоне пишутся через точку, а ввести могут с запятыми 
             cell_info = self.project_cost * float(TableItem) / 100
             self.main_table_necessary_percents.setItem(0, i, QTableWidgetItem(str(cell_info)))
             self.main_table_necessary_percents.setItem(1, i, QTableWidgetItem(str(cell_info)))
