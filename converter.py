@@ -50,7 +50,8 @@ class mywindow(QtWidgets.QMainWindow):
         self.mini_table_for_necessary_percents.setItem(0,6,QTableWidgetItem("13,3302211572039"))
         self.mini_table_for_necessary_percents.setItem(0,7,QTableWidgetItem("3,32028347130497"))
         self.mini_table_for_necessary_percents.setItem(0,8,QTableWidgetItem("3,93512861368219"))
-        self.mini_table_for_necessary_percents.setItem(0,9,QTableWidgetItem("5,75262499669945")) # по идее тут вместо самой последней 5 должно +3 , т.е 8. Надо было для подсчета нормального так сделать
+        self.mini_table_for_necessary_percents.setItem(0,9,QTableWidgetItem("5,75262499669948")) # по идее тут вместо самой последней 5 должно +3 , 
+        #т.е 8. Надо было для подсчета нормального так сделать
         ##############################################
         self.ui.Apartments_amount.setText("368")
         self.ui.Average_area_of_apartments.setText("66")
@@ -71,8 +72,8 @@ class mywindow(QtWidgets.QMainWindow):
             else:
                 percent = float(self.mini_table_for_necessary_percents.item(0, i).text().replace(',', '.'))
                 percents_sum += percent
-        
-        if(percents_sum != 100):
+        percents_sum = round(percents_sum, 4)
+        if(percents_sum != float(100)):
             message = f'Сумма процентов не равна 100 ({percents_sum})'
             QtWidgets.QMessageBox.warning(self, 'Уведомление', message,
                                                         QtWidgets.QMessageBox.Ok)
@@ -110,10 +111,11 @@ class mywindow(QtWidgets.QMainWindow):
                 error_dialog.showMessage("Здесь.Не.Строят")
                 error_dialog.exec_()
             elif(self.fill_mini_table_for_necessary_percents()):
-                 self.k = total_area * self_cost - start_money
-                 application = newwindow(self)
-                 application.show()
-                 self.hide()
+                self.k = total_area * self_cost - start_money
+                application = newwindow(self)
+                application.show()
+                self.hide()
+            
     
     def isnt_field_empty(self):
         lineEdits = self.ui.centralwidget.findChildren(QtWidgets.QLineEdit)
@@ -455,42 +457,33 @@ class newwindow(QtWidgets.QMainWindow):
     #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
     def fill_main_table_necessary_percents(self):
-        
-        percents_sum = 0
-        for i in range(self.parent().mini_table_for_necessary_percents.columnCount()):
-            if(self.parent().mini_table_for_necessary_percents.item(0, i) == None):
-                message = 'Вы не заполнили все ячейки'
-                QtWidgets.QMessageBox.warning(self, 'Уведомление', message, QtWidgets.QMessageBox.Ok)
-                return
-            else:
-                percent = float(self.parent().mini_table_for_necessary_percents.item(0, i).text().replace(',', '.'))
-                percents_sum += percent
-        
-        if(percents_sum != 100):
-            message = f'Сумма процентов не равна 100 ({percents_sum})'
-            QtWidgets.QMessageBox.warning(self, 'Уведомление', message,
-                                                        QtWidgets.QMessageBox.Ok)
-            return
+        current_own_money = self.project_cost - self.credit_money
+        item = 0
+        cell_info_sum = 0
         
         for i in range(self.parent().mini_table_for_necessary_percents.columnCount()):
             TableItem = self.parent().mini_table_for_necessary_percents.item(0, i).text().replace(',', '.') #это надо из-за того,
             # что дробные числа в питоне пишутся через точку, а ввести могут с запятыми 
             cell_info = self.project_cost * float(TableItem) / 100
-            self.main_table_necessary_percents.setItem(0, i, QTableWidgetItem(str(cell_info)))
-            self.main_table_necessary_percents.setItem(1, i, QTableWidgetItem(str(cell_info)))
+           
+            if(current_own_money - cell_info >= 0):
+                item = 0
+                current_own_money -= cell_info
+            else:
+                if(current_own_money > 0):
+                   item = cell_info - current_own_money
+                   current_own_money = 0
+                else:
+                    item = cell_info
+            cell_info_sum += item
 
-        self.main_table_necessary_percents.setItem(1, 0, QTableWidgetItem('0'))
-        self.main_table_necessary_percents.setItem(1, 1, QTableWidgetItem('78859731.95'))
-        
-        self.main_table_necessary_percents.update()
-        tmp_sum = 0
-        for i in range(self.parent().mini_table_for_necessary_percents.columnCount()):
-            tmp_sum += float(self.main_table_necessary_percents.item(1, i).text())
-            self.main_table_necessary_percents.setItem(2, i, QTableWidgetItem(str(tmp_sum)))
+            self.main_table_necessary_percents.setItem(0, i, QTableWidgetItem(str(cell_info)))
+            self.main_table_necessary_percents.setItem(1, i, QTableWidgetItem(str(item)))
+            self.main_table_necessary_percents.setItem(2, i, QTableWidgetItem(str(cell_info_sum)))
 
         for i in range(4):
             row_sum = 0
-            for j in range(1, self.decades):
+            for j in range(self.decades):
                 tmp = float(self.main_table_necessary_percents.item(2, j).text())
                 percent = float(self.escrow_rate.item(i,j).text())
                 row_sum += tmp * percent / 4
@@ -973,9 +966,9 @@ class newwindow(QtWidgets.QMainWindow):
             
         for i in range(4):
             total_sum = 0
-            for j in range(decades + 3):
+            #говно-цикл, презираю, осуждаю
+            for j in range(decades):
                 total_sum += float(self.credit_is_got_fully_at_the_beginning.item(i, j).text())
-            
             total_sum += self.credit_money + self.own_money
             self.credit_is_got_fully_at_the_beginning.setItem(i, decades + 4, QTableWidgetItem(str(round(total_sum, 2)))) #Итого
 
@@ -1047,9 +1040,8 @@ class newwindow(QtWidgets.QMainWindow):
             
         for i in range(4):
             total_sum = 0
-            for j in range(decades + 3):
+            for j in range(decades):
                 total_sum += float(self.credit_line_chooses_evenly.item(i, j).text())
-            
             total_sum += self.credit_money + self.own_money
             self.credit_line_chooses_evenly.setItem(i, decades + 4, QTableWidgetItem(str(round(total_sum, 2)))) #Итого
 
@@ -1113,8 +1105,8 @@ class newwindow(QtWidgets.QMainWindow):
             self.table_85_percent_debt_money.setItem(1, i, res)
         #заполняем третью строку
         for i in range(4):
-            pass
             item1 = float(self.Table_with_flat_sell_plan.item(i+5, self.decades).text())
+            print(self.main_table_necessary_percents.item(i+3, self.decades + 4).text())
             item2 = float(self.main_table_necessary_percents.item(i+3, self.decades + 4).text())
             res = QTableWidgetItem(str((item1 - item2)))
             self.table_85_percent_debt_money.setItem(2, i, res)
