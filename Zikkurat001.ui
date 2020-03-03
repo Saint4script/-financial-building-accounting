@@ -6,9 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1200</width>
+    <width>1112</width>
     <height>800</height>
    </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>1112</width>
+    <height>800</height>
+   </size>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
@@ -227,8 +233,8 @@
    <widget class="QPushButton" name="Build">
     <property name="geometry">
      <rect>
-      <x>50</x>
-      <y>350</y>
+      <x>500</x>
+      <y>630</y>
       <width>201</width>
       <height>71</height>
      </rect>
@@ -237,17 +243,17 @@
      <string>Построить Зиккурат</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="Test">
+   <widget class="QPushButton" name="show_percents_table">
     <property name="geometry">
      <rect>
-      <x>400</x>
-      <y>400</y>
-      <width>211</width>
-      <height>111</height>
+      <x>40</x>
+      <y>380</y>
+      <width>31</width>
+      <height>31</height>
      </rect>
     </property>
     <property name="text">
-     <string>PushButton</string>
+     <string/>
     </property>
    </widget>
    <widget class="QCalendarWidget" name="calendarWidget">
@@ -260,13 +266,62 @@
      </rect>
     </property>
    </widget>
+   <widget class="QPushButton" name="show_calendar">
+    <property name="geometry">
+     <rect>
+      <x>500</x>
+      <y>100</y>
+      <width>50</width>
+      <height>50</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_10">
+    <property name="geometry">
+     <rect>
+      <x>560</x>
+      <y>110</y>
+      <width>231</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Выберите дату начала строительства</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_11">
+    <property name="geometry">
+     <rect>
+      <x>80</x>
+      <y>380</y>
+      <width>261</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Введите нужные вам проценту ко кредиту</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1200</width>
+     <width>1112</width>
      <height>21</height>
     </rect>
    </property>

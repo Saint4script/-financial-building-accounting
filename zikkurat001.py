@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'Zikkurat001.ui'
 #
-# Created by: PyQt5 UI code generator 5.13.0
+# Created by: PyQt5 UI code generator 5.13.2
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -13,7 +13,8 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1200, 800)
+        MainWindow.resize(1112, 800)
+        MainWindow.setMinimumSize(QtCore.QSize(1112, 800))
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.Total_area = QtWidgets.QLineEdit(self.centralwidget)
@@ -72,17 +73,34 @@ class Ui_MainWindow(object):
         self.Project_cost.setGeometry(QtCore.QRect(330, 300, 141, 22))
         self.Project_cost.setObjectName("Project_cost")
         self.Build = QtWidgets.QPushButton(self.centralwidget)
-        self.Build.setGeometry(QtCore.QRect(50, 350, 201, 71))
+        self.Build.setGeometry(QtCore.QRect(500, 630, 201, 71))
         self.Build.setObjectName("Build")
-        # self.Test = QtWidgets.QPushButton(self.centralwidget)
-        # self.Test.setGeometry(QtCore.QRect(400, 400, 211, 111))
-        # self.Test.setObjectName("Test")
+        self.show_percents_table = QtWidgets.QPushButton(self.centralwidget)
+        self.show_percents_table.setGeometry(QtCore.QRect(40, 380, 31, 31))
+        self.show_percents_table.setText("")
+        self.show_percents_table.setObjectName("show_percents_table")
         self.calendarWidget = QtWidgets.QCalendarWidget(self.centralwidget)
-        self.calendarWidget.setGeometry(QtCore.QRect(500, 150, 400, 250))
+        self.calendarWidget.setGeometry(QtCore.QRect(500, 150, 312, 183))
         self.calendarWidget.setObjectName("calendarWidget")
+        self.show_calendar = QtWidgets.QPushButton(self.centralwidget)
+        self.show_calendar.setGeometry(QtCore.QRect(500, 100, 50, 50))
+        self.show_calendar.setText("")
+        self.show_calendar.setObjectName("show_calendar")
+        self.label_10 = QtWidgets.QLabel(self.centralwidget)
+        self.label_10.setGeometry(QtCore.QRect(560, 110, 231, 21))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.label_10.setFont(font)
+        self.label_10.setObjectName("label_10")
+        self.label_11 = QtWidgets.QLabel(self.centralwidget)
+        self.label_11.setGeometry(QtCore.QRect(80, 380, 261, 21))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.label_11.setFont(font)
+        self.label_11.setObjectName("label_11")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 1200, 21))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 1112, 21))
         self.menubar.setObjectName("menubar")
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
@@ -105,4 +123,5 @@ class Ui_MainWindow(object):
         self.label_8.setText(_translate("MainWindow", "<html><head/><body><p>Себестоимость 1 м<span style=\" vertical-align:super;\">2</span></p></body></html>"))
         self.label_9.setText(_translate("MainWindow", "<html><head/><body><p>*Стоимость проекта*</p></body></html>"))
         self.Build.setText(_translate("MainWindow", "Построить Зиккурат"))
-        #self.Test.setText(_translate("MainWindow", "PushButton"))
+        self.label_10.setText(_translate("MainWindow", "Выберите дату начала строительства"))
+        self.label_11.setText(_translate("MainWindow", "Введите нужные вам проценту ко кредиту"))
