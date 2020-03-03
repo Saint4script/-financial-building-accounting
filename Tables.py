@@ -6,8 +6,10 @@
 #
 # WARNING! All changes made in this file will be lost!
 
-
+import math
+from PyQt5.QtCore import QDate
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtWidgets import QTableWidgetItem
 
 
 class Ui_NewWindow(object):
@@ -25,8 +27,6 @@ class Ui_NewWindow(object):
         self.listWidget.setGeometry(QtCore.QRect(0, 0, 651, 91))
         self.listWidget.setSelectionMode(QtWidgets.QAbstractItemView.ExtendedSelection)
         self.listWidget.setObjectName("listWidget")
-        item = QtWidgets.QListWidgetItem()
-        self.listWidget.addItem(item)
         item = QtWidgets.QListWidgetItem()
         self.listWidget.addItem(item)
         item = QtWidgets.QListWidgetItem()
@@ -92,23 +92,261 @@ class Ui_NewWindow(object):
         item = self.listWidget.item(5)
         item.setText(_translate("MainWindow", "если кредитная линия выбирается по мере необходимости строительного процесса, то платежи по процентам за пользование заемными средствами в конце периода"))
         item = self.listWidget.item(6)
-        item.setText(_translate("MainWindow", "Процентные выплаты, которые получит банк"))
-        item = self.listWidget.item(7)
         item.setText(_translate("MainWindow", "Прибыль с использованием заемных средств в объеме 85 % от стоимости проекта"))
-        item = self.listWidget.item(8)
+        item = self.listWidget.item(7)
         item.setText(_translate("MainWindow", "Финансовый рычаг при различных стратегиях продаж с использованием заемных средств"))
-        item = self.listWidget.item(9)
+        item = self.listWidget.item(8)
         item.setText(_translate("MainWindow", "Рентабельность собственного капитала при различных стратегиях продаж с использованием заемных средств"))
-        item = self.listWidget.item(10)
+        item = self.listWidget.item(9)
         item.setText(_translate("MainWindow", "Процентные выплаты, получаемые банком за предоставление кредита"))
+        item = self.listWidget.item(10)
+        item.setText(_translate("MainWindow", "Средневзвешенная процентная ставка по заемному капиталу строительной организации"))
         item = self.listWidget.item(11)
-        item.setText(_translate("MainWindow", "Средневзвешенная процентная ставка по заемному капиталу строительной организации "))
-        item = self.listWidget.item(12)
         item.setText(_translate("MainWindow", "Увеличение себестоимости 1м2  при кредитовании строительной организации"))
-        item = self.listWidget.item(13)
+        item = self.listWidget.item(12)
         item.setText(_translate("MainWindow", "Увеличение себестоимости 1м2  при кредитовании строительной организации в %"))
-        item = self.listWidget.item(14)
+        item = self.listWidget.item(13)
         item.setText(_translate("MainWindow", "Прикидка поступления денежных средств в бюджет за счет налоговых отчислений от строительной организации и банка"))
         self.listWidget.setSortingEnabled(__sortingEnabled)
         self.show_tables.setText(_translate("MainWindow", "Показать выбранные"))
         self.clear_tables.setText(_translate("MainWindow", "Скрыть таблицы"))
+
+
+    def create_tables(self, decades):
+        #Увелечение цены каждый квартал на какое-то кол-во процентов
+        self.TableWidget = QtWidgets.QTableWidget(self.centralwidget)
+        self.TableWidget.setObjectName("Table_decade")
+        self.TableWidget.move(-3000,-3000) 
+        self.TableWidget.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContents)
+        self.TableWidget.resizeColumnsToContents()
+        self.TableWidget.resizeRowsToContents()
+        self.TableWidget.setRowCount(2)
+        self.TableWidget.setColumnCount(decades + 1)
+        self.TableWidget.setHorizontalHeaderItem(decades, QTableWidgetItem("Средняя цена"))
+        
+        #план продаж
+        self.Table_with_flat_sell_plan = QtWidgets.QTableWidget(self.centralwidget)
+        self.Table_with_flat_sell_plan.setObjectName("Table_with_flat_sell_plan")  
+        self.Table_with_flat_sell_plan.move(-3000,-3000) 
+        self.Table_with_flat_sell_plan.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContents)
+        self.Table_with_flat_sell_plan.resizeColumnsToContents()
+        self.Table_with_flat_sell_plan.resizeRowsToContents()
+        self.Table_with_flat_sell_plan.setRowCount(14)
+        self.Table_with_flat_sell_plan.setColumnCount(decades + 3)
+        self.Table_with_flat_sell_plan.setHorizontalHeaderItem(decades, QTableWidgetItem("Итого"))
+        self.Table_with_flat_sell_plan.setHorizontalHeaderItem(decades + 1, QTableWidgetItem("потеря прибыли у строительной организации"))
+        self.Table_with_flat_sell_plan.setColumnWidth(decades + 1, 200)
+        self.Table_with_flat_sell_plan.setHorizontalHeaderItem(decades+ 2, QTableWidgetItem("рентабильность активов"))
+        self.Table_with_flat_sell_plan.setColumnWidth(decades + 2, 150)
+        self.Table_with_flat_sell_plan.setHorizontalHeaderLabels(["" for i in range(decades)])
+        self.Table_with_flat_sell_plan.setVerticalHeaderLabels([ "по стратегии 1 - в начале",
+                                                                    "по стратегии 2 - в середине",
+                                                                    "по стратегии 3 - в конце",
+                                                                    "по стратегии 4 - равномерно",
+                                                                    "план продаж в руб. по ценам:",
+                                                                    "по стратегии 1 - в начале",
+                                                                    "по стратегии 2 - в середине",
+                                                                    "по стратегии 3 - в конце",
+                                                                    "по стратегии 4 - равномерно",
+                                                                    "количество денег на эскроу счетах:",
+                                                                    "по стратегии 1 - в начале",
+                                                                    "по стратегии 2 - в середине",
+                                                                    "по стратегии 3 - в конце",
+                                                                    "по стратегии 4 - равномерно"])
+
+        #Эскроу счета
+        self.escrow_rate = QtWidgets.QTableWidget(self.centralwidget)
+        self.escrow_rate.setObjectName("escrow_rate")  
+        self.escrow_rate.move(-3000,-3000) 
+        self.escrow_rate.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContents)
+        self.escrow_rate.resizeColumnsToContents()
+        self.escrow_rate.resizeRowsToContents()
+        self.escrow_rate.setRowCount(4)
+        self.escrow_rate.setColumnCount(decades)
+        self.escrow_rate.setVerticalHeaderLabels([ "по стратегии 1 - в начале",
+                                                            "по стратегии 2 - в середине",
+                                                            "по стратегии 3 - в конце",
+                                                            "по стратегии 4 - равномерно"])
+
+        #Кредит получен целиков в начале
+        self.credit_is_got_fully_at_the_beginning = QtWidgets.QTableWidget(self.centralwidget)
+        self.credit_is_got_fully_at_the_beginning.setObjectName("credit_is_got_fully_atThe_beginning")  
+        self.credit_is_got_fully_at_the_beginning.move(-3000,-3000) 
+        self.credit_is_got_fully_at_the_beginning.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContents)
+        self.credit_is_got_fully_at_the_beginning.resizeColumnsToContents()
+        self.credit_is_got_fully_at_the_beginning.resizeRowsToContents()
+        self.credit_is_got_fully_at_the_beginning.setRowCount(4)
+        self.credit_is_got_fully_at_the_beginning.setColumnCount(decades + 5)
+        self.credit_is_got_fully_at_the_beginning.setVerticalHeaderLabels([ "по стратегии 1 - в начале",
+                                                                            "по стратегии 2 - в середине",
+                                                                            "по стратегии 3 - в конце",
+                                                                            "по стратегии 4 - равномерно"])
+        self.credit_is_got_fully_at_the_beginning.setColumnWidth(decades + 1, 230)
+        self.credit_is_got_fully_at_the_beginning.setColumnWidth(decades + 2, 180)
+        self.credit_is_got_fully_at_the_beginning.setColumnWidth(decades + 3, 230)
+
+        #Кредит получен равномерно
+        self.credit_line_chooses_evenly = QtWidgets.QTableWidget(self.centralwidget)
+        self.credit_line_chooses_evenly.setObjectName("credit_line_chooses_evenly")  
+        self.credit_line_chooses_evenly.move(-3000,-3000) 
+        self.credit_line_chooses_evenly.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContents)
+        self.credit_line_chooses_evenly.resizeColumnsToContents()
+        self.credit_line_chooses_evenly.resizeRowsToContents()
+        self.credit_line_chooses_evenly.setRowCount(4)
+        self.credit_line_chooses_evenly.setColumnCount(decades + 5)
+        self.credit_line_chooses_evenly.setVerticalHeaderLabels([ "по стратегии 1 - в начале",
+                                                            "по стратегии 2 - в середине",
+                                                            "по стратегии 3 - в конце",
+                                                            "по стратегии 4 - равномерно"])
+        
+        #Кредит заполняется исходя из текущих нужд
+        self.main_table_necessary_percents = QtWidgets.QTableWidget(self.centralwidget)
+        self.main_table_necessary_percents.setObjectName("main_table_necessary_percents")  
+        self.main_table_necessary_percents.move(-3000,-3000) 
+        self.main_table_necessary_percents.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContents)
+        self.main_table_necessary_percents.resizeColumnsToContents()
+        self.main_table_necessary_percents.resizeRowsToContents()
+        self.main_table_necessary_percents.setRowCount(7)
+        self.main_table_necessary_percents.setColumnCount(decades + 5)
+        self.main_table_necessary_percents.setVerticalHeaderLabels(["потребность в денежныж средствах для реализации проекта", 
+                                                                    "заемных средств, которые нужно взять у банка", 
+                                                                    "количество заемных средств",
+                                                                    "по 1 стратегии - в начале",
+                                                                    "по 2 стратегии - в середине", 
+                                                                    "по 3 стратегии - в конце", 
+                                                                    "по 4 стратегии - равномерно"])
+        
+        self.main_table_necessary_percents.setHorizontalHeaderItem(decades, QTableWidgetItem("Сумма платежей"))
+        self.main_table_necessary_percents.setHorizontalHeaderItem(decades + 1, QTableWidgetItem("Средневзвешенная процентная ставка"))
+        self.main_table_necessary_percents.setHorizontalHeaderItem(decades + 2, QTableWidgetItem("Эффект финансового рычага"))
+        self.main_table_necessary_percents.setHorizontalHeaderItem(decades + 3, QTableWidgetItem("Рентабильность собственного капиатала"))
+        self.main_table_necessary_percents.setHorizontalHeaderItem(decades + 4, QTableWidgetItem("Итого"))
+        self.main_table_necessary_percents.setColumnWidth(decades + 1, 230)
+        self.main_table_necessary_percents.setColumnWidth(decades + 2, 180)
+        self.main_table_necessary_percents.setColumnWidth(decades + 3, 240)
+
+        #14. Прибыль до налогообложения строительной организации при различных стратегиях
+        #продаж с использованием заемных средств в объеме 85 % от стоимости проекта.
+        #таблица №2 из статьи, задание 14
+        self.table_85_percent_debt_money = QtWidgets.QTableWidget(self.centralwidget)
+        self.table_85_percent_debt_money.setObjectName("table_85_percent_debt_money")  
+        self.table_85_percent_debt_money.move(-3000,-3000) 
+        self.table_85_percent_debt_money.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContents)
+        self.table_85_percent_debt_money.resizeColumnsToContents()
+        self.table_85_percent_debt_money.resizeRowsToContents()
+        self.table_85_percent_debt_money.setRowCount(3)
+        self.table_85_percent_debt_money.setColumnCount(4)
+        self.table_85_percent_debt_money.setVerticalHeaderLabels(["в начале строительства", "равномерно в течение строительства", "по мере необходимости"])
+        self.table_85_percent_debt_money.setHorizontalHeaderLabels(["в начале", "в середине", "в конце", "равномерно"])
+    
+        self.label_85_percent_debt_money = QtWidgets.QLabel(self.centralwidget)
+        self.label_85_percent_debt_money.setText("Прибыль до налогообложения строительной организации")
+        self.label_85_percent_debt_money.move(-3000, -3000)
+
+        #15.	
+        #Расчет эффект финансового рычага строительной организации при 
+        #различных стратегиях продаж с использованием заемных средств
+        self.table_financial_leverage_with_debt = QtWidgets.QTableWidget(self.centralwidget)
+        self.table_financial_leverage_with_debt.setObjectName("table_financial_leverage_with_debt")  
+        self.table_financial_leverage_with_debt.move(-3000,-3000) 
+        self.table_financial_leverage_with_debt.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContents)
+        self.table_financial_leverage_with_debt.resizeColumnsToContents()
+        self.table_financial_leverage_with_debt.resizeRowsToContents()
+        self.table_financial_leverage_with_debt.setRowCount(3)
+        self.table_financial_leverage_with_debt.setColumnCount(4)
+        self.table_financial_leverage_with_debt.setVerticalHeaderLabels(["в начале строительства", "равномерно в течение строительства", "по мере необходимости"])
+        self.table_financial_leverage_with_debt.setHorizontalHeaderLabels(["в начале", "в середине", "в конце", "равномерно"])
+
+        self.label_financial_leverage_with_debt = QtWidgets.QLabel(self.centralwidget)
+        self.label_financial_leverage_with_debt.setText("Эффект финансового рычага строительной организации")
+        self.label_financial_leverage_with_debt.move(-3000, -3000)
+
+        #16.
+        #Рентабельность собственного капитала строительной организации
+        #при различных стратегиях продаж с использованием заемных средств
+        #в объеме 85 % от стоимости проекта, в процентах.
+        self.table_profitability_of_own_money = QtWidgets.QTableWidget(self.centralwidget)
+        self.table_profitability_of_own_money.setObjectName("table_profitability_of_own_money")  
+        self.table_profitability_of_own_money.move(-3000,-3000) 
+        self.table_profitability_of_own_money.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContents)
+        self.table_profitability_of_own_money.resizeColumnsToContents()
+        self.table_profitability_of_own_money.resizeRowsToContents()
+        self.table_profitability_of_own_money.setRowCount(3)
+        self.table_profitability_of_own_money.setColumnCount(4)
+        self.table_profitability_of_own_money.setVerticalHeaderLabels(["в начале строительства", "равномерно в течение строительства", "по мере необходимости"])
+        self.table_profitability_of_own_money.setHorizontalHeaderLabels(["в начале", "в середине", "в конце", "равномерно"])
+
+        self.label_profitability_of_own_money = QtWidgets.QLabel(self.centralwidget)
+        self.label_profitability_of_own_money.setText("Рентабельность собственного капитала строительной организации")
+        self.label_profitability_of_own_money.move(-3000, -3000)
+
+        #17
+        #Количество денежных средств, которые получит банк за предоставления кредита в размере 85%
+        #от стоимости проекта за весь срок строительства
+        self.table_bank_money_all_time = QtWidgets.QTableWidget(self.centralwidget)
+        self.table_bank_money_all_time.setObjectName("table_bank_money_all_time")  
+        self.table_bank_money_all_time.move(-3000,-3000) 
+        self.table_bank_money_all_time.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContents)
+        self.table_bank_money_all_time.resizeColumnsToContents()
+        self.table_bank_money_all_time.resizeRowsToContents()
+        self.table_bank_money_all_time.setRowCount(3)
+        self.table_bank_money_all_time.setColumnCount(4)
+        self.table_bank_money_all_time.setVerticalHeaderLabels(["в начале строительства", "равномерно в течение строительства", "по мере необходимости"])
+        self.table_bank_money_all_time.setHorizontalHeaderLabels(["в начале", "в середине", "в конце", "равномерно"])
+
+        self.label_bank_money_all_time = QtWidgets.QLabel(self.centralwidget)
+        self.label_bank_money_all_time.setText("Процентные выплаты, которые получит банк за предоставления кредита строительной организации")
+        self.label_bank_money_all_time.move(-3000, -3000)
+
+        #18
+        #Расчет средневзвешенной процентной ставки по заемному капиталу строительной организации при кредитовании 
+        self.table_average_weighted_rate = QtWidgets.QTableWidget(self.centralwidget)
+        self.table_average_weighted_rate.setObjectName("table_average_weighted_rate")  
+        self.table_average_weighted_rate.move(-3000,-3000) 
+        self.table_average_weighted_rate.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContents)
+        self.table_average_weighted_rate.resizeColumnsToContents()
+        self.table_average_weighted_rate.resizeRowsToContents()
+        self.table_average_weighted_rate.setRowCount(3)
+        self.table_average_weighted_rate.setColumnCount(4)
+        self.table_average_weighted_rate.setVerticalHeaderLabels(["в начале строительства", "равномерно в течение строительства", "по мере необходимости"])
+        self.table_average_weighted_rate.setHorizontalHeaderLabels(["в начале", "в середине", "в конце", "равномерно"])
+
+        self.label_average_weighted_rate = QtWidgets.QLabel(self.centralwidget)
+        self.label_average_weighted_rate.setText("Средневзвешенная процентная ставка по заемному капиталу за весь срок кредитования строительной организации")
+        self.label_average_weighted_rate.move(-3000, -3000)
+
+        #19.
+        #Увеличение себестоимости 1м2 при различных видах кредитования и времени пополнения
+        #счетов эскроу при кредитовании строительной организации
+        self.table_encrease_owncost_area = QtWidgets.QTableWidget(self.centralwidget)
+        self.table_encrease_owncost_area.setObjectName("table_encrease_owncost_area")  
+        self.table_encrease_owncost_area.move(-3000,-3000) 
+        self.table_encrease_owncost_area.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContents)
+        self.table_encrease_owncost_area.resizeColumnsToContents()
+        self.table_encrease_owncost_area.resizeRowsToContents()
+        self.table_encrease_owncost_area.setRowCount(3)
+        self.table_encrease_owncost_area.setColumnCount(4)
+        self.table_encrease_owncost_area.setVerticalHeaderLabels(["в начале строительства", "равномерно в течение строительства", "по мере необходимости"])
+        self.table_encrease_owncost_area.setHorizontalHeaderLabels(["в начале", "в середине", "в конце", "равномерно"])
+
+        self.label_encrease_owncost_area = QtWidgets.QLabel(self.centralwidget)
+        self.label_encrease_owncost_area.setText("Увеличение себестоимости 1м2 при различных видах кредитования и времени пополнения счетов эскроу при кредитовании строительной организации")
+        self.label_encrease_owncost_area.move(-3000, -3000)
+
+        #20
+        #Увеличение себестоимости 1м2 при различных видах кредитования и времени пополнения
+        #счетов эскроу при кредитовании строительной организации, %
+        self.table_encrease_owncost_area_percentage = QtWidgets.QTableWidget(self.centralwidget)
+        self.table_encrease_owncost_area_percentage.setObjectName("table_encrease_owncost_area_percentage")  
+        self.table_encrease_owncost_area_percentage.move(-3000,-3000) 
+        self.table_encrease_owncost_area_percentage.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContents)
+        self.table_encrease_owncost_area_percentage.resizeColumnsToContents()
+        self.table_encrease_owncost_area_percentage.resizeRowsToContents()
+        self.table_encrease_owncost_area_percentage.setRowCount(3)
+        self.table_encrease_owncost_area_percentage.setColumnCount(4)
+        self.table_encrease_owncost_area_percentage.setVerticalHeaderLabels(["в начале строительства", "равномерно в течение строительства", "по мере необходимости"])
+        self.table_encrease_owncost_area_percentage.setHorizontalHeaderLabels(["в начале", "в середине", "в конце", "равномерно"])
+
+        self.label_encrease_owncost_area_percentage = QtWidgets.QLabel(self.centralwidget)
+        self.label_encrease_owncost_area_percentage.setText("Увеличение себестоимости 1м2 при различных видах кредитования и времени пополнения счетов эскроу в процентах")
+        self.label_encrease_owncost_area_percentage.move(-3000, -3000)
