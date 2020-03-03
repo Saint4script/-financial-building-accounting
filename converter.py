@@ -250,20 +250,12 @@ class newwindow(QtWidgets.QMainWindow):
         #21
         #Прикидка поступления денежных средств в бюджет за счет налоговых отчислений
         #от строительной организации и банка при кредитовании строительной организации 
-        self.table_budget_money_income = QtWidgets.QTableWidget(self.ui.centralwidget)
-        self.table_budget_money_income.setObjectName("table_budget_money_income")  
-        self.table_budget_money_income.move(-3000,-3000) 
-        self.table_budget_money_income.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContents)
-        self.table_budget_money_income.resizeColumnsToContents()
-        self.table_budget_money_income.resizeRowsToContents()
-        self.table_budget_money_income.setRowCount(3)
-        self.table_budget_money_income.setColumnCount(4)
-        self.table_budget_money_income.setVerticalHeaderLabels(["в начале строительства", "равномерно в течение строительства", "по мере необходимости"])
-        self.table_budget_money_income.setHorizontalHeaderLabels(["в начале", "в середине", "в конце", "равномерно"])
         self.fill_table_budget_money_income()
-        self.label_budget_money_income = QtWidgets.QLabel(self.ui.centralwidget)
-        self.label_budget_money_income.setText("Прикидка поступления денежных средств в бюджет за счет налоговых отчислений от строительной организации и банка при кредитовании строительной организации")
-        self.label_budget_money_income.move(-3000, -3000)
+
+        tables = self.ui.centralwidget.findChildren(QtWidgets.QTableWidget)
+        for table in tables:
+            read_only_tables(table)
+            align_items(table)
 
         self.ui.pushButton.clicked.connect(self._exit)
         self.ui.show_tables.clicked.connect(self.choose_tables)
@@ -348,10 +340,10 @@ class newwindow(QtWidgets.QMainWindow):
         labels = self.ui.centralwidget.findChildren(QtWidgets.QLabel)
         #self.show_main_table.move(-3000, -3000)
         for table in tables:
-            table.move(-3000,-3000)
+            table.hide()
         
         for label in labels:
-            label.move(-3000, -3000)
+            label.hide()
         selected_items = self.ui.listWidget.selectedItems()
 
         def check_height(height):
@@ -366,6 +358,7 @@ class newwindow(QtWidgets.QMainWindow):
         for elem in selected_items:
             if(elem.text() == 'Цена 1м^2'):
                 if(check_height(current_height + self.ui.TableWidget.height() + 10)):
+                    self.ui.TableWidget.show()
                     self.ui.TableWidget.move(0,current_height)
                     current_height += self.ui.TableWidget.height() + 10
                     self.ui.TableWidget.resize(1600, self.ui.TableWidget.height())
@@ -373,6 +366,7 @@ class newwindow(QtWidgets.QMainWindow):
                     break
             elif(elem.text() == 'План продаж'):
                 if(check_height(current_height + self.ui.Table_with_flat_sell_plan.height() + 10)):
+                    self.ui.Table_with_flat_sell_plan.show()
                     self.ui.Table_with_flat_sell_plan.move(0,current_height)
                     current_height += self.ui.Table_with_flat_sell_plan.height() + 10
                     self.ui.Table_with_flat_sell_plan.resize(1600, self.ui.Table_with_flat_sell_plan.height())
@@ -380,6 +374,7 @@ class newwindow(QtWidgets.QMainWindow):
                     break
             elif(elem.text() == 'Определение процентной ставки на эскроу'):
                 if(check_height(current_height + self.ui.escrow_rate.height() + 10)):
+                    self.ui.escrow_rate.show()
                     self.ui.escrow_rate.move(0,current_height)
                     current_height += self.ui.escrow_rate.height() + 10
                     self.ui.escrow_rate.resize(1600, self.ui.escrow_rate.height())
@@ -387,6 +382,7 @@ class newwindow(QtWidgets.QMainWindow):
                     break
             elif(elem.text() == "если кредит получен единовременно в начале, то платежи по процентам за пользование заемными средствами в конце периода"):
                 if(check_height(current_height + self.ui.credit_is_got_fully_at_the_beginning.height() + 10)):
+                    self.ui.credit_is_got_fully_at_the_beginning.show()
                     self.ui.credit_is_got_fully_at_the_beginning.move(0, current_height)
                     current_height += self.ui.credit_is_got_fully_at_the_beginning.height() + 10
                     self.ui.credit_is_got_fully_at_the_beginning.resize(1600, self.ui.credit_is_got_fully_at_the_beginning.height())
@@ -394,6 +390,7 @@ class newwindow(QtWidgets.QMainWindow):
                     break
             elif(elem.text() == "если кредитная линия выбирается равномерно в течении срока строительства, то платежи по процентам за пользование заемными средствами в конце периода"):
                 if(check_height(current_height + self.ui.credit_line_chooses_evenly.height() + 10)):
+                    self.ui.credit_line_chooses_evenly.show()
                     self.ui.credit_line_chooses_evenly.move(0, current_height)
                     current_height += self.ui.credit_line_chooses_evenly.height() + 10
                     self.ui.credit_line_chooses_evenly.resize(1600, self.ui.credit_line_chooses_evenly.height())
@@ -401,6 +398,7 @@ class newwindow(QtWidgets.QMainWindow):
                     break
             elif(elem.text() == "если кредитная линия выбирается по мере необходимости строительного процесса, то платежи по процентам за пользование заемными средствами в конце периода"):
                 if(check_height(current_height + 10 + self.ui.main_table_necessary_percents.height() + 10)):
+                    self.ui.main_table_necessary_percents.show()
                     self.ui.main_table_necessary_percents.move(0, current_height)
                     self.ui.main_table_necessary_percents.resize(1600, self.ui.main_table_necessary_percents.height())
                     current_height += self.ui.main_table_necessary_percents.height() + 10
@@ -408,8 +406,10 @@ class newwindow(QtWidgets.QMainWindow):
                     break
             elif(elem.text() == "Прибыль с использованием заемных средств в объеме 85 % от стоимости проекта"):#+
                 if(check_height(current_height + self.ui.table_85_percent_debt_money.height() + 10 + self.ui.label_85_percent_debt_money.height() + 5)):
+                    self.ui.label_85_percent_debt_money.show()
                     self.ui.label_85_percent_debt_money.move(0, current_height)
                     current_height += self.ui.label_85_percent_debt_money.height() + 5
+                    self.ui.table_85_percent_debt_money.show()
                     self.ui.table_85_percent_debt_money.move(0, current_height)
                     self.ui.table_85_percent_debt_money.resize(800, self.ui.table_85_percent_debt_money.height())
                     current_height += self.ui.table_85_percent_debt_money.height() + 10
@@ -417,8 +417,10 @@ class newwindow(QtWidgets.QMainWindow):
                     break
             elif(elem.text() == "Финансовый рычаг при различных стратегиях продаж с использованием заемных средств"):#+
                 if(check_height(current_height + self.ui.table_financial_leverage_with_debt.height() + 10 + self.ui.label_financial_leverage_with_debt.height() + 5)):
+                    self.ui.label_financial_leverage_with_debt.show()
                     self.ui.label_financial_leverage_with_debt.move(0, current_height)
                     current_height += self.ui.label_financial_leverage_with_debt.height() + 5
+                    self.ui.table_financial_leverage_with_debt.show()
                     self.ui.table_financial_leverage_with_debt.move(0, current_height)
                     self.ui.table_financial_leverage_with_debt.resize(800, self.ui.table_financial_leverage_with_debt.height())
                     current_height += self.ui.table_financial_leverage_with_debt.height() + 10
@@ -426,8 +428,10 @@ class newwindow(QtWidgets.QMainWindow):
                     break
             elif(elem.text() == "Рентабельность собственного капитала при различных стратегиях продаж с использованием заемных средств"):#+
                 if(check_height(current_height + self.ui.table_profitability_of_own_money.height() + 10 + self.ui.label_profitability_of_own_money.height() + 5)):
+                    self.ui.label_profitability_of_own_money.show()
                     self.ui.label_profitability_of_own_money.move(0, current_height)
                     current_height += self.ui.label_profitability_of_own_money.height() + 5
+                    self.ui.table_profitability_of_own_money.show()
                     self.ui.table_profitability_of_own_money.move(0, current_height)
                     self.ui.table_profitability_of_own_money.resize(800, self.ui.table_profitability_of_own_money.height())
                     current_height += self.ui.table_profitability_of_own_money.height() + 10
@@ -435,8 +439,10 @@ class newwindow(QtWidgets.QMainWindow):
                     break
             elif(elem.text() == "Процентные выплаты, получаемые банком за предоставление кредита"):#+++++
                 if(check_height(current_height + self.ui.table_bank_money_all_time.height() + 10 + self.ui.label_bank_money_all_time.height() + 5)):
+                    self.ui.label_bank_money_all_time.show()
                     self.ui.label_bank_money_all_time.move(0, current_height)
                     current_height += self.ui.label_bank_money_all_time.height() + 5
+                    self.ui.table_bank_money_all_time.show()
                     self.ui.table_bank_money_all_time.move(0, current_height)
                     self.ui.table_bank_money_all_time.resize(800, self.ui.table_bank_money_all_time.height())
                     current_height += self.ui.table_bank_money_all_time.height() + 10
@@ -444,8 +450,10 @@ class newwindow(QtWidgets.QMainWindow):
                     break
             elif(elem.text() == "Средневзвешенная процентная ставка по заемному капиталу строительной организации"):#+
                 if(check_height(current_height + self.ui.table_average_weighted_rate.height() + 10 + self.ui.label_average_weighted_rate.height() + 5)):
+                    self.ui.label_average_weighted_rate.show()
                     self.ui.label_average_weighted_rate.move(0, current_height)
                     current_height += self.ui.label_average_weighted_rate.height() + 5
+                    self.ui.table_average_weighted_rate.show()
                     self.ui.table_average_weighted_rate.move(0, current_height)
                     self.ui.table_average_weighted_rate.resize(800, self.ui.table_average_weighted_rate.height())
                     current_height += self.ui.table_average_weighted_rate.height() + 10
@@ -453,8 +461,10 @@ class newwindow(QtWidgets.QMainWindow):
                     break
             elif(elem.text() == "Увеличение себестоимости 1м2  при кредитовании строительной организации"):#+
                 if(check_height(current_height + self.ui.table_encrease_owncost_area.height() + 10 + self.ui.label_encrease_owncost_area.height() + 5)):
+                    self.ui.label_encrease_owncost_area.show()
                     self.ui.label_encrease_owncost_area.move(0, current_height)
                     current_height += self.ui.label_encrease_owncost_area.height() + 5
+                    self.ui.table_encrease_owncost_area.show()
                     self.ui.table_encrease_owncost_area.move(0, current_height)
                     self.ui.table_encrease_owncost_area.resize(800, self.ui.table_encrease_owncost_area.height())
                     current_height += self.ui.table_encrease_owncost_area.height() + 10
@@ -462,20 +472,24 @@ class newwindow(QtWidgets.QMainWindow):
                     break
             elif(elem.text() == "Увеличение себестоимости 1м2  при кредитовании строительной организации в %"):#+
                 if(check_height(current_height + self.ui.table_encrease_owncost_area_percentage.height() + 10 + self.ui.label_encrease_owncost_area_percentage.height() + 5)):
+                    self.ui.label_encrease_owncost_area_percentage.show()
                     self.ui.label_encrease_owncost_area_percentage.move(0, current_height)
                     current_height += self.ui.label_encrease_owncost_area_percentage.height() + 5
+                    self.ui.table_encrease_owncost_area_percentage.show()
                     self.ui.table_encrease_owncost_area_percentage.move(0, current_height)
                     self.ui.table_encrease_owncost_area_percentage.resize(800, self.ui.table_encrease_owncost_area_percentage.height())
                     current_height += self.ui.table_encrease_owncost_area_percentage.height() + 10
                 else:
                     break
             elif(elem.text() == "Прикидка поступления денежных средств в бюджет за счет налоговых отчислений от строительной организации и банка"): #+
-                if(check_height(current_height + self.table_budget_money_income.height() + 10 + self.label_budget_money_income.height() + 5)):
-                    self.label_budget_money_income.move(0, current_height)
-                    current_height += self.label_budget_money_income.height() + 5
-                    self.table_budget_money_income.move(0, current_height)
-                    self.table_budget_money_income.resize(800, self.table_budget_money_income.height())
-                    current_height += self.table_budget_money_income.height() + 10
+                if(check_height(current_height + self.ui.table_budget_money_income.height() + 10 + self.ui.label_budget_money_income.height() + 5)):
+                    self.ui.label_budget_money_income.show()
+                    self.ui.label_budget_money_income.move(0, current_height)
+                    current_height += self.ui.label_budget_money_income.height() + 5
+                    self.ui.table_budget_money_income.show()
+                    self.ui.table_budget_money_income.move(0, current_height)
+                    self.ui.table_budget_money_income.resize(800, self.ui.table_budget_money_income.height())
+                    current_height += self.ui.table_budget_money_income.height() + 10
                 else:
                     break
             
@@ -952,8 +966,10 @@ class newwindow(QtWidgets.QMainWindow):
                     elem = QTableWidgetItem(str(round(item1)))
                 else:
                     elem = QTableWidgetItem('0')
-                self.table_budget_money_income.setItem(j, i, elem)
+                self.ui.table_budget_money_income.setItem(j, i, elem)
                 
+
+    
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication([])
