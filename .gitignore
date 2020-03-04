@@ -1,0 +1,8 @@
+
+*.txt
+*.md
+.vscode
+.git
+__pycache__
+Tables.ui
+Zikkurat.ui
