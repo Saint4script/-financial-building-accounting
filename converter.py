@@ -1,14 +1,11 @@
 import sys
 import math
 from PyQt5 import QtWidgets, QtCore, QtGui
-#from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QMainWindow, QAction, qApp, QApplication, QTableWidgetItem, QDesktopWidget, QWidget
 from PyQt5.QtCore import QDate
 
 from zikkurat001 import Ui_MainWindow 
 from Tables import Ui_NewWindow
-#TASKS:
-#СДЕЛАТЬ ПРОВЕРКУ НА ОТРИЦАТЕЛЬНЫЕ ЧИСЛА ДЛЯ не ЗНАю ЧЕГО
 
 #main window
 class mywindow(QtWidgets.QMainWindow):
@@ -20,7 +17,6 @@ class mywindow(QtWidgets.QMainWindow):
         self.ui.setupUi(self)
         self.ui.Build.clicked.connect(self.BuildFunc)
         self.ui.calendarWidget.hide()
-        #self.ui.Test.clicked.connect(self.Trying) # для процетиков
         self.ui.Total_area.editingFinished.connect(lambda field = self.ui.Total_area: self.CheckerForFields(field))
         self.ui.Apartments_amount.editingFinished.connect(lambda field = self.ui.Apartments_amount: self.CheckerForFields(field))
         self.ui.Average_area_of_apartments.editingFinished.connect(lambda field = self.ui.Average_area_of_apartments: self.CheckerForFields(field))
@@ -30,46 +26,34 @@ class mywindow(QtWidgets.QMainWindow):
         self.ui.Start_money.editingFinished.connect(lambda field = self.ui.Start_money: self.CheckerForFields(field))
         self.ui.Self_cost.editingFinished.connect(lambda field = self.ui.Self_cost: self.CheckerForFields(field))
         self.ui.calendarWidget.clicked[QDate].connect(self.show_date)
-        ##############################################
         
-        def fill_horizontal_headers(table):
-                decades = math.ceil(self.build_time / 3)
-                new_date = self.date_start.month()
-                labels_names = []
-                for j in range(decades):
-                    month = QDate.longMonthName(new_date)
-                    day = str(self.date_start.day())
-                    tempStr = F"{day} {month}"
-                    labels_names.append(tempStr)
-                    new_date = new_date + 3
-                    if(new_date > 12):
-                        new_date -= 12
-                table.setHorizontalHeaderLabels(labels_names)
+        
 
         self.mini_table_for_necessary_percents = QtWidgets.QTableWidget(self.ui.centralwidget)
         self.mini_table_for_necessary_percents.setObjectName("mini_table_for_necessary_percents")  
         self.mini_table_for_necessary_percents.hide() 
-        # self.mini_table_for_necessary_percents.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContents)
-        # self.mini_table_for_necessary_percents.resizeColumnsToContents()
-        # self.mini_table_for_necessary_percents.resizeRowsToContents()
-        # self.mini_table_for_necessary_percents.setRowCount(1)
-        # self.mini_table_for_necessary_percents.setColumnCount(10)
-        # self.mini_table_for_necessary_percents.setVerticalHeaderLabels(["Потребность в деньгах от стоимости проекта(%)"])
+        #Комментировать вместе с автозаполнением
+        self.mini_table_for_necessary_percents.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContents)
+        self.mini_table_for_necessary_percents.resizeColumnsToContents()
+        self.mini_table_for_necessary_percents.resizeRowsToContents()
+        self.mini_table_for_necessary_percents.setRowCount(1)
+        self.mini_table_for_necessary_percents.setColumnCount(10)
+        self.mini_table_for_necessary_percents.setVerticalHeaderLabels(["Потребность в деньгах от стоимости проекта(%)"])
+        #
         self.mini_table_for_necessary_percents.move(40, 420)
 
         #сделаем пока автозаполнение процентов
-        # self.mini_table_for_necessary_percents.setItem(0,0,QTableWidgetItem("9,68508804395618"))
-        # self.mini_table_for_necessary_percents.setItem(0,1,QTableWidgetItem("11,570903952796"))
-        # self.mini_table_for_necessary_percents.setItem(0,2,QTableWidgetItem("14,9494931029218"))
-        # self.mini_table_for_necessary_percents.setItem(0,3,QTableWidgetItem("11,0695162827756"))
-        # self.mini_table_for_necessary_percents.setItem(0,4,QTableWidgetItem("13,3757296894168"))
-        # self.mini_table_for_necessary_percents.setItem(0,5,QTableWidgetItem("13,0110106892431"))
-        # self.mini_table_for_necessary_percents.setItem(0,6,QTableWidgetItem("13,3302211572039"))
-        # self.mini_table_for_necessary_percents.setItem(0,7,QTableWidgetItem("3,32028347130497"))
-        # self.mini_table_for_necessary_percents.setItem(0,8,QTableWidgetItem("3,93512861368219"))
-        # self.mini_table_for_necessary_percents.setItem(0,9,QTableWidgetItem("5,75262499669948")) # по идее тут вместо самой последней 5 должно +3 , 
-        #т.е 8. Надо было для подсчета нормального так сделать
-        ##############################################
+        self.mini_table_for_necessary_percents.setItem(0,0,QTableWidgetItem("9,68508804395618"))
+        self.mini_table_for_necessary_percents.setItem(0,1,QTableWidgetItem("11,570903952796"))
+        self.mini_table_for_necessary_percents.setItem(0,2,QTableWidgetItem("14,9494931029218"))
+        self.mini_table_for_necessary_percents.setItem(0,3,QTableWidgetItem("11,0695162827756"))
+        self.mini_table_for_necessary_percents.setItem(0,4,QTableWidgetItem("13,3757296894168"))
+        self.mini_table_for_necessary_percents.setItem(0,5,QTableWidgetItem("13,0110106892431"))
+        self.mini_table_for_necessary_percents.setItem(0,6,QTableWidgetItem("13,3302211572039"))
+        self.mini_table_for_necessary_percents.setItem(0,7,QTableWidgetItem("3,32028347130497"))
+        self.mini_table_for_necessary_percents.setItem(0,8,QTableWidgetItem("3,93512861368219"))
+        self.mini_table_for_necessary_percents.setItem(0,9,QTableWidgetItem("5,75262499669948")) 
+
         self.ui.Apartments_amount.setText("368")
         self.ui.Average_area_of_apartments.setText("66")
         self.ui.Bulding_duration.setText("30")
@@ -86,7 +70,9 @@ class mywindow(QtWidgets.QMainWindow):
         self.ui.show_calendar.setStyleSheet("border-image: url(images/calendar.png)0 0 0 0 stretch stretch")
         self.ui.show_percents_table.setStyleSheet("border-image: url(images/arrow.png)0 0 0 0 stretch stretch")
 
-        
+
+
+    #Заполнение таблицы процентов по выплатам
     def fill_mini_table_for_necessary_percents(self):
         percents_sum = 0
         for i in range(self.mini_table_for_necessary_percents.columnCount()):
@@ -114,14 +100,16 @@ class mywindow(QtWidgets.QMainWindow):
             return False
         else:
             return True
-        
+    
     def show_date(self, date):
         self.date_start = date
-     
+
+    #Для дочернего класса
     def get_dimensions(self):
         l = (self.k,self.S,self.n,self.s,self.p1,self.z,self.build_time,self.own_money,self.c, self.date_start, self.Project_cost)
         return l
 
+    #Переход к итоговым таблицам
     def BuildFunc(self):
 
         if(self.isnt_field_empty()):
@@ -129,7 +117,7 @@ class mywindow(QtWidgets.QMainWindow):
                 message = 'Срок строительства слишком мал'
                 QtWidgets.QMessageBox.warning(self, 'Уведомление', message, QtWidgets.QMessageBox.Ok)
                 return 
-
+            #Автозаполнение стоимости проекта
             if(self.ui.Project_cost.text() == ""):
                tmp = int(self.ui.Self_cost.text())*int(self.ui.Apartments_amount.text()) * int(self.ui.Average_area_of_apartments.text())
                self.ui.Project_cost.setText(str(tmp))
@@ -144,18 +132,34 @@ class mywindow(QtWidgets.QMainWindow):
             self.build_time = int(self.ui.Bulding_duration.text())
             self.own_money = int(self.ui.Start_money.text())
             self.Project_cost = int(self.ui.Project_cost.text())
-            
+            #Если собственных денег меньше, чем 1\10 себестоимости
             if(start_money < total_area * self_cost * 0.1):     
-                error_dialog = QtWidgets.QErrorMessage()
-                error_dialog.showMessage("Здесь.Не.Строят")
-                error_dialog.exec_()
+                message = 'Недостаточно собственных средств, строительство невозможно'
+                QtWidgets.QMessageBox.warning(self, 'Уведомление', message, QtWidgets.QMessageBox.Ok)
+                return 
             elif(self.fill_mini_table_for_necessary_percents()):
                 self.k = total_area * self_cost - start_money
                 application = newwindow(self)
                 application.show()
                 self.hide()
-            
-    
+
+    #Заполнение горизонтальных заголовков
+    def fill_horizontal_headers(self, table):
+        bt = int(self.ui.Bulding_duration.text())
+        decades = math.ceil(bt / 3)
+        new_date = self.date_start.month()
+        labels_names = []
+        for j in range(decades):
+            month = QDate.longMonthName(new_date)
+            day = str(self.date_start.day())
+            tempStr = F"{day} {month}"
+            labels_names.append(tempStr)
+            new_date = new_date + 3
+            if(new_date > 12):
+                new_date -= 12
+        table.setHorizontalHeaderLabels(labels_names)   
+
+    #Проверка на пустые поля
     def isnt_field_empty(self):
         lineEdits = self.ui.centralwidget.findChildren(QtWidgets.QLineEdit)
         checker = True
@@ -168,22 +172,20 @@ class mywindow(QtWidgets.QMainWindow):
                 lineEdit.setStyleSheet("background-color:none;")
         self.ui.Project_cost.setStyleSheet("background-color:none;")
         if(not checker):
-            warning = QtWidgets.QMessageBox()
-            warning.setWindowTitle("Empty field")
-            warning.setText("Fill all the fields")
-            warning.setIcon(QtWidgets.QMessageBox.Critical)
-            warning.exec_() 
+            message = 'Заполните все поля!'
+            QtWidgets.QMessageBox.warning(self, 'Уведомление', message, QtWidgets.QMessageBox.Ok)
+            return  
         return checker
-                      
-    def CheckerForFields(self, field): #Проверка заполнения полей, чтобы не вводили что-то кроме чисел
+
+    #Проверка заполнения полей, чтобы не вводили что-то кроме чисел                  
+    def CheckerForFields(self, field): 
         if(field.text() != ""): #Если не писать это условие, прога вообще не запускается _-_
             try:
                 int(field.text())
             except ValueError:
-                error = QtWidgets.QErrorMessage()
-                error.showMessage("Это не число")
-                error.exec_()
-                field.setText("")
+                message = 'Некорректный ввод числовых значений.'
+                QtWidgets.QMessageBox.warning(self, 'Уведомление', message, QtWidgets.QMessageBox.Ok)
+                return 
     
     def show_hide_calendar(self):
         if(self.ui.calendarWidget.isHidden()):
@@ -191,6 +193,7 @@ class mywindow(QtWidgets.QMainWindow):
         else:
             self.ui.calendarWidget.hide()
     
+    #Показать таблицу с процентами
     def show_mini_percents_table(self):
         if(self.isnt_field_empty()):
             if(int(self.ui.Bulding_duration.text()) < 7):
@@ -200,17 +203,21 @@ class mywindow(QtWidgets.QMainWindow):
 
             self.mini_table_for_necessary_percents.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContents)
             self.mini_table_for_necessary_percents.horizontalHeader().setMinimumSectionSize(100)
-            self.mini_table_for_necessary_percents.verticalHeader().setMinimumSectionSize(35)
+            self.mini_table_for_necessary_percents.verticalHeader().setMinimumSectionSize(32)
             self.mini_table_for_necessary_percents.resizeColumnsToContents()
             self.mini_table_for_necessary_percents.resizeRowsToContents()
             self.mini_table_for_necessary_percents.setRowCount(1)
             self.mini_table_for_necessary_percents.setColumnCount(math.ceil(int(self.ui.Bulding_duration.text())/3))
             self.mini_table_for_necessary_percents.setVerticalHeaderLabels(["Потребность в деньгах от стоимости проекта(%)"])
             self.mini_table_for_necessary_percents.resize(1000, 80)
+            self.fill_horizontal_headers(self.mini_table_for_necessary_percents)
+            
             if(self.mini_table_for_necessary_percents.isHidden()):
                 self.mini_table_for_necessary_percents.show()
+                self.ui.label_11.setText("Скрыть/Обновить")
             else:
                 self.mini_table_for_necessary_percents.hide()
+                self.ui.label_11.setText("Введите нужные вам проценты по кредиту")
 
 #Это теперь дочерний класс класса mywindow
 class newwindow(QtWidgets.QMainWindow):
@@ -222,6 +229,7 @@ class newwindow(QtWidgets.QMainWindow):
 
         self.k, self.S, self.n, self.s, self.p1,self.z, self.build_time, self.own_money, self.c, self.date_start, self.project_cost = mywindow.get_dimensions(self.parent())
         self.decades = math.ceil(self.build_time / 3)
+        #Центрируем окно
         cp = QDesktopWidget().availableGeometry().center()
         self.move(int(round(cp.x() - self.width() / 2)), int(round(cp.y() - self.height() / 2 - 20)))
     
@@ -251,6 +259,17 @@ class newwindow(QtWidgets.QMainWindow):
                             table.setItem(i, j, QTableWidgetItem(""))  #Поэтому надо положить в нее хотя бы пустую строку
                             table.item(i, j).setTextAlignment(QtCore.Qt.AlignVCenter | QtCore.Qt.AlignHCenter)
 
+        #Разбиение по разрядам
+        def decorate_numbers(table):
+            for i in range(table.rowCount()):
+                for j in range(table.columnCount()):
+                    x = float(table.item(i, j).text())
+                    if(x % int(x) == 0.0):
+                        tmp = int(x)
+                    else:
+                        tmp = x
+                    table.setItem(i, j, QTableWidgetItem('{0:,}'.format(tmp).replace(',', ' ')))
+
         #Увелечение цены каждый квартал на какое-то кол-во процентов
         self.fill_table()
         self.fill_horizontal_headers(self.ui.TableWidget)
@@ -270,7 +289,7 @@ class newwindow(QtWidgets.QMainWindow):
         #Кредит получен равномерно
         self.fill_credit_line_chooses_evenly()
 
-        #Кредид получается исходя из текущих нужд
+        #Кредидб получается исходя из текущих нужд
         self.fill_horizontal_headers(self.ui.main_table_necessary_percents)
         self.fill_main_table_necessary_percents()
 
@@ -278,17 +297,20 @@ class newwindow(QtWidgets.QMainWindow):
         #продаж с использованием заемных средств в объеме 85 % от стоимости проекта.
         #таблица №2 из статьи, задание 14
         self.fill_table_85_percent_debt_money()
+        
 
         #15.	
         #Расчет эффект финансового рычага строительной организации при 
         #различных стратегиях продаж с использованием заемных средств
         self.fill_table_financial_leverage_with_debt()
+        
 
         #16.
         #Рентабельность собственного капитала строительной организации
         #при различных стратегиях продаж с использованием заемных средств
         #в объеме 85 % от стоимости проекта, в процентах.
         self.fill_table_profitability_of_own_money()
+        
 
         #17
         #Количество денежных средств, которые получит банк за предоставления кредита в размере 85%
@@ -300,32 +322,49 @@ class newwindow(QtWidgets.QMainWindow):
         #Расчет средневзвешенной процентной ставки по заемному капиталу строительной организации при кредитовании 
         self.fill_table_average_weighted_rate()
         
+        
         #19.
         #Увеличение себестоимости 1м2 при различных видах кредитования и времени пополнения
         #счетов эскроу при кредитовании строительной организации
         self.fill_table_encrease_owncost_area()
+        
         
 
         #20
         #Увеличение себестоимости 1м2 при различных видах кредитования и времени пополнения
         #счетов эскроу при кредитовании строительной организации, %
         self.fill_table_encrease_owncost_area_percentage()
+        
 
         #21
         #Прикидка поступления денежных средств в бюджет за счет налоговых отчислений
         #от строительной организации и банка при кредитовании строительной организации 
         self.fill_table_budget_money_income()
+        
 
+        #Вынесено после ф-ий заполнения, чтобы не было ошибок в рассчетах
+        decorate_numbers(self.ui.table_85_percent_debt_money)
+        decorate_numbers(self.ui.table_financial_leverage_with_debt)
+        decorate_numbers(self.ui.table_profitability_of_own_money)
+        decorate_numbers(self.ui.table_bank_money_all_time)
+        decorate_numbers(self.ui.table_average_weighted_rate)
+        decorate_numbers(self.ui.table_encrease_owncost_area)
+        decorate_numbers(self.ui.table_encrease_owncost_area_percentage)
+        decorate_numbers(self.ui.table_budget_money_income)
+
+        #Выравнивание и запрет на редактирование эл-в таблиц
         tables = self.ui.centralwidget.findChildren(QtWidgets.QTableWidget)
         for table in tables:
             read_only_tables(table)
             align_items(table)
 
+        
+
         self.ui.pushButton.clicked.connect(self._exit)
         self.ui.show_tables.clicked.connect(self.choose_tables)
         self.ui.clear_tables.clicked.connect(self.clear_tables)
 
-
+    #Это мы уже видели
     def fill_horizontal_headers(self, table):
                 decades = math.ceil(self.build_time / 3)
                 new_date = self.date_start.month()
@@ -340,6 +379,7 @@ class newwindow(QtWidgets.QMainWindow):
                         new_date -= 12
                 table.setHorizontalHeaderLabels(labels_names)
 
+    #Кредидб получается исходя из текущих нужд
     def fill_main_table_necessary_percents(self):
         current_own_money = self.project_cost - self.credit_money
         item = 0
@@ -390,17 +430,17 @@ class newwindow(QtWidgets.QMainWindow):
             total_sum += self.credit_money + self.own_money
             self.ui.main_table_necessary_percents.setItem(i + 3, self.decades + 4, QTableWidgetItem(str(round(total_sum, 2)))) #Итого
         
-        #self.fill_general_table_bank_position()
- 
+
+    #Спрятать таблицы
     def clear_tables(self):
         tables = self.ui.centralwidget.findChildren(QtWidgets.QTableWidget)
         for table in tables:
-            #table.move(-3000,-3000)
             table.hide()
         labels = self.ui.centralwidget.findChildren(QtWidgets.QLabel)
         for label in labels:
             label.hide()
 
+    #Отображение ВЫБРАННЫХ таблиц
     def choose_tables(self):
         current_height = 100
         tables = self.ui.centralwidget.findChildren(QtWidgets.QTableWidget)
@@ -559,11 +599,13 @@ class newwindow(QtWidgets.QMainWindow):
                     current_height += self.ui.table_budget_money_income.height() + 10
                 else:
                     break
-            
+
+    #Выход      
     def _exit(self):
         self.parent().show()
         self.close()
-        
+
+    #Увелечение цены каждый квартал на какое-то кол-во процентов    
     def fill_table(self):  
         decades = math.ceil(self.build_time/3)
         # self.TableWidget.setRowCount(2)
@@ -605,7 +647,8 @@ class newwindow(QtWidgets.QMainWindow):
         
         self.ui.TableWidget.setVerticalHeaderLabels([F"цена 1 кв.м. - каждый квартал увеличивается на {self.z}%", "средняя цена 1 кв.м"])
 
-    def fill_Table_with_flat_sell_plan(self): # план продаж в количестве квартир
+    # план продаж в количестве квартир
+    def fill_Table_with_flat_sell_plan(self): 
         self.iterator = 0
         decades = math.ceil(self.build_time/3)
 
@@ -689,7 +732,8 @@ class newwindow(QtWidgets.QMainWindow):
         for i in range(4):
             value = (self.sell_plan_sum_of_each_str[i] - self.S * self.c) / (self.own_money + self.credit_money)
             self.ui.Table_with_flat_sell_plan.setItem(i + 5, decades + 2, QTableWidgetItem(str(value)))
-    
+
+    #Эскроу счета
     def fill_escrow_rate(self):
         decades = math.ceil(self.build_time / 3)
         #ЗАПОЛНЯЕМ ПЕРВУЮ СТРОЧКУ
@@ -771,6 +815,7 @@ class newwindow(QtWidgets.QMainWindow):
                 cell_info = QTableWidgetItem("0.03")
                 self.ui.escrow_rate.setItem(3, i, cell_info)     
 
+    #Кредит получен в начале
     def fill_credit_is_got_fully_at_the_beginning(self):
         #Объявим несколько массивов
         self.first_strategy_payment = []
@@ -838,8 +883,9 @@ class newwindow(QtWidgets.QMainWindow):
         labels_names.append("Итого")
         self.ui.credit_is_got_fully_at_the_beginning.setHorizontalHeaderLabels(labels_names)
 
+    #Кредит получен равномерно
     def fill_credit_line_chooses_evenly(self):
-         #Объявим несколько массивов
+        #Объявим несколько массивов
         self.first_strategy_credit_line = []
         self.second_strategy_credit_line = []
         self.third_strategy_credit_line = []
@@ -910,6 +956,7 @@ class newwindow(QtWidgets.QMainWindow):
         labels_names.append("Итого")
         self.ui.credit_line_chooses_evenly.setHorizontalHeaderLabels(labels_names)
 
+
     def fill_general_table_bank_position(self):
         self.general_table_bank_position.setItem(0, 0, QTableWidgetItem(str(round(sum(self.first_strategy_payment),2))))
         self.general_table_bank_position.setItem(0, 1, QTableWidgetItem(str(round(sum(self.second_strategy_payment),2))))
@@ -926,6 +973,9 @@ class newwindow(QtWidgets.QMainWindow):
         self.general_table_bank_position.setItem(2, 2, QTableWidgetItem(self.ui.main_table_necessary_percents.item(5, self.decades).text()))
         self.general_table_bank_position.setItem(2, 3, QTableWidgetItem(self.ui.main_table_necessary_percents.item(6, self.decades).text()))
 
+    #14. Прибыль до налогообложения строительной организации при различных стратегиях
+    #продаж с использованием заемных средств в объеме 85 % от стоимости проекта.
+    #таблица №2 из статьи, задание 14
     def fill_table_financial_leverage_with_debt(self):
 
         #заполняем первую строку
@@ -940,7 +990,10 @@ class newwindow(QtWidgets.QMainWindow):
         for i in range(4):
             item = QTableWidgetItem(str(round(float(self.ui.main_table_necessary_percents.item(i+3, self.decades+2).text())*100, 2)))
             self.ui.table_financial_leverage_with_debt.setItem(2, i, item)
-        
+
+    #15.	
+    #Расчет эффект финансового рычага строительной организации при 
+    #различных стратегиях продаж с использованием заемных средств    
     def fill_table_85_percent_debt_money(self):
         #заполняем первую строку
         for i in range(4):
@@ -961,6 +1014,10 @@ class newwindow(QtWidgets.QMainWindow):
             res = QTableWidgetItem(str(round(item1 - item2, 2)))
             self.ui.table_85_percent_debt_money.setItem(2, i, res)
 
+    #16.
+    #Рентабельность собственного капитала строительной организации
+    #при различных стратегиях продаж с использованием заемных средств
+    #в объеме 85 % от стоимости проекта, в процентах.
     def fill_table_profitability_of_own_money(self):
         #заполняем первую строку
         for i in range(4):
@@ -974,7 +1031,10 @@ class newwindow(QtWidgets.QMainWindow):
         for i in range(4):
             item = QTableWidgetItem(str(round(float(self.ui.main_table_necessary_percents.item(i+3, self.decades+3).text())*100, 2)))
             self.ui.table_profitability_of_own_money.setItem(2, i, item)
-    
+
+    #17
+    #Количество денежных средств, которые получит банк за предоставления кредита в размере 85%
+    #от стоимости проекта за весь срок строительства
     def fill_table_bank_money_all_time(self):
         #заполняем первую строку
         for i in range(4):
@@ -989,6 +1049,8 @@ class newwindow(QtWidgets.QMainWindow):
             item = QTableWidgetItem(str(round(float(self.ui.main_table_necessary_percents.item(i+3, self.decades).text()), 2)))
             self.ui.table_bank_money_all_time.setItem(2, i, item)
 
+    #18
+    #Расчет средневзвешенной процентной ставки по заемному капиталу строительной организации при кредитовании 
     def fill_table_average_weighted_rate(self):
         #заполняем первую строку
         for i in range(4):
@@ -1003,6 +1065,9 @@ class newwindow(QtWidgets.QMainWindow):
             item = QTableWidgetItem(str(round(float(self.ui.main_table_necessary_percents.item(i+3, self.decades+1).text()), 2)))
             self.ui.table_average_weighted_rate.setItem(2, i, item)
 
+    #19.
+    #Увеличение себестоимости 1м2 при различных видах кредитования и времени пополнения
+    #счетов эскроу при кредитовании строительной организации
     def fill_table_encrease_owncost_area(self):
         tmp = self.s*self.n
         for i in range(3):
@@ -1010,12 +1075,19 @@ class newwindow(QtWidgets.QMainWindow):
                 item = float(self.ui.table_bank_money_all_time.item(i,j).text())
                 self.ui.table_encrease_owncost_area.setItem(i, j, QTableWidgetItem(str(round(float(item/tmp)))))
 
+    #20
+    #Увеличение себестоимости 1м2 при различных видах кредитования и времени пополнения
+    #счетов эскроу при кредитовании строительной организации, %
     def fill_table_encrease_owncost_area_percentage(self):
         for i in range(3):
             for j in range(4):
                 item = float(self.ui.table_encrease_owncost_area.item(i,j).text())
-                self.ui.table_encrease_owncost_area_percentage.setItem(i, j, QTableWidgetItem(str(round(float(item/self.c*100),1))))
+                self.ui.table_encrease_owncost_area_percentage.setItem(i, j,
+                 QTableWidgetItem(str(round(float(item / self.c * 100), 1))))
 
+    #21
+    #Прикидка поступления денежных средств в бюджет за счет налоговых отчислений
+    #от строительной организации и банка при кредитовании строительной организации 
     def fill_table_budget_money_income(self):
         for j in range(3):
             for i in range(4):
@@ -1025,7 +1097,7 @@ class newwindow(QtWidgets.QMainWindow):
                     q5 = float(self.ui.credit_line_chooses_evenly.item(i, self.decades+4).text())
                 else:
                     q5 = float(self.ui.main_table_necessary_percents.item(i + 3, self.decades+4).text())
-                q2 = float(self.ui.Table_with_flat_sell_plan.item(i+5, self.decades).text())
+                q2 = float(self.ui.Table_with_flat_sell_plan.item(i + 5, self.decades).text())
                 item1 = (float(self.ui.table_bank_money_all_time.item(j, i).text()) - self.credit_money*0.05) * 0.24
                 item2 = (q2 - q5)*0.2
                 
@@ -1038,7 +1110,8 @@ class newwindow(QtWidgets.QMainWindow):
                 else:
                     elem = QTableWidgetItem('0')
                 self.ui.table_budget_money_income.setItem(j, i, elem)
-                
+        
+
 
     
 

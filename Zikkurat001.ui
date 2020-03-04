@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1112</width>
+    <width>1201</width>
     <height>800</height>
    </rect>
   </property>
@@ -40,7 +40,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Общая площадь(м&lt;span style=&quot; vertical-align:super;&quot;&gt;2&lt;/span&gt;)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;Общая площадь(м&lt;/span&gt;&lt;span style=&quot; font-size:10pt; vertical-align:super;&quot;&gt;2&lt;/span&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;)&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_2">
@@ -51,6 +51,11 @@
       <width>241</width>
       <height>20</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
     </property>
     <property name="text">
      <string>Количество квартир(шт)</string>
@@ -75,6 +80,11 @@
       <height>20</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
     <property name="text">
      <string>Средняя площадь квартир - м2</string>
     </property>
@@ -97,6 +107,11 @@
       <width>241</width>
       <height>20</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
     </property>
     <property name="text">
      <string>Срок строительства</string>
@@ -122,7 +137,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Процент увеличения цены 1м&lt;span style=&quot; vertical-align:super;&quot;&gt;2 &lt;/span&gt;в периоде &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;Процент увеличения цены 1м&lt;/span&gt;&lt;span style=&quot; font-size:10pt; vertical-align:super;&quot;&gt;2 &lt;/span&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;в периоде &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
    <widget class="QLineEdit" name="Increasing_percentage">
@@ -143,6 +158,11 @@
       <width>241</width>
       <height>20</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
     </property>
     <property name="text">
      <string>Начальная цена 1 м2 – руб</string>
@@ -180,6 +200,11 @@
       <height>20</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
     <property name="text">
      <string>Собственный капитал </string>
     </property>
@@ -204,7 +229,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Себестоимость 1 м&lt;span style=&quot; vertical-align:super;&quot;&gt;2&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;Себестоимость 1 м&lt;/span&gt;&lt;span style=&quot; font-size:10pt; vertical-align:super;&quot;&gt;2&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_9">
@@ -217,7 +242,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;*Стоимость проекта*&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;*Стоимость проекта*&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
    <widget class="QLineEdit" name="Project_cost">
@@ -238,6 +263,11 @@
       <width>201</width>
       <height>71</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
     </property>
     <property name="text">
      <string>Построить Зиккурат</string>
@@ -261,8 +291,8 @@
      <rect>
       <x>500</x>
       <y>150</y>
-      <width>312</width>
-      <height>183</height>
+      <width>471</width>
+      <height>261</height>
      </rect>
     </property>
    </widget>
@@ -284,7 +314,7 @@
      <rect>
       <x>560</x>
       <y>110</y>
-      <width>231</width>
+      <width>301</width>
       <height>21</height>
      </rect>
     </property>
@@ -302,8 +332,8 @@
      <rect>
       <x>80</x>
       <y>380</y>
-      <width>261</width>
-      <height>21</height>
+      <width>341</width>
+      <height>31</height>
      </rect>
     </property>
     <property name="font">
@@ -312,7 +342,7 @@
      </font>
     </property>
     <property name="text">
-     <string>Введите нужные вам проценту ко кредиту</string>
+     <string>Введите нужные вам проценты по кредиту</string>
     </property>
    </widget>
   </widget>
@@ -321,8 +351,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1112</width>
-     <height>21</height>
+     <width>1201</width>
+     <height>26</height>
     </rect>
    </property>
   </widget>
