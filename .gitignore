@@ -6,7 +6,6 @@ build/
 dist/
 .git
 __pycache__/
-*.ui
 *.spec
 
 
