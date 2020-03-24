@@ -2,7 +2,12 @@
 *.txt
 *.md
 /.vscode
+/build
+/dist
 .git
 /__pycache__
 *.ui
+*.spec
+
+
 
