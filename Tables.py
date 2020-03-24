@@ -56,8 +56,6 @@ class Ui_NewWindow(object):
         self.listWidget.addItem(item)
         item = QtWidgets.QListWidgetItem()
         self.listWidget.addItem(item)
-        item = QtWidgets.QListWidgetItem()
-        self.listWidget.addItem(item)
         self.show_tables = QtWidgets.QPushButton(self.centralwidget)
         self.show_tables.setGeometry(QtCore.QRect(670, 130, 181, 31))
         self.show_tables.setStyleSheet("font: 10pt \"MS Shell Dlg 2\";")
