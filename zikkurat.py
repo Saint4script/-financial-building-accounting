@@ -9,7 +9,6 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
@@ -133,13 +132,13 @@ class Ui_MainWindow(object):
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.label.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:10pt;\">Общая площадь(м</span><span style=\" font-size:10pt; vertical-align:super;\">2</span><span style=\" font-size:10pt;\">)</span></p></body></html>"))
         self.label_2.setText(_translate("MainWindow", "Количество квартир(шт)"))
-        self.label_3.setText(_translate("MainWindow", "Средняя площадь квартир - м2"))
-        self.label_4.setText(_translate("MainWindow", "Срок строительства"))
+        self.label_3.setText(_translate("MainWindow", "Средняя площадь квартир(м^2)"))
+        self.label_4.setText(_translate("MainWindow", "Срок строительства(мес)"))
         self.label_5.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:10pt;\">Процент увеличения цены 1м</span><span style=\" font-size:10pt; vertical-align:super;\">2 </span><span style=\" font-size:10pt;\">в периоде </span></p></body></html>"))
-        self.label_6.setText(_translate("MainWindow", "Начальная цена 1 м2 – руб"))
+        self.label_6.setText(_translate("MainWindow", "Начальная цена 1 м^2(руб)"))
         self.label_7.setText(_translate("MainWindow", "Собственный капитал "))
         self.label_8.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:10pt;\">Себестоимость 1 м</span><span style=\" font-size:10pt; vertical-align:super;\">2</span></p></body></html>"))
         self.label_9.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:10pt;\">*Стоимость проекта*</span></p></body></html>"))
-        self.Build.setText(_translate("MainWindow", "Построить Зиккурат"))
+        self.Build.setText(_translate("MainWindow", "Построить таблицы"))
         self.label_10.setText(_translate("MainWindow", "Выберите дату начала строительства"))
         self.label_11.setText(_translate("MainWindow", "Введите нужные вам проценты по кредиту"))

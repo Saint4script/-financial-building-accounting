@@ -1,10 +1,11 @@
 import sys
+import os
 import math
 from PyQt5 import QtWidgets, QtCore, QtGui
 from PyQt5.QtWidgets import QMainWindow, QAction, qApp, QApplication, QTableWidgetItem, QDesktopWidget, QWidget
 from PyQt5.QtCore import QDate
 
-from zikkurat001 import Ui_MainWindow 
+from zikkurat import Ui_MainWindow 
 from Tables import Ui_NewWindow
 
 #main window
@@ -65,8 +66,16 @@ class mywindow(QtWidgets.QMainWindow):
 
         #картинки на кнопки + code
         #self.TableWidget.setStyleSheet("QTableCornerButton::section{border-image:url(Corner.png)}")
+
+        path = os.path.dirname(os.path.abspath(__file__))
+        path1 = os.path.join(path, 'arrow.png')
+
+        #lbl.setPixmap(QPixmap(os.path.join(path, 'icon.png')))
+        #self.ui.show_calendar.setFlat(True)
+        #self.ui.show_calendar.setAutoFillBackground(True)
         self.ui.show_calendar.clicked.connect(self.show_hide_calendar)
         self.ui.show_percents_table.clicked.connect(self.show_mini_percents_table)
+
         self.ui.show_calendar.setStyleSheet("border-image: url(images/calendar.png)0 0 0 0 stretch stretch")
         self.ui.show_percents_table.setStyleSheet("border-image: url(images/arrow.png)0 0 0 0 stretch stretch")
 
@@ -264,11 +273,12 @@ class newwindow(QtWidgets.QMainWindow):
             for i in range(table.rowCount()):
                 for j in range(table.columnCount()):
                     x = float(table.item(i, j).text())
-                    if(x % int(x) == 0.0):
-                        tmp = int(x)
-                    else:
-                        tmp = x
-                    table.setItem(i, j, QTableWidgetItem('{0:,}'.format(tmp).replace(',', ' ')))
+                    # print(x)
+                    # if(x % int(x) == 0.0):
+                    #     tmp = int(x)
+                    # else:
+                    #     tmp = x
+                    table.setItem(i, j, QTableWidgetItem('{0:,}'.format(x).replace(',', ' ')))
 
         #Увелечение цены каждый квартал на какое-то кол-во процентов
         self.fill_table()
@@ -442,10 +452,9 @@ class newwindow(QtWidgets.QMainWindow):
 
     #Отображение ВЫБРАННЫХ таблиц
     def choose_tables(self):
-        current_height = 100
+        current_height = 200
         tables = self.ui.centralwidget.findChildren(QtWidgets.QTableWidget)
         labels = self.ui.centralwidget.findChildren(QtWidgets.QLabel)
-        #self.show_main_table.move(-3000, -3000)
         for table in tables:
             table.hide()
         
@@ -466,136 +475,150 @@ class newwindow(QtWidgets.QMainWindow):
             if(elem.text() == 'Цена 1м^2'):
                 if(check_height(current_height + self.ui.TableWidget.height() + 10)):
                     self.ui.TableWidget.show()
-                    self.ui.TableWidget.move(0,current_height)
+                    self.ui.TableWidget.move(10,current_height)
                     current_height += self.ui.TableWidget.height() + 10
-                    self.ui.TableWidget.resize(1600, self.ui.TableWidget.height())
+                    self.ui.TableWidget.resize(1200, self.ui.TableWidget.height())
+                    self.ui.TableWidget.adjustSize()
                 else:
                     break
             elif(elem.text() == 'План продаж'):
                 if(check_height(current_height + self.ui.Table_with_flat_sell_plan.height() + 10)):
                     self.ui.Table_with_flat_sell_plan.show()
-                    self.ui.Table_with_flat_sell_plan.move(0,current_height)
+                    self.ui.Table_with_flat_sell_plan.move(10,current_height)
                     current_height += self.ui.Table_with_flat_sell_plan.height() + 10
-                    self.ui.Table_with_flat_sell_plan.resize(1600, self.ui.Table_with_flat_sell_plan.height())
+                    self.ui.Table_with_flat_sell_plan.resize(1200, self.ui.Table_with_flat_sell_plan.height())
+                    self.ui.Table_with_flat_sell_plan.adjustSize()
                 else:
                     break
             elif(elem.text() == 'Определение процентной ставки на эскроу'):
                 if(check_height(current_height + self.ui.escrow_rate.height() + 10)):
                     self.ui.escrow_rate.show()
-                    self.ui.escrow_rate.move(0,current_height)
+                    self.ui.escrow_rate.move(10,current_height)
                     current_height += self.ui.escrow_rate.height() + 10
-                    self.ui.escrow_rate.resize(1600, self.ui.escrow_rate.height())
+                    self.ui.escrow_rate.resize(1200, self.ui.escrow_rate.height())
+                    self.ui.escrow_rate.adjustSize()
                 else:
                     break
-            elif(elem.text() == "если кредит получен единовременно в начале, то платежи по процентам за пользование заемными средствами в конце периода"):
+            elif(elem.text() == "Если кредит получен единовременно в начале, то платежи по процентам за пользование заемными средствами в конце периода"):
                 if(check_height(current_height + self.ui.credit_is_got_fully_at_the_beginning.height() + 10)):
                     self.ui.credit_is_got_fully_at_the_beginning.show()
-                    self.ui.credit_is_got_fully_at_the_beginning.move(0, current_height)
+                    self.ui.credit_is_got_fully_at_the_beginning.move(10, current_height)
                     current_height += self.ui.credit_is_got_fully_at_the_beginning.height() + 10
-                    self.ui.credit_is_got_fully_at_the_beginning.resize(1600, self.ui.credit_is_got_fully_at_the_beginning.height())
+                    self.ui.credit_is_got_fully_at_the_beginning.resize(1200, self.ui.credit_is_got_fully_at_the_beginning.height())
+                    self.ui.credit_is_got_fully_at_the_beginning.adjustSize()
                 else:
                     break
-            elif(elem.text() == "если кредитная линия выбирается равномерно в течении срока строительства, то платежи по процентам за пользование заемными средствами в конце периода"):
+            elif(elem.text() == "Если кредитная линия выбирается равномерно в течении срока строительства, то платежи по процентам за пользование заемными средствами в конце периода"):
                 if(check_height(current_height + self.ui.credit_line_chooses_evenly.height() + 10)):
                     self.ui.credit_line_chooses_evenly.show()
-                    self.ui.credit_line_chooses_evenly.move(0, current_height)
+                    self.ui.credit_line_chooses_evenly.move(10, current_height)
                     current_height += self.ui.credit_line_chooses_evenly.height() + 10
-                    self.ui.credit_line_chooses_evenly.resize(1600, self.ui.credit_line_chooses_evenly.height())
+                    self.ui.credit_line_chooses_evenly.resize(1200, self.ui.credit_line_chooses_evenly.height())
+                    self.ui.credit_line_chooses_evenly.adjustSize()
                 else:
                     break
-            elif(elem.text() == "если кредитная линия выбирается по мере необходимости строительного процесса, то платежи по процентам за пользование заемными средствами в конце периода"):
+            elif(elem.text() == "Если кредитная линия выбирается по мере необходимости строительного процесса, то платежи по процентам за пользование заемными средствами в конце периода"):
                 if(check_height(current_height + 10 + self.ui.main_table_necessary_percents.height() + 10)):
                     self.ui.main_table_necessary_percents.show()
-                    self.ui.main_table_necessary_percents.move(0, current_height)
-                    self.ui.main_table_necessary_percents.resize(1600, self.ui.main_table_necessary_percents.height())
+                    self.ui.main_table_necessary_percents.move(10, current_height)
+                    self.ui.main_table_necessary_percents.resize(1200, self.ui.main_table_necessary_percents.height())
+                    self.ui.main_table_necessary_percents.adjustSize()
                     current_height += self.ui.main_table_necessary_percents.height() + 10
                 else:
                     break
             elif(elem.text() == "Прибыль с использованием заемных средств в объеме 85 % от стоимости проекта"):#+
                 if(check_height(current_height + self.ui.table_85_percent_debt_money.height() + 10 + self.ui.label_85_percent_debt_money.height() + 5)):
                     self.ui.label_85_percent_debt_money.show()
-                    self.ui.label_85_percent_debt_money.move(0, current_height)
+                    self.ui.label_85_percent_debt_money.move(10, current_height)
                     current_height += self.ui.label_85_percent_debt_money.height() + 5
                     self.ui.table_85_percent_debt_money.show()
-                    self.ui.table_85_percent_debt_money.move(0, current_height)
-                    self.ui.table_85_percent_debt_money.resize(800, self.ui.table_85_percent_debt_money.height())
+                    self.ui.table_85_percent_debt_money.move(10, current_height)
+                    self.ui.table_85_percent_debt_money.resize(900, self.ui.table_85_percent_debt_money.height())
+                    self.ui.table_85_percent_debt_money.adjustSize()
                     current_height += self.ui.table_85_percent_debt_money.height() + 10
                 else:
                     break
             elif(elem.text() == "Финансовый рычаг при различных стратегиях продаж с использованием заемных средств"):#+
                 if(check_height(current_height + self.ui.table_financial_leverage_with_debt.height() + 10 + self.ui.label_financial_leverage_with_debt.height() + 5)):
                     self.ui.label_financial_leverage_with_debt.show()
-                    self.ui.label_financial_leverage_with_debt.move(0, current_height)
+                    self.ui.label_financial_leverage_with_debt.move(10, current_height)
                     current_height += self.ui.label_financial_leverage_with_debt.height() + 5
                     self.ui.table_financial_leverage_with_debt.show()
-                    self.ui.table_financial_leverage_with_debt.move(0, current_height)
-                    self.ui.table_financial_leverage_with_debt.resize(800, self.ui.table_financial_leverage_with_debt.height())
+                    self.ui.table_financial_leverage_with_debt.move(10, current_height)
+                    self.ui.table_financial_leverage_with_debt.resize(900, self.ui.table_financial_leverage_with_debt.height())
+                    self.ui.table_financial_leverage_with_debt.adjustSize()
                     current_height += self.ui.table_financial_leverage_with_debt.height() + 10
                 else:
                     break
             elif(elem.text() == "Рентабельность собственного капитала при различных стратегиях продаж с использованием заемных средств"):#+
                 if(check_height(current_height + self.ui.table_profitability_of_own_money.height() + 10 + self.ui.label_profitability_of_own_money.height() + 5)):
                     self.ui.label_profitability_of_own_money.show()
-                    self.ui.label_profitability_of_own_money.move(0, current_height)
+                    self.ui.label_profitability_of_own_money.move(10, current_height)
                     current_height += self.ui.label_profitability_of_own_money.height() + 5
                     self.ui.table_profitability_of_own_money.show()
-                    self.ui.table_profitability_of_own_money.move(0, current_height)
-                    self.ui.table_profitability_of_own_money.resize(800, self.ui.table_profitability_of_own_money.height())
+                    self.ui.table_profitability_of_own_money.move(10, current_height)
+                    self.ui.table_profitability_of_own_money.resize(900, self.ui.table_profitability_of_own_money.height())
+                    self.ui.table_profitability_of_own_money.adjustSize()
                     current_height += self.ui.table_profitability_of_own_money.height() + 10
                 else:
                     break
             elif(elem.text() == "Процентные выплаты, получаемые банком за предоставление кредита"):#+++++
                 if(check_height(current_height + self.ui.table_bank_money_all_time.height() + 10 + self.ui.label_bank_money_all_time.height() + 5)):
                     self.ui.label_bank_money_all_time.show()
-                    self.ui.label_bank_money_all_time.move(0, current_height)
+                    self.ui.label_bank_money_all_time.move(10, current_height)
                     current_height += self.ui.label_bank_money_all_time.height() + 5
                     self.ui.table_bank_money_all_time.show()
-                    self.ui.table_bank_money_all_time.move(0, current_height)
-                    self.ui.table_bank_money_all_time.resize(800, self.ui.table_bank_money_all_time.height())
+                    self.ui.table_bank_money_all_time.move(10, current_height)
+                    self.ui.table_bank_money_all_time.resize(900, self.ui.table_bank_money_all_time.height())
+                    self.ui.table_bank_money_all_time.adjustSize()
                     current_height += self.ui.table_bank_money_all_time.height() + 10
                 else:
                     break
             elif(elem.text() == "Средневзвешенная процентная ставка по заемному капиталу строительной организации"):#+
                 if(check_height(current_height + self.ui.table_average_weighted_rate.height() + 10 + self.ui.label_average_weighted_rate.height() + 5)):
                     self.ui.label_average_weighted_rate.show()
-                    self.ui.label_average_weighted_rate.move(0, current_height)
+                    self.ui.label_average_weighted_rate.move(10, current_height)
                     current_height += self.ui.label_average_weighted_rate.height() + 5
                     self.ui.table_average_weighted_rate.show()
-                    self.ui.table_average_weighted_rate.move(0, current_height)
-                    self.ui.table_average_weighted_rate.resize(800, self.ui.table_average_weighted_rate.height())
+                    self.ui.table_average_weighted_rate.move(10, current_height)
+                    self.ui.table_average_weighted_rate.resize(900, self.ui.table_average_weighted_rate.height())
+                    self.ui.table_average_weighted_rate.adjustSize()
                     current_height += self.ui.table_average_weighted_rate.height() + 10
                 else:
                     break
             elif(elem.text() == "Увеличение себестоимости 1м2  при кредитовании строительной организации"):#+
                 if(check_height(current_height + self.ui.table_encrease_owncost_area.height() + 10 + self.ui.label_encrease_owncost_area.height() + 5)):
                     self.ui.label_encrease_owncost_area.show()
-                    self.ui.label_encrease_owncost_area.move(0, current_height)
+                    self.ui.label_encrease_owncost_area.move(10, current_height)
                     current_height += self.ui.label_encrease_owncost_area.height() + 5
                     self.ui.table_encrease_owncost_area.show()
-                    self.ui.table_encrease_owncost_area.move(0, current_height)
-                    self.ui.table_encrease_owncost_area.resize(800, self.ui.table_encrease_owncost_area.height())
+                    self.ui.table_encrease_owncost_area.move(10, current_height)
+                    self.ui.table_encrease_owncost_area.resize(900, self.ui.table_encrease_owncost_area.height())
+                    self.ui.table_encrease_owncost_area.adjustSize()
                     current_height += self.ui.table_encrease_owncost_area.height() + 10
                 else:
                     break
             elif(elem.text() == "Увеличение себестоимости 1м2  при кредитовании строительной организации в %"):#+
                 if(check_height(current_height + self.ui.table_encrease_owncost_area_percentage.height() + 10 + self.ui.label_encrease_owncost_area_percentage.height() + 5)):
                     self.ui.label_encrease_owncost_area_percentage.show()
-                    self.ui.label_encrease_owncost_area_percentage.move(0, current_height)
+                    self.ui.label_encrease_owncost_area_percentage.move(10, current_height)
                     current_height += self.ui.label_encrease_owncost_area_percentage.height() + 5
                     self.ui.table_encrease_owncost_area_percentage.show()
-                    self.ui.table_encrease_owncost_area_percentage.move(0, current_height)
-                    self.ui.table_encrease_owncost_area_percentage.resize(800, self.ui.table_encrease_owncost_area_percentage.height())
+                    self.ui.table_encrease_owncost_area_percentage.move(10, current_height)
+                    self.ui.table_encrease_owncost_area_percentage.resize(900, self.ui.table_encrease_owncost_area_percentage.height())
+                    self.ui.table_encrease_owncost_area_percentage.adjustSize()
                     current_height += self.ui.table_encrease_owncost_area_percentage.height() + 10
                 else:
                     break
             elif(elem.text() == "Прикидка поступления денежных средств в бюджет за счет налоговых отчислений от строительной организации и банка"): #+
                 if(check_height(current_height + self.ui.table_budget_money_income.height() + 10 + self.ui.label_budget_money_income.height() + 5)):
                     self.ui.label_budget_money_income.show()
-                    self.ui.label_budget_money_income.move(0, current_height)
+                    self.ui.label_budget_money_income.move(10, current_height)
                     current_height += self.ui.label_budget_money_income.height() + 5
                     self.ui.table_budget_money_income.show()
-                    self.ui.table_budget_money_income.move(0, current_height)
-                    self.ui.table_budget_money_income.resize(800, self.ui.table_budget_money_income.height())
+                    self.ui.table_budget_money_income.move(10, current_height)
+                    self.ui.table_budget_money_income.resize(900, self.ui.table_budget_money_income.height())
+                    self.ui.table_budget_money_income.adjustSize()
                     current_height += self.ui.table_budget_money_income.height() + 10
                 else:
                     break

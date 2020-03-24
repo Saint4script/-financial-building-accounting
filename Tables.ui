@@ -26,11 +26,14 @@
    <widget class="QPushButton" name="pushButton">
     <property name="geometry">
      <rect>
-      <x>1000</x>
-      <y>20</y>
-      <width>101</width>
+      <x>670</x>
+      <y>10</y>
+      <width>181</width>
       <height>31</height>
      </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">font: 10pt &quot;MS Shell Dlg 2&quot;;</string>
     </property>
     <property name="text">
      <string>Назад</string>
@@ -42,7 +45,7 @@
       <x>0</x>
       <y>0</y>
       <width>651</width>
-      <height>91</height>
+      <height>161</height>
      </rect>
     </property>
     <property name="selectionMode">
@@ -65,17 +68,17 @@
     </item>
     <item>
      <property name="text">
-      <string>если кредит получен единовременно в начале, то платежи по процентам за пользование заемными средствами в конце периода</string>
+      <string>Если кредит получен единовременно в начале, то платежи по процентам за пользование заемными средствами в конце периода</string>
      </property>
     </item>
     <item>
      <property name="text">
-      <string>если кредитная линия выбирается равномерно в течении срока строительства, то платежи по процентам за пользование заемными средствами в конце периода</string>
+      <string>Если кредитная линия выбирается равномерно в течении срока строительства, то платежи по процентам за пользование заемными средствами в конце периода</string>
      </property>
     </item>
     <item>
      <property name="text">
-      <string>если кредитная линия выбирается по мере необходимости строительного процесса, то платежи по процентам за пользование заемными средствами в конце периода</string>
+      <string>Если кредитная линия выбирается по мере необходимости строительного процесса, то платежи по процентам за пользование заемными средствами в конце периода</string>
      </property>
     </item>
     <item>
@@ -128,10 +131,13 @@
     <property name="geometry">
      <rect>
       <x>670</x>
-      <y>20</y>
-      <width>131</width>
-      <height>28</height>
+      <y>130</y>
+      <width>181</width>
+      <height>31</height>
      </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">font: 10pt &quot;MS Shell Dlg 2&quot;;</string>
     </property>
     <property name="text">
      <string>Показать выбранные</string>
@@ -140,11 +146,14 @@
    <widget class="QPushButton" name="clear_tables">
     <property name="geometry">
      <rect>
-      <x>812</x>
-      <y>20</y>
-      <width>121</width>
-      <height>28</height>
+      <x>670</x>
+      <y>70</y>
+      <width>181</width>
+      <height>31</height>
      </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">font: 10pt &quot;MS Shell Dlg 2&quot;;</string>
     </property>
     <property name="text">
      <string>Скрыть таблицы</string>

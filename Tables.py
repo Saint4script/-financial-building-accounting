@@ -6,25 +6,26 @@
 #
 # WARNING! All changes made in this file will be lost!
 
+
 import math
 from PyQt5.QtCore import QDate
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QTableWidgetItem
 
-
 class Ui_NewWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1600, 1000)
-        MainWindow.setMinimumSize(QtCore.QSize(1600, 1000))
+        MainWindow.resize(1400, 1000)
+        MainWindow.setMinimumSize(QtCore.QSize(1200, 800))
         MainWindow.setLayoutDirection(QtCore.Qt.LeftToRight)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.pushButton = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton.setGeometry(QtCore.QRect(990, 20, 101, 31))
+        self.pushButton.setGeometry(QtCore.QRect(670, 10, 181, 31))
+        self.pushButton.setStyleSheet("font: 10pt \"MS Shell Dlg 2\";")
         self.pushButton.setObjectName("pushButton")
         self.listWidget = QtWidgets.QListWidget(self.centralwidget)
-        self.listWidget.setGeometry(QtCore.QRect(0, 0, 651, 91))
+        self.listWidget.setGeometry(QtCore.QRect(0, 0, 651, 161))
         self.listWidget.setSelectionMode(QtWidgets.QAbstractItemView.ExtendedSelection)
         self.listWidget.setObjectName("listWidget")
         item = QtWidgets.QListWidgetItem()
@@ -55,11 +56,15 @@ class Ui_NewWindow(object):
         self.listWidget.addItem(item)
         item = QtWidgets.QListWidgetItem()
         self.listWidget.addItem(item)
+        item = QtWidgets.QListWidgetItem()
+        self.listWidget.addItem(item)
         self.show_tables = QtWidgets.QPushButton(self.centralwidget)
-        self.show_tables.setGeometry(QtCore.QRect(670, 20, 131, 28))
+        self.show_tables.setGeometry(QtCore.QRect(670, 130, 181, 31))
+        self.show_tables.setStyleSheet("font: 10pt \"MS Shell Dlg 2\";")
         self.show_tables.setObjectName("show_tables")
         self.clear_tables = QtWidgets.QPushButton(self.centralwidget)
-        self.clear_tables.setGeometry(QtCore.QRect(812, 20, 121, 28))
+        self.clear_tables.setGeometry(QtCore.QRect(670, 70, 181, 31))
+        self.clear_tables.setStyleSheet("font: 10pt \"MS Shell Dlg 2\";")
         self.clear_tables.setObjectName("clear_tables")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
@@ -86,11 +91,11 @@ class Ui_NewWindow(object):
         item = self.listWidget.item(2)
         item.setText(_translate("MainWindow", "Определение процентной ставки на эскроу"))
         item = self.listWidget.item(3)
-        item.setText(_translate("MainWindow", "если кредит получен единовременно в начале, то платежи по процентам за пользование заемными средствами в конце периода"))
+        item.setText(_translate("MainWindow", "Если кредит получен единовременно в начале, то платежи по процентам за пользование заемными средствами в конце периода"))
         item = self.listWidget.item(4)
-        item.setText(_translate("MainWindow", "если кредитная линия выбирается равномерно в течении срока строительства, то платежи по процентам за пользование заемными средствами в конце периода"))
+        item.setText(_translate("MainWindow", "Если кредитная линия выбирается равномерно в течении срока строительства, то платежи по процентам за пользование заемными средствами в конце периода"))
         item = self.listWidget.item(5)
-        item.setText(_translate("MainWindow", "если кредитная линия выбирается по мере необходимости строительного процесса, то платежи по процентам за пользование заемными средствами в конце периода"))
+        item.setText(_translate("MainWindow", "Если кредитная линия выбирается по мере необходимости строительного процесса, то платежи по процентам за пользование заемными средствами в конце периода"))
         item = self.listWidget.item(6)
         item.setText(_translate("MainWindow", "Прибыль с использованием заемных средств в объеме 85 % от стоимости проекта"))
         item = self.listWidget.item(7)
@@ -111,7 +116,7 @@ class Ui_NewWindow(object):
         self.show_tables.setText(_translate("MainWindow", "Показать выбранные"))
         self.clear_tables.setText(_translate("MainWindow", "Скрыть таблицы"))
 
-    # no use for that
+# no use for that
     def hide_tables(self):
         tables = self.centralwidget.findChildren(QtWidgets.QTableWidget)
         labels = self.centralwidget.findChildren(QtWidgets.QLabel)
@@ -133,6 +138,7 @@ class Ui_NewWindow(object):
         self.TableWidget.setRowCount(2)
         self.TableWidget.setColumnCount(decades + 1)
         self.TableWidget.setHorizontalHeaderItem(decades, QTableWidgetItem("Средняя цена"))
+        self.TableWidget.setStyleSheet("background-color:rgb(207, 255, 245)")
 
         #план продаж
         self.Table_with_flat_sell_plan = QtWidgets.QTableWidget(self.centralwidget)
@@ -163,6 +169,7 @@ class Ui_NewWindow(object):
                                                                     "по стратегии 2 - в середине",
                                                                     "по стратегии 3 - в конце",
                                                                     "по стратегии 4 - равномерно"])
+        self.Table_with_flat_sell_plan.setStyleSheet("background-color:rgb(207, 255, 245)")
 
         #Эскроу счета
         self.escrow_rate = QtWidgets.QTableWidget(self.centralwidget)
@@ -177,6 +184,7 @@ class Ui_NewWindow(object):
                                                             "по стратегии 2 - в середине",
                                                             "по стратегии 3 - в конце",
                                                             "по стратегии 4 - равномерно"])
+        self.escrow_rate.setStyleSheet("background-color:rgb(207, 255, 245)")
 
         #Кредит получен целиком в начале
         self.credit_is_got_fully_at_the_beginning = QtWidgets.QTableWidget(self.centralwidget)
@@ -194,6 +202,7 @@ class Ui_NewWindow(object):
         self.credit_is_got_fully_at_the_beginning.setColumnWidth(decades + 1, 230)
         self.credit_is_got_fully_at_the_beginning.setColumnWidth(decades + 2, 180)
         self.credit_is_got_fully_at_the_beginning.setColumnWidth(decades + 3, 230)
+        self.credit_is_got_fully_at_the_beginning.setStyleSheet("background-color:rgb(207, 255, 245)")
 
         #Кредит получен равномерно
         self.credit_line_chooses_evenly = QtWidgets.QTableWidget(self.centralwidget)
@@ -208,7 +217,8 @@ class Ui_NewWindow(object):
                                                             "по стратегии 2 - в середине",
                                                             "по стратегии 3 - в конце",
                                                             "по стратегии 4 - равномерно"])
-        
+        self.credit_line_chooses_evenly.setStyleSheet("background-color:rgb(207, 255, 245)")
+
         #Кредит заполняется исходя из текущих нужд
         self.main_table_necessary_percents = QtWidgets.QTableWidget(self.centralwidget)
         self.main_table_necessary_percents.setObjectName("main_table_necessary_percents")  
@@ -234,6 +244,7 @@ class Ui_NewWindow(object):
         self.main_table_necessary_percents.setColumnWidth(decades + 1, 230)
         self.main_table_necessary_percents.setColumnWidth(decades + 2, 180)
         self.main_table_necessary_percents.setColumnWidth(decades + 3, 240)
+        self.main_table_necessary_percents.setStyleSheet("background-color:rgb(207, 255, 245)")
 
         #14. Прибыль до налогообложения строительной организации при различных стратегиях
         #продаж с использованием заемных средств в объеме 85 % от стоимости проекта.
@@ -246,12 +257,15 @@ class Ui_NewWindow(object):
         self.table_85_percent_debt_money.resizeRowsToContents()
         self.table_85_percent_debt_money.setRowCount(3)
         self.table_85_percent_debt_money.setColumnCount(4)
-        self.table_85_percent_debt_money.setVerticalHeaderLabels(["в начале строительства", "равномерно в течение строительства", "по мере необходимости"])
+        self.table_85_percent_debt_money.setVerticalHeaderLabels(["в начале строительства", "равномерно в течение строительства", "по мере производственной необходимости"])
         self.table_85_percent_debt_money.setHorizontalHeaderLabels(["в начале", "в середине", "в конце", "равномерно"])
+        self.table_85_percent_debt_money.setStyleSheet("background-color:rgb(225, 255, 160)")
+        self.table_85_percent_debt_money.setAlternatingRowColors(True)
     
         self.label_85_percent_debt_money = QtWidgets.QLabel(self.centralwidget)
+        self.label_85_percent_debt_money.setStyleSheet("font: 10pt \"MS Shell Dlg 2\";")
         self.label_85_percent_debt_money.setText("Прибыль до налогообложения строительной организации")
-        #self.label_85_percent_debt_money.move(-3000, -3000)
+        #self.label_85_percent_debt_money.setStyleSheet("background-color:rgb(207, 255, 245)")
 
         #15.	
         #Расчет эффект финансового рычага строительной организации при 
@@ -264,12 +278,15 @@ class Ui_NewWindow(object):
         self.table_financial_leverage_with_debt.resizeRowsToContents()
         self.table_financial_leverage_with_debt.setRowCount(3)
         self.table_financial_leverage_with_debt.setColumnCount(4)
-        self.table_financial_leverage_with_debt.setVerticalHeaderLabels(["в начале строительства", "равномерно в течение строительства", "по мере необходимости"])
+        self.table_financial_leverage_with_debt.setVerticalHeaderLabels(["в начале строительства", "равномерно в течение строительства", "по мере производственной необходимости"])
         self.table_financial_leverage_with_debt.setHorizontalHeaderLabels(["в начале", "в середине", "в конце", "равномерно"])
+        self.table_financial_leverage_with_debt.setStyleSheet("background-color:rgb(225, 255, 160)")
+        self.table_financial_leverage_with_debt.setAlternatingRowColors(True)
 
         self.label_financial_leverage_with_debt = QtWidgets.QLabel(self.centralwidget)
+        self.label_financial_leverage_with_debt.setStyleSheet("font: 10pt \"MS Shell Dlg 2\";")
         self.label_financial_leverage_with_debt.setText("Эффект финансового рычага строительной организации")
-        #self.label_financial_leverage_with_debt.move(-3000, -3000)
+        #self.label_financial_leverage_with_debt.setStyleSheet("background-color:rgb(207, 255, 245)")
 
         #16.
         #Рентабельность собственного капитала строительной организации
@@ -283,12 +300,15 @@ class Ui_NewWindow(object):
         self.table_profitability_of_own_money.resizeRowsToContents()
         self.table_profitability_of_own_money.setRowCount(3)
         self.table_profitability_of_own_money.setColumnCount(4)
-        self.table_profitability_of_own_money.setVerticalHeaderLabels(["в начале строительства", "равномерно в течение строительства", "по мере необходимости"])
+        self.table_profitability_of_own_money.setVerticalHeaderLabels(["в начале строительства", "равномерно в течение строительства", "по мере производственной необходимости"])
         self.table_profitability_of_own_money.setHorizontalHeaderLabels(["в начале", "в середине", "в конце", "равномерно"])
+        self.table_profitability_of_own_money.setStyleSheet("background-color:rgb(225, 255, 160)")
+        self.table_profitability_of_own_money.setAlternatingRowColors(True)
 
         self.label_profitability_of_own_money = QtWidgets.QLabel(self.centralwidget)
+        self.label_profitability_of_own_money.setStyleSheet("font: 10pt \"MS Shell Dlg 2\";")
         self.label_profitability_of_own_money.setText("Рентабельность собственного капитала строительной организации")
-        #self.label_profitability_of_own_money.move(-3000, -3000)
+        #self.label_profitability_of_own_money.setStyleSheet("background-color:rgb(207, 255, 245)")
 
         #17
         #Количество денежных средств, которые получит банк за предоставления кредита в размере 85%
@@ -301,12 +321,15 @@ class Ui_NewWindow(object):
         self.table_bank_money_all_time.resizeRowsToContents()
         self.table_bank_money_all_time.setRowCount(3)
         self.table_bank_money_all_time.setColumnCount(4)
-        self.table_bank_money_all_time.setVerticalHeaderLabels(["в начале строительства", "равномерно в течение строительства", "по мере необходимости"])
+        self.table_bank_money_all_time.setVerticalHeaderLabels(["в начале строительства", "равномерно в течение строительства", "по мере производственной необходимости"])
         self.table_bank_money_all_time.setHorizontalHeaderLabels(["в начале", "в середине", "в конце", "равномерно"])
+        self.table_bank_money_all_time.setStyleSheet("background-color:rgb(225, 255, 160)")
+        self.table_bank_money_all_time.setAlternatingRowColors(True)
 
         self.label_bank_money_all_time = QtWidgets.QLabel(self.centralwidget)
-        self.label_bank_money_all_time.setText("Процентные выплаты, которые получит банк за предоставления кредита строительной организации")
-        #self.label_bank_money_all_time.move(-3000, -3000)
+        self.label_bank_money_all_time.setStyleSheet("font: 10pt \"MS Shell Dlg 2\";")
+        self.label_bank_money_all_time.setText("Процентные выплаты, получаемые банком за предоставление кредита строительной организации")
+        #self.label_bank_money_all_time.setStyleSheet("background-color:rgb(207, 255, 245)")
 
         #18
         #Расчет средневзвешенной процентной ставки по заемному капиталу строительной организации при кредитовании 
@@ -318,12 +341,15 @@ class Ui_NewWindow(object):
         self.table_average_weighted_rate.resizeRowsToContents()
         self.table_average_weighted_rate.setRowCount(3)
         self.table_average_weighted_rate.setColumnCount(4)
-        self.table_average_weighted_rate.setVerticalHeaderLabels(["в начале строительства", "равномерно в течение строительства", "по мере необходимости"])
+        self.table_average_weighted_rate.setVerticalHeaderLabels(["в начале строительства", "равномерно в течение строительства", "по мере производственной необходимости"])
         self.table_average_weighted_rate.setHorizontalHeaderLabels(["в начале", "в середине", "в конце", "равномерно"])
+        self.table_average_weighted_rate.setStyleSheet("background-color:rgb(225, 255, 160)")
+        self.table_average_weighted_rate.setAlternatingRowColors(True)
 
         self.label_average_weighted_rate = QtWidgets.QLabel(self.centralwidget)
+        self.label_average_weighted_rate.setStyleSheet("font: 10pt \"MS Shell Dlg 2\";")
         self.label_average_weighted_rate.setText("Средневзвешенная процентная ставка по заемному капиталу за весь срок кредитования строительной организации")
-        #self.label_average_weighted_rate.move(-3000, -3000)
+        #self.label_average_weighted_rate.setStyleSheet("background-color:rgb(207, 255, 245)")
 
         #19.
         #Увеличение себестоимости 1м2 при различных видах кредитования и времени пополнения
@@ -336,12 +362,15 @@ class Ui_NewWindow(object):
         self.table_encrease_owncost_area.resizeRowsToContents()
         self.table_encrease_owncost_area.setRowCount(3)
         self.table_encrease_owncost_area.setColumnCount(4)
-        self.table_encrease_owncost_area.setVerticalHeaderLabels(["в начале строительства", "равномерно в течение строительства", "по мере необходимости"])
+        self.table_encrease_owncost_area.setVerticalHeaderLabels(["в начале строительства", "равномерно в течение строительства", "по мере производственной необходимости"])
         self.table_encrease_owncost_area.setHorizontalHeaderLabels(["в начале", "в середине", "в конце", "равномерно"])
+        self.table_encrease_owncost_area.setStyleSheet("background-color:rgb(225, 255, 160)")
+        self.table_encrease_owncost_area.setAlternatingRowColors(True)
 
         self.label_encrease_owncost_area = QtWidgets.QLabel(self.centralwidget)
+        self.label_encrease_owncost_area.setStyleSheet("font: 10pt \"MS Shell Dlg 2\";")
         self.label_encrease_owncost_area.setText("Увеличение себестоимости 1м2 при различных видах кредитования и времени пополнения счетов эскроу при кредитовании строительной организации")
-        #self.label_encrease_owncost_area.move(-3000, -3000)
+        #self.label_encrease_owncost_area.setStyleSheet("background-color:rgb(207, 255, 245)")
 
         #20
         #Увеличение себестоимости 1м2 при различных видах кредитования и времени пополнения
@@ -354,12 +383,15 @@ class Ui_NewWindow(object):
         self.table_encrease_owncost_area_percentage.resizeRowsToContents()
         self.table_encrease_owncost_area_percentage.setRowCount(3)
         self.table_encrease_owncost_area_percentage.setColumnCount(4)
-        self.table_encrease_owncost_area_percentage.setVerticalHeaderLabels(["в начале строительства", "равномерно в течение строительства", "по мере необходимости"])
+        self.table_encrease_owncost_area_percentage.setVerticalHeaderLabels(["в начале строительства", "равномерно в течение строительства", "по мере производственной необходимости"])
         self.table_encrease_owncost_area_percentage.setHorizontalHeaderLabels(["в начале", "в середине", "в конце", "равномерно"])
+        self.table_encrease_owncost_area_percentage.setStyleSheet("background-color:rgb(225, 255, 160)")
+        self.table_encrease_owncost_area_percentage.setAlternatingRowColors(True)
 
         self.label_encrease_owncost_area_percentage = QtWidgets.QLabel(self.centralwidget)
+        self.label_encrease_owncost_area_percentage.setStyleSheet("font: 10pt \"MS Shell Dlg 2\";")
         self.label_encrease_owncost_area_percentage.setText("Увеличение себестоимости 1м2 при различных видах кредитования и времени пополнения счетов эскроу в процентах")
-        #self.label_encrease_owncost_area_percentage.move(-3000, -3000)
+        #self.label_encrease_owncost_area_percentage.setStyleSheet("background-color:rgb(207, 255, 245)")
 
         #21
         #Прикидка поступления денежных средств в бюджет за счет налоговых отчислений
@@ -372,11 +404,15 @@ class Ui_NewWindow(object):
         self.table_budget_money_income.resizeRowsToContents()
         self.table_budget_money_income.setRowCount(3)
         self.table_budget_money_income.setColumnCount(4)
-        self.table_budget_money_income.setVerticalHeaderLabels(["в начале строительства", "равномерно в течение строительства", "по мере необходимости"])
+        self.table_budget_money_income.setVerticalHeaderLabels(["в начале строительства", "равномерно в течение строительства", "по мере производственной необходимости"])
         self.table_budget_money_income.setHorizontalHeaderLabels(["в начале", "в середине", "в конце", "равномерно"])
+        self.table_budget_money_income.setStyleSheet("background-color:rgb(225, 255, 160)")
+        self.table_budget_money_income.setAlternatingRowColors(True)
+        self.table_budget_money_income.horizontalHeader().setStretchLastSection(True)
 
         self.label_budget_money_income = QtWidgets.QLabel(self.centralwidget)
+        self.label_budget_money_income.setStyleSheet("font: 10pt \"MS Shell Dlg 2\";")
         self.label_budget_money_income.setText("Прикидка поступления денежных средств в бюджет за счет налоговых отчислений от строительной организации и банка при кредитовании строительной организации")
-        #self.label_budget_money_income.move(-3000, -3000)
+        #self.label_budget_money_income.setStyleSheet("background-color:rgb(207, 255, 245)")
     
         self.hide_tables()
