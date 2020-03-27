@@ -253,9 +253,14 @@ class newwindow(QtWidgets.QMainWindow):
                     if(table.item(i, j) != None): # Если не сделать проверку на None(NULL), то когда он пытается обратиться к пустой ячейке, он падает, 
                                                     #т.к она NoneType -_-
                         table.item(i, j).setFlags(QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsEnabled)
+                        
                     else:
                         table.setItem(i, j, QTableWidgetItem(""))  #Поэтому надо положить в нее хотя бы пустую строку
                         table.item(i, j).setFlags(QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsEnabled)
+                    brush = QtGui.QBrush(QtGui.QColor(233, 145, 255))
+                    brush.setStyle(QtCore.Qt.SolidPattern)
+                    if(i % 2 == 0):
+                        table.item(i, j).setBackground(brush)
 
         #Выравнивание контента в ячейках таблиц по центру
         def align_items(table):
@@ -268,7 +273,7 @@ class newwindow(QtWidgets.QMainWindow):
                             table.setItem(i, j, QTableWidgetItem(""))  #Поэтому надо положить в нее хотя бы пустую строку
                             table.item(i, j).setTextAlignment(QtCore.Qt.AlignVCenter | QtCore.Qt.AlignHCenter)
 
-        #Разбиение по разрядам
+        #Разбиение длинных чисел по разрядам
         def decorate_numbers(table):
             for i in range(table.rowCount()):
                 for j in range(table.columnCount()):
@@ -426,7 +431,7 @@ class newwindow(QtWidgets.QMainWindow):
             self.ui.main_table_necessary_percents.setItem(i + 3, self.decades + 1, QTableWidgetItem(str(round(row_sum / self.credit_money * 100 , 2))))
         
         for i in range(4):
-            rent = float(self.ui.Table_with_flat_sell_plan.item(i + 5, self.decades + 2).text())
+            rent = float(self.ui.Table_with_flat_sell_plan.item(i + 5, self.decades + 1).text())
             rate = float(self.ui.main_table_necessary_percents.item(i + 3, self.decades + 1).text())
             effect = 0.8 * (rent - rate / 100) * self.credit_money / self.own_money
             self.ui.main_table_necessary_percents.setItem(i + 3, self.decades + 2, QTableWidgetItem(str(effect))) # Эффект финансового рычага
@@ -478,7 +483,7 @@ class newwindow(QtWidgets.QMainWindow):
                     self.ui.TableWidget.move(10,current_height)
                     current_height += self.ui.TableWidget.height() + 10
                     self.ui.TableWidget.resize(1200, self.ui.TableWidget.height())
-                    self.ui.TableWidget.adjustSize()
+                    #self.ui.TableWidget.adjustSize()
                 else:
                     break
             elif(elem.text() == 'План продаж'):
@@ -487,7 +492,7 @@ class newwindow(QtWidgets.QMainWindow):
                     self.ui.Table_with_flat_sell_plan.move(10,current_height)
                     current_height += self.ui.Table_with_flat_sell_plan.height() + 10
                     self.ui.Table_with_flat_sell_plan.resize(1200, self.ui.Table_with_flat_sell_plan.height())
-                    self.ui.Table_with_flat_sell_plan.adjustSize()
+                    #self.ui.Table_with_flat_sell_plan.adjustSize()
                 else:
                     break
             elif(elem.text() == 'Определение процентной ставки на эскроу'):
@@ -496,7 +501,7 @@ class newwindow(QtWidgets.QMainWindow):
                     self.ui.escrow_rate.move(10,current_height)
                     current_height += self.ui.escrow_rate.height() + 10
                     self.ui.escrow_rate.resize(1200, self.ui.escrow_rate.height())
-                    self.ui.escrow_rate.adjustSize()
+                    #self.ui.escrow_rate.adjustSize()
                 else:
                     break
             elif(elem.text() == "Если кредит получен единовременно в начале, то платежи по процентам за пользование заемными средствами в конце периода"):
@@ -505,7 +510,7 @@ class newwindow(QtWidgets.QMainWindow):
                     self.ui.credit_is_got_fully_at_the_beginning.move(10, current_height)
                     current_height += self.ui.credit_is_got_fully_at_the_beginning.height() + 10
                     self.ui.credit_is_got_fully_at_the_beginning.resize(1200, self.ui.credit_is_got_fully_at_the_beginning.height())
-                    self.ui.credit_is_got_fully_at_the_beginning.adjustSize()
+                    #self.ui.credit_is_got_fully_at_the_beginning.adjustSize()
                 else:
                     break
             elif(elem.text() == "Если кредитная линия выбирается равномерно в течении срока строительства, то платежи по процентам за пользование заемными средствами в конце периода"):
@@ -514,7 +519,7 @@ class newwindow(QtWidgets.QMainWindow):
                     self.ui.credit_line_chooses_evenly.move(10, current_height)
                     current_height += self.ui.credit_line_chooses_evenly.height() + 10
                     self.ui.credit_line_chooses_evenly.resize(1200, self.ui.credit_line_chooses_evenly.height())
-                    self.ui.credit_line_chooses_evenly.adjustSize()
+                    #self.ui.credit_line_chooses_evenly.adjustSize()
                 else:
                     break
             elif(elem.text() == "Если кредитная линия выбирается по мере необходимости строительного процесса, то платежи по процентам за пользование заемными средствами в конце периода"):
@@ -522,7 +527,7 @@ class newwindow(QtWidgets.QMainWindow):
                     self.ui.main_table_necessary_percents.show()
                     self.ui.main_table_necessary_percents.move(10, current_height)
                     self.ui.main_table_necessary_percents.resize(1200, self.ui.main_table_necessary_percents.height())
-                    self.ui.main_table_necessary_percents.adjustSize()
+                    #self.ui.main_table_necessary_percents.adjustSize()
                     current_height += self.ui.main_table_necessary_percents.height() + 10
                 else:
                     break
@@ -754,7 +759,7 @@ class newwindow(QtWidgets.QMainWindow):
         #Заполним рентабилность активов 
         for i in range(4):
             value = (self.sell_plan_sum_of_each_str[i] - self.S * self.c) / (self.own_money + self.credit_money)
-            self.ui.Table_with_flat_sell_plan.setItem(i + 5, decades + 2, QTableWidgetItem(str(value)))
+            self.ui.Table_with_flat_sell_plan.setItem(i + 5, decades + 1, QTableWidgetItem(str(value)))
 
     #Эскроу счета
     def fill_escrow_rate(self):
@@ -885,7 +890,7 @@ class newwindow(QtWidgets.QMainWindow):
 
 
         for i in range(4):
-            rent = float(self.ui.Table_with_flat_sell_plan.item(i + 5, decades + 2).text())
+            rent = float(self.ui.Table_with_flat_sell_plan.item(i + 5, decades + 1).text())
             rate = float(self.ui.credit_is_got_fully_at_the_beginning.item(i, decades + 1).text())
             effect = 0.8 * (rent - rate / 100) * self.credit_money / self.own_money
             self.ui.credit_is_got_fully_at_the_beginning.setItem(i, decades + 2, QTableWidgetItem(str(effect))) # Эффект финансового рычага
@@ -952,7 +957,7 @@ class newwindow(QtWidgets.QMainWindow):
         self.ui.credit_line_chooses_evenly.setItem(3, decades + 1, QTableWidgetItem(str(round(sum(self.fourth_strategy_credit_line) / self.credit_money * 100, 2))))
 
         for i in range(4):
-            rent = float(self.ui.Table_with_flat_sell_plan.item(i + 5, decades + 2).text())
+            rent = float(self.ui.Table_with_flat_sell_plan.item(i + 5, decades + 1).text())
             rate = float(self.ui.credit_line_chooses_evenly.item(i, decades + 1).text())
             effect = 0.8 * (rent - rate / 100) * self.credit_money / self.own_money
             self.ui.credit_line_chooses_evenly.setItem(i, decades + 2, QTableWidgetItem(str(effect))) # Эффект финансового рычага

@@ -57,7 +57,7 @@ class Ui_NewWindow(object):
         item = QtWidgets.QListWidgetItem()
         self.listWidget.addItem(item)
         self.show_tables = QtWidgets.QPushButton(self.centralwidget)
-        self.show_tables.setGeometry(QtCore.QRect(670, 130, 181, 31))
+        self.show_tables.setGeometry(QtCore.QRect(670, 130, 246, 31))
         self.show_tables.setStyleSheet("font: 10pt \"MS Shell Dlg 2\";")
         self.show_tables.setObjectName("show_tables")
         self.clear_tables = QtWidgets.QPushButton(self.centralwidget)
@@ -111,7 +111,8 @@ class Ui_NewWindow(object):
         item = self.listWidget.item(13)
         item.setText(_translate("MainWindow", "Прикидка поступления денежных средств в бюджет за счет налоговых отчислений от строительной организации и банка"))
         self.listWidget.setSortingEnabled(__sortingEnabled)
-        self.show_tables.setText(_translate("MainWindow", "Показать выбранные"))
+        self.show_tables.setText(_translate("MainWindow", "Показать выбранные таблицы"))
+        self.show_tables.setToolTip("Ctrl + click чтобы выбрать несколько таблиц")
         self.clear_tables.setText(_translate("MainWindow", "Скрыть таблицы"))
 
 # no use for that
@@ -136,7 +137,7 @@ class Ui_NewWindow(object):
         self.TableWidget.setRowCount(2)
         self.TableWidget.setColumnCount(decades + 1)
         self.TableWidget.setHorizontalHeaderItem(decades, QTableWidgetItem("Средняя цена"))
-        self.TableWidget.setStyleSheet("background-color:rgb(207, 255, 245)")
+        #self.TableWidget.setStyleSheet("background-color:rgb(207, 255, 245)")
 
         #план продаж
         self.Table_with_flat_sell_plan = QtWidgets.QTableWidget(self.centralwidget)
@@ -146,12 +147,10 @@ class Ui_NewWindow(object):
         self.Table_with_flat_sell_plan.resizeColumnsToContents()
         self.Table_with_flat_sell_plan.resizeRowsToContents()
         self.Table_with_flat_sell_plan.setRowCount(14)
-        self.Table_with_flat_sell_plan.setColumnCount(decades + 3)
+        self.Table_with_flat_sell_plan.setColumnCount(decades + 2)
         self.Table_with_flat_sell_plan.setHorizontalHeaderItem(decades, QTableWidgetItem("Итого"))
-        self.Table_with_flat_sell_plan.setHorizontalHeaderItem(decades + 1, QTableWidgetItem("потеря прибыли у строительной организации"))
+        self.Table_with_flat_sell_plan.setHorizontalHeaderItem(decades + 1, QTableWidgetItem("Рентабильность активов"))
         self.Table_with_flat_sell_plan.setColumnWidth(decades + 1, 200)
-        self.Table_with_flat_sell_plan.setHorizontalHeaderItem(decades+ 2, QTableWidgetItem("рентабильность активов"))
-        self.Table_with_flat_sell_plan.setColumnWidth(decades + 2, 150)
         self.Table_with_flat_sell_plan.setHorizontalHeaderLabels(["" for i in range(decades)])
         self.Table_with_flat_sell_plan.setVerticalHeaderLabels([ "по стратегии 1 - в начале",
                                                                     "по стратегии 2 - в середине",
@@ -167,7 +166,7 @@ class Ui_NewWindow(object):
                                                                     "по стратегии 2 - в середине",
                                                                     "по стратегии 3 - в конце",
                                                                     "по стратегии 4 - равномерно"])
-        self.Table_with_flat_sell_plan.setStyleSheet("background-color:rgb(207, 255, 245)")
+        #self.Table_with_flat_sell_plan.setStyleSheet("background-color:rgb(207, 255, 245)")
 
         #Эскроу счета
         self.escrow_rate = QtWidgets.QTableWidget(self.centralwidget)
@@ -182,7 +181,7 @@ class Ui_NewWindow(object):
                                                             "по стратегии 2 - в середине",
                                                             "по стратегии 3 - в конце",
                                                             "по стратегии 4 - равномерно"])
-        self.escrow_rate.setStyleSheet("background-color:rgb(207, 255, 245)")
+        #self.escrow_rate.setStyleSheet("background-color:rgb(207, 255, 245)")
 
         #Кредит получен целиком в начале
         self.credit_is_got_fully_at_the_beginning = QtWidgets.QTableWidget(self.centralwidget)
@@ -200,7 +199,7 @@ class Ui_NewWindow(object):
         self.credit_is_got_fully_at_the_beginning.setColumnWidth(decades + 1, 230)
         self.credit_is_got_fully_at_the_beginning.setColumnWidth(decades + 2, 180)
         self.credit_is_got_fully_at_the_beginning.setColumnWidth(decades + 3, 230)
-        self.credit_is_got_fully_at_the_beginning.setStyleSheet("background-color:rgb(207, 255, 245)")
+        #self.credit_is_got_fully_at_the_beginning.setStyleSheet("background-color:rgb(207, 255, 245)")
 
         #Кредит получен равномерно
         self.credit_line_chooses_evenly = QtWidgets.QTableWidget(self.centralwidget)
@@ -215,7 +214,7 @@ class Ui_NewWindow(object):
                                                             "по стратегии 2 - в середине",
                                                             "по стратегии 3 - в конце",
                                                             "по стратегии 4 - равномерно"])
-        self.credit_line_chooses_evenly.setStyleSheet("background-color:rgb(207, 255, 245)")
+       # self.credit_line_chooses_evenly.setStyleSheet("background-color:rgb(207, 255, 245)")
 
         #Кредит заполняется исходя из текущих нужд
         self.main_table_necessary_percents = QtWidgets.QTableWidget(self.centralwidget)
@@ -242,7 +241,7 @@ class Ui_NewWindow(object):
         self.main_table_necessary_percents.setColumnWidth(decades + 1, 230)
         self.main_table_necessary_percents.setColumnWidth(decades + 2, 180)
         self.main_table_necessary_percents.setColumnWidth(decades + 3, 240)
-        self.main_table_necessary_percents.setStyleSheet("background-color:rgb(207, 255, 245)")
+        #self.main_table_necessary_percents.setStyleSheet("background-color:rgb(207, 255, 245)")
 
         #14. Прибыль до налогообложения строительной организации при различных стратегиях
         #продаж с использованием заемных средств в объеме 85 % от стоимости проекта.
@@ -257,7 +256,7 @@ class Ui_NewWindow(object):
         self.table_85_percent_debt_money.setColumnCount(4)
         self.table_85_percent_debt_money.setVerticalHeaderLabels(["в начале строительства", "равномерно в течение строительства", "по мере производственной необходимости"])
         self.table_85_percent_debt_money.setHorizontalHeaderLabels(["в начале", "в середине", "в конце", "равномерно"])
-        self.table_85_percent_debt_money.setStyleSheet("background-color:rgb(225, 255, 160)")
+        #self.table_85_percent_debt_money.setStyleSheet("background-color:rgb(225, 255, 160)")
         self.table_85_percent_debt_money.setAlternatingRowColors(True)
     
         self.label_85_percent_debt_money = QtWidgets.QLabel(self.centralwidget)
@@ -278,7 +277,7 @@ class Ui_NewWindow(object):
         self.table_financial_leverage_with_debt.setColumnCount(4)
         self.table_financial_leverage_with_debt.setVerticalHeaderLabels(["в начале строительства", "равномерно в течение строительства", "по мере производственной необходимости"])
         self.table_financial_leverage_with_debt.setHorizontalHeaderLabels(["в начале", "в середине", "в конце", "равномерно"])
-        self.table_financial_leverage_with_debt.setStyleSheet("background-color:rgb(225, 255, 160)")
+        #self.table_financial_leverage_with_debt.setStyleSheet("background-color:rgb(225, 255, 160)")
         self.table_financial_leverage_with_debt.setAlternatingRowColors(True)
 
         self.label_financial_leverage_with_debt = QtWidgets.QLabel(self.centralwidget)
@@ -300,7 +299,7 @@ class Ui_NewWindow(object):
         self.table_profitability_of_own_money.setColumnCount(4)
         self.table_profitability_of_own_money.setVerticalHeaderLabels(["в начале строительства", "равномерно в течение строительства", "по мере производственной необходимости"])
         self.table_profitability_of_own_money.setHorizontalHeaderLabels(["в начале", "в середине", "в конце", "равномерно"])
-        self.table_profitability_of_own_money.setStyleSheet("background-color:rgb(225, 255, 160)")
+        #self.table_profitability_of_own_money.setStyleSheet("background-color:rgb(225, 255, 160)")
         self.table_profitability_of_own_money.setAlternatingRowColors(True)
 
         self.label_profitability_of_own_money = QtWidgets.QLabel(self.centralwidget)
@@ -321,7 +320,7 @@ class Ui_NewWindow(object):
         self.table_bank_money_all_time.setColumnCount(4)
         self.table_bank_money_all_time.setVerticalHeaderLabels(["в начале строительства", "равномерно в течение строительства", "по мере производственной необходимости"])
         self.table_bank_money_all_time.setHorizontalHeaderLabels(["в начале", "в середине", "в конце", "равномерно"])
-        self.table_bank_money_all_time.setStyleSheet("background-color:rgb(225, 255, 160)")
+        #self.table_bank_money_all_time.setStyleSheet("background-color:rgb(225, 255, 160)")
         self.table_bank_money_all_time.setAlternatingRowColors(True)
 
         self.label_bank_money_all_time = QtWidgets.QLabel(self.centralwidget)
@@ -341,7 +340,7 @@ class Ui_NewWindow(object):
         self.table_average_weighted_rate.setColumnCount(4)
         self.table_average_weighted_rate.setVerticalHeaderLabels(["в начале строительства", "равномерно в течение строительства", "по мере производственной необходимости"])
         self.table_average_weighted_rate.setHorizontalHeaderLabels(["в начале", "в середине", "в конце", "равномерно"])
-        self.table_average_weighted_rate.setStyleSheet("background-color:rgb(225, 255, 160)")
+        #self.table_average_weighted_rate.setStyleSheet("background-color:rgb(225, 255, 160)")
         self.table_average_weighted_rate.setAlternatingRowColors(True)
 
         self.label_average_weighted_rate = QtWidgets.QLabel(self.centralwidget)
@@ -362,7 +361,7 @@ class Ui_NewWindow(object):
         self.table_encrease_owncost_area.setColumnCount(4)
         self.table_encrease_owncost_area.setVerticalHeaderLabels(["в начале строительства", "равномерно в течение строительства", "по мере производственной необходимости"])
         self.table_encrease_owncost_area.setHorizontalHeaderLabels(["в начале", "в середине", "в конце", "равномерно"])
-        self.table_encrease_owncost_area.setStyleSheet("background-color:rgb(225, 255, 160)")
+        #self.table_encrease_owncost_area.setStyleSheet("background-color:rgb(225, 255, 160)")
         self.table_encrease_owncost_area.setAlternatingRowColors(True)
 
         self.label_encrease_owncost_area = QtWidgets.QLabel(self.centralwidget)
@@ -383,7 +382,7 @@ class Ui_NewWindow(object):
         self.table_encrease_owncost_area_percentage.setColumnCount(4)
         self.table_encrease_owncost_area_percentage.setVerticalHeaderLabels(["в начале строительства", "равномерно в течение строительства", "по мере производственной необходимости"])
         self.table_encrease_owncost_area_percentage.setHorizontalHeaderLabels(["в начале", "в середине", "в конце", "равномерно"])
-        self.table_encrease_owncost_area_percentage.setStyleSheet("background-color:rgb(225, 255, 160)")
+        #self.table_encrease_owncost_area_percentage.setStyleSheet("background-color:rgb(225, 255, 160)")
         self.table_encrease_owncost_area_percentage.setAlternatingRowColors(True)
 
         self.label_encrease_owncost_area_percentage = QtWidgets.QLabel(self.centralwidget)
@@ -404,9 +403,9 @@ class Ui_NewWindow(object):
         self.table_budget_money_income.setColumnCount(4)
         self.table_budget_money_income.setVerticalHeaderLabels(["в начале строительства", "равномерно в течение строительства", "по мере производственной необходимости"])
         self.table_budget_money_income.setHorizontalHeaderLabels(["в начале", "в середине", "в конце", "равномерно"])
-        self.table_budget_money_income.setStyleSheet("background-color:rgb(225, 255, 160)")
+        #self.table_budget_money_income.setStyleSheet("background-color:rgb(225, 255, 160)")
         self.table_budget_money_income.setAlternatingRowColors(True)
-        self.table_budget_money_income.horizontalHeader().setStretchLastSection(True)
+        #self.table_budget_money_income.horizontalHeader().setStretchLastSection(True)
 
         self.label_budget_money_income = QtWidgets.QLabel(self.centralwidget)
         self.label_budget_money_income.setStyleSheet("font: 10pt \"MS Shell Dlg 2\";")

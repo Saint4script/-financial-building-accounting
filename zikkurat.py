@@ -126,16 +126,16 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
-
+#Начальная цена 1 м^2(руб)
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.label.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:10pt;\">Общая площадь(м</span><span style=\" font-size:10pt; vertical-align:super;\">2</span><span style=\" font-size:10pt;\">)</span></p></body></html>"))
         self.label_2.setText(_translate("MainWindow", "Количество квартир(шт)"))
-        self.label_3.setText(_translate("MainWindow", "Средняя площадь квартир(м^2)"))
+        self.label_3.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:10pt;\">Средняя площадь квартир(м</span><span style=\" font-size:10pt; vertical-align:super;\">2</span><span style=\" font-size:10pt;\">)</span></p></body></html>"))
         self.label_4.setText(_translate("MainWindow", "Срок строительства(мес)"))
         self.label_5.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:10pt;\">Процент увеличения цены 1м</span><span style=\" font-size:10pt; vertical-align:super;\">2 </span><span style=\" font-size:10pt;\">в периоде </span></p></body></html>"))
-        self.label_6.setText(_translate("MainWindow", "Начальная цена 1 м^2(руб)"))
+        self.label_6.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:10pt;\">Начальная цена 1м</span><span style=\" font-size:10pt; vertical-align:super;\">2</span><span style=\" font-size:10pt;\">(руб)</span></p></body></html>"))
         self.label_7.setText(_translate("MainWindow", "Собственный капитал "))
         self.label_8.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:10pt;\">Себестоимость 1 м</span><span style=\" font-size:10pt; vertical-align:super;\">2</span></p></body></html>"))
         self.label_9.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:10pt;\">*Стоимость проекта*</span></p></body></html>"))
