@@ -10,12 +10,14 @@ from Tables import Ui_NewWindow
 
 #main window
 class mywindow(QtWidgets.QMainWindow):
-    k = S = n = s = p1 = z = c = build_time = own_money = 0 
+    k = S = n = s = p1 = z = c = build_time = own_money = Project_cost = 0 
     date_start = QDate.currentDate()
     def __init__(self):
         super(mywindow, self).__init__()
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
+        self.setWindowTitle('Start datas window')
+        self.setWindowIcon(QtGui.QIcon('images/icon.png'))
         self.ui.Build.clicked.connect(self.BuildFunc)
         self.ui.calendarWidget.hide()
         self.ui.Total_area.editingFinished.connect(lambda field = self.ui.Total_area: self.CheckerForFields(field))
@@ -148,8 +150,8 @@ class mywindow(QtWidgets.QMainWindow):
                 return 
             elif(self.fill_mini_table_for_necessary_percents()):
                 self.k = total_area * self_cost - start_money
-                application = newwindow(self)
-                application.show()
+                self.application = newwindow()
+                self.application.show()
                 self.hide()
 
     #Заполнение горизонтальных заголовков
@@ -231,12 +233,14 @@ class mywindow(QtWidgets.QMainWindow):
 #Это теперь дочерний класс класса mywindow
 class newwindow(QtWidgets.QMainWindow):
     
-    def __init__(self, parent):
-        super(newwindow, self).__init__(parent)
+    def __init__(self):
+        super(newwindow, self).__init__()
         self.ui = Ui_NewWindow()
         self.ui.setupUi(self)
-
-        self.k, self.S, self.n, self.s, self.p1,self.z, self.build_time, self.own_money, self.c, self.date_start, self.project_cost = mywindow.get_dimensions(self.parent())
+        self.setWindowTitle('Result tables')
+        self.setWindowIcon(QtGui.QIcon('images/icon.png'))
+        #self.mainWindow = mywindow()
+        self.k, self.S, self.n, self.s, self.p1,self.z, self.build_time, self.own_money, self.c, self.date_start, self.project_cost = application.get_dimensions()
         self.decades = math.ceil(self.build_time / 3)
         #Центрируем окно
         cp = QDesktopWidget().availableGeometry().center()
@@ -400,8 +404,8 @@ class newwindow(QtWidgets.QMainWindow):
         item = 0
         cell_info_sum = 0
         
-        for i in range(self.parent().mini_table_for_necessary_percents.columnCount()):
-            TableItem = self.parent().mini_table_for_necessary_percents.item(0, i).text().replace(',', '.') #это надо из-за того,
+        for i in range(application.mini_table_for_necessary_percents.columnCount()):
+            TableItem = application.mini_table_for_necessary_percents.item(0, i).text().replace(',', '.') #это надо из-за того,
             # что дробные числа в питоне пишутся через точку, а ввести могут с запятыми 
             cell_info = self.project_cost * float(TableItem) / 100
            
@@ -630,7 +634,7 @@ class newwindow(QtWidgets.QMainWindow):
 
     #Выход      
     def _exit(self):
-        self.parent().show()
+        application.show()
         self.close()
 
     #Увелечение цены каждый квартал на какое-то кол-во процентов    
@@ -1140,8 +1144,6 @@ class newwindow(QtWidgets.QMainWindow):
                 self.ui.table_budget_money_income.setItem(j, i, elem)
         
 
-
-    
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication([])
