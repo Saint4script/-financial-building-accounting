@@ -57,14 +57,14 @@ class mywindow(QtWidgets.QMainWindow):
         self.mini_table_for_necessary_percents.setItem(0,8,QTableWidgetItem("3,93512861368219"))
         self.mini_table_for_necessary_percents.setItem(0,9,QTableWidgetItem("5,75262499669948")) 
 
-        self.ui.Apartments_amount.setText("368")
-        self.ui.Average_area_of_apartments.setText("66")
-        self.ui.Bulding_duration.setText("30")
-        self.ui.Increasing_percentage.setText("2")
-        self.ui.Start_money.setText("189082080")
-        self.ui.Total_area.setText("24000")
-        self.ui.Start_cost.setText("54000")
-        self.ui.Self_cost.setText("51900")
+        self.ui.Apartments_amount.setText("400")#368
+        self.ui.Average_area_of_apartments.setText("75")#66
+        self.ui.Bulding_duration.setText("40")#30
+        self.ui.Increasing_percentage.setText("1")#2
+        self.ui.Start_money.setText("150082080")#189082080
+        self.ui.Total_area.setText("30000")#24000
+        self.ui.Start_cost.setText("22000")#54000
+        self.ui.Self_cost.setText("31900")#51900
 
         #картинки на кнопки + code
         #self.TableWidget.setStyleSheet("QTableCornerButton::section{border-image:url(Corner.png)}")
@@ -72,9 +72,6 @@ class mywindow(QtWidgets.QMainWindow):
         path = os.path.dirname(os.path.abspath(__file__))
         path1 = os.path.join(path, 'arrow.png')
 
-        #lbl.setPixmap(QPixmap(os.path.join(path, 'icon.png')))
-        #self.ui.show_calendar.setFlat(True)
-        #self.ui.show_calendar.setAutoFillBackground(True)
         self.ui.show_calendar.clicked.connect(self.show_hide_calendar)
         self.ui.show_percents_table.clicked.connect(self.show_mini_percents_table)
 
@@ -101,7 +98,6 @@ class mywindow(QtWidgets.QMainWindow):
                     message = f'Вы ввели некоррекнтный символ: {text}'
                     QtWidgets.QMessageBox.warning(self, 'Уведомление', message,
                                                         QtWidgets.QMessageBox.Ok)
-                    
                     return False
         percents_sum = round(percents_sum, 4)
         if(percents_sum != float(100)):
@@ -132,7 +128,7 @@ class mywindow(QtWidgets.QMainWindow):
             if(self.ui.Project_cost.text() == ""):
                tmp = int(self.ui.Self_cost.text())*int(self.ui.Apartments_amount.text()) * int(self.ui.Average_area_of_apartments.text())
                self.ui.Project_cost.setText(str(tmp))
-            
+
             start_money = int(self.ui.Start_money.text())
             self_cost = self.c = int(self.ui.Self_cost.text())
             total_area = self.S = int(self.ui.Total_area.text())
@@ -143,11 +139,12 @@ class mywindow(QtWidgets.QMainWindow):
             self.build_time = int(self.ui.Bulding_duration.text())
             self.own_money = int(self.ui.Start_money.text())
             self.Project_cost = int(self.ui.Project_cost.text())
+            self.show_mini_percents_table()
             #Если собственных денег меньше, чем 1\10 себестоимости
             if(start_money < total_area * self_cost * 0.1):     
                 message = 'Недостаточно собственных средств, строительство невозможно'
                 QtWidgets.QMessageBox.warning(self, 'Уведомление', message, QtWidgets.QMessageBox.Ok)
-                return 
+                return
             elif(self.fill_mini_table_for_necessary_percents()):
                 self.k = total_area * self_cost - start_money
                 self.application = newwindow()
@@ -427,7 +424,7 @@ class newwindow(QtWidgets.QMainWindow):
         for i in range(4):
             row_sum = 0
             for j in range(self.decades):
-                tmp = float(self.ui.main_table_necessary_percents.item(2, j).text())
+                tmp = float(self.ui.main_table_necessary_percents.item(2, j).text())          
                 percent = float(self.ui.escrow_rate.item(i,j).text())
                 row_sum += tmp * percent / 4
                 self.ui.main_table_necessary_percents.setItem(i + 3, j, QTableWidgetItem(str(tmp *percent / 4 )))
