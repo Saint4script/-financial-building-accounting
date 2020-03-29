@@ -82,8 +82,11 @@ class Ui_NewWindow(object):
         self.pushButton.setText(_translate("MainWindow", "Назад"))
         __sortingEnabled = self.listWidget.isSortingEnabled()
         self.listWidget.setSortingEnabled(False)
+
+#<html><head/><body><p><span style=\" font-size:10pt;\">Средняя площадь квартир(м</span><span style=\" font-size:10pt; vertical-align:super;\">2</span><span style=\" font-size:10pt;\">)</span></p></body></html>
+
         item = self.listWidget.item(0)
-        item.setText(_translate("MainWindow", "Цена 1м^2"))
+        item.setText(_translate("MainWindow", "Цена 1м²"))
         item = self.listWidget.item(1)
         item.setText(_translate("MainWindow", "План продаж"))
         item = self.listWidget.item(2)
@@ -105,9 +108,9 @@ class Ui_NewWindow(object):
         item = self.listWidget.item(10)
         item.setText(_translate("MainWindow", "Средневзвешенная процентная ставка по заемному капиталу строительной организации"))
         item = self.listWidget.item(11)
-        item.setText(_translate("MainWindow", "Увеличение себестоимости 1м2  при кредитовании строительной организации"))
+        item.setText(_translate("MainWindow", "Увеличение себестоимости 1м²  при кредитовании строительной организации"))
         item = self.listWidget.item(12)
-        item.setText(_translate("MainWindow", "Увеличение себестоимости 1м2  при кредитовании строительной организации в %"))
+        item.setText(_translate("MainWindow", "Увеличение себестоимости 1м²  при кредитовании строительной организации в %"))
         item = self.listWidget.item(13)
         item.setText(_translate("MainWindow", "Прикидка поступления денежных средств в бюджет за счет налоговых отчислений от строительной организации и банка"))
         self.listWidget.setSortingEnabled(__sortingEnabled)
@@ -139,6 +142,10 @@ class Ui_NewWindow(object):
         self.TableWidget.setHorizontalHeaderItem(decades, QTableWidgetItem("Средняя цена"))
         #self.TableWidget.setStyleSheet("background-color:rgb(207, 255, 245)")
 
+        self.label_TableWidget = QtWidgets.QLabel(self.centralwidget)
+        self.label_TableWidget.setStyleSheet("font: 10pt \"MS Shell Dlg 2\";")
+        self.label_TableWidget.setText("Цена 1м²")
+
         #план продаж
         self.Table_with_flat_sell_plan = QtWidgets.QTableWidget(self.centralwidget)
         self.Table_with_flat_sell_plan.setObjectName("Table_with_flat_sell_plan")  
@@ -168,6 +175,10 @@ class Ui_NewWindow(object):
                                                                     "по стратегии 4 - равномерно"])
         #self.Table_with_flat_sell_plan.setStyleSheet("background-color:rgb(207, 255, 245)")
 
+        self.label_with_flat_sell_plan = QtWidgets.QLabel(self.centralwidget)
+        self.label_with_flat_sell_plan.setStyleSheet("font: 10pt \"MS Shell Dlg 2\";")
+        self.label_with_flat_sell_plan.setText("План продаж")
+
         #Эскроу счета
         self.escrow_rate = QtWidgets.QTableWidget(self.centralwidget)
         self.escrow_rate.setObjectName("escrow_rate")  
@@ -182,6 +193,10 @@ class Ui_NewWindow(object):
                                                             "по стратегии 3 - в конце",
                                                             "по стратегии 4 - равномерно"])
         #self.escrow_rate.setStyleSheet("background-color:rgb(207, 255, 245)")
+
+        self.label_escrow_rate = QtWidgets.QLabel(self.centralwidget)
+        self.label_escrow_rate.setStyleSheet("font: 10pt \"MS Shell Dlg 2\";")
+        self.label_escrow_rate.setText("Определение процентной ставки на эскроу")
 
         #Кредит получен целиком в начале
         self.credit_is_got_fully_at_the_beginning = QtWidgets.QTableWidget(self.centralwidget)
@@ -201,6 +216,10 @@ class Ui_NewWindow(object):
         self.credit_is_got_fully_at_the_beginning.setColumnWidth(decades + 3, 230)
         #self.credit_is_got_fully_at_the_beginning.setStyleSheet("background-color:rgb(207, 255, 245)")
 
+        self.label_credit_is_got_fully_at_the_beginning = QtWidgets.QLabel(self.centralwidget)
+        self.label_credit_is_got_fully_at_the_beginning.setStyleSheet("font: 10pt \"MS Shell Dlg 2\";")
+        self.label_credit_is_got_fully_at_the_beginning.setText("Платежи, если кредит получен единовременно в начале")
+
         #Кредит получен равномерно
         self.credit_line_chooses_evenly = QtWidgets.QTableWidget(self.centralwidget)
         self.credit_line_chooses_evenly.setObjectName("credit_line_chooses_evenly")  
@@ -215,6 +234,10 @@ class Ui_NewWindow(object):
                                                             "по стратегии 3 - в конце",
                                                             "по стратегии 4 - равномерно"])
        # self.credit_line_chooses_evenly.setStyleSheet("background-color:rgb(207, 255, 245)")
+
+        self.label_credit_line_chooses_evenly = QtWidgets.QLabel(self.centralwidget)
+        self.label_credit_line_chooses_evenly.setStyleSheet("font: 10pt \"MS Shell Dlg 2\";")
+        self.label_credit_line_chooses_evenly.setText("Платежи, если кредит получен равномерно")
 
         #Кредит заполняется исходя из текущих нужд
         self.main_table_necessary_percents = QtWidgets.QTableWidget(self.centralwidget)
@@ -243,6 +266,10 @@ class Ui_NewWindow(object):
         self.main_table_necessary_percents.setColumnWidth(decades + 3, 240)
         #self.main_table_necessary_percents.setStyleSheet("background-color:rgb(207, 255, 245)")
 
+        self.label_main_table_necessary_percents = QtWidgets.QLabel(self.centralwidget)
+        self.label_main_table_necessary_percents.setStyleSheet("font: 10pt \"MS Shell Dlg 2\";")
+        self.label_main_table_necessary_percents.setText("Платежи, если кредит получен из текущих нужд")
+
         #14. Прибыль до налогообложения строительной организации при различных стратегиях
         #продаж с использованием заемных средств в объеме 85 % от стоимости проекта.
         #таблица №2 из статьи, задание 14
@@ -258,6 +285,8 @@ class Ui_NewWindow(object):
         self.table_85_percent_debt_money.setHorizontalHeaderLabels(["в начале", "в середине", "в конце", "равномерно"])
         #self.table_85_percent_debt_money.setStyleSheet("background-color:rgb(225, 255, 160)")
         self.table_85_percent_debt_money.setAlternatingRowColors(True)
+        self.table_85_percent_debt_money.setCornerButtonEnabled(True)
+        self.table_85_percent_debt_money.setStyleSheet("QTableCornerButton::section{border-width: 1px; border-color: #BABABA; border-style:solid; border-image: url(images/corner.png)0 0 0 0 stretch stretch}")
     
         self.label_85_percent_debt_money = QtWidgets.QLabel(self.centralwidget)
         self.label_85_percent_debt_money.setStyleSheet("font: 10pt \"MS Shell Dlg 2\";")
