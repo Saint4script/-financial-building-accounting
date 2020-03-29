@@ -96,7 +96,7 @@ class mywindow(QtWidgets.QMainWindow):
                     percents_sum += percent
                 except(ValueError):
                     text = self.mini_table_for_necessary_percents.item(0, i).text()
-                    message = f'Вы ввели некоррекнтный символ: {text}'
+                    message = f'Вы ввели некорректный символ: {text}'
                     QtWidgets.QMessageBox.warning(self, 'Уведомление', message,
                                                         QtWidgets.QMessageBox.Ok)
                     return False
@@ -230,7 +230,7 @@ class mywindow(QtWidgets.QMainWindow):
                 self.ui.label_11.setText("Скрыть/Обновить")
             else:
                 self.mini_table_for_necessary_percents.hide()
-                self.ui.label_11.setText("Введите нужные вам проценты по кредиту")
+                self.ui.label_11.setText("Ввод процентов потребности в денежных средствах по производственной необходимости")
 
 #Это теперь дочерний класс класса mywindow
 class newwindow(QtWidgets.QMainWindow):
@@ -238,19 +238,22 @@ class newwindow(QtWidgets.QMainWindow):
     def __init__(self):
         super(newwindow, self).__init__()
         self.ui = Ui_NewWindow()
-        self.ui.setupUi(self)
         self.setWindowTitle('Result tables')
         self.setWindowIcon(QtGui.QIcon('images/icon.png'))
         #self.mainWindow = mywindow()
         self.k, self.S, self.n, self.s, self.p1,self.z, self.build_time, self.own_money, self.c, self.date_start, self.project_cost = application.get_dimensions()
         self.decades = math.ceil(self.build_time / 3)
+        self.tmp_percent = (1 - self.own_money / self.project_cost) * 100 # для динамического отображения процентов в лейбле и листе
+        self.credit_money = self.project_cost - self.own_money #заемные средства
+        self.rentable_array = []
         #Центрируем окно
         cp = QDesktopWidget().availableGeometry().center()
         self.move(int(round(cp.x() - self.width() / 2)), int(round(cp.y() - self.height() / 2 - 20)))
     
-        self.credit_money = self.project_cost - self.own_money #заемные средства 
+         
 
-        self.ui.create_tables(self.decades)
+        self.ui.setupUi(self,self.tmp_percent)
+        self.ui.create_tables(self.decades, self.tmp_percent)
 
         #делаем все ячейки в таблицe read-only
         def read_only_tables(table):
@@ -388,26 +391,9 @@ class newwindow(QtWidgets.QMainWindow):
             self.ui.table_encrease_owncost_area_percentage,
             self.ui.table_budget_money_income
         ]
-
-
-        #Вынесено после ф-ий заполнения, чтобы не было ошибок в рассчетах
-        decorate_numbers(self.ui.table_85_percent_debt_money)
-        decorate_numbers(self.ui.table_financial_leverage_with_debt)
-        decorate_numbers(self.ui.table_profitability_of_own_money)
-        decorate_numbers(self.ui.table_bank_money_all_time)
-        decorate_numbers(self.ui.table_average_weighted_rate)
-        decorate_numbers(self.ui.table_encrease_owncost_area)
-        decorate_numbers(self.ui.table_encrease_owncost_area_percentage)
-        decorate_numbers(self.ui.table_budget_money_income)
-
-        find_best(self.ui.table_85_percent_debt_money)
-        find_best(self.ui.table_financial_leverage_with_debt)
-        find_best(self.ui.table_profitability_of_own_money)
-        find_best(self.ui.table_bank_money_all_time)
-        find_best(self.ui.table_average_weighted_rate)
-        find_best(self.ui.table_encrease_owncost_area)
-        find_best(self.ui.table_encrease_owncost_area_percentage)
-        find_best(self.ui.table_budget_money_income)
+        for table in tables_for_users:
+            decorate_numbers(table)
+            find_best(table)
 
         #Выравнивание и запрет на редактирование эл-в таблиц
         tables = self.ui.centralwidget.findChildren(QtWidgets.QTableWidget)
@@ -473,7 +459,7 @@ class newwindow(QtWidgets.QMainWindow):
             self.ui.main_table_necessary_percents.setItem(i + 3, self.decades + 1, QTableWidgetItem(str(round(row_sum / self.credit_money * 100 , 2))))
         
         for i in range(4):
-            rent = float(self.ui.Table_with_flat_sell_plan.item(i + 5, self.decades + 1).text())
+            rent = self.rentable_array[i]
             rate = float(self.ui.main_table_necessary_percents.item(i + 3, self.decades + 1).text())
             effect = 0.8 * (rent - rate / 100) * self.credit_money / self.own_money
             self.ui.main_table_necessary_percents.setItem(i + 3, self.decades + 2, QTableWidgetItem(str(effect))) # Эффект финансового рычага
@@ -592,7 +578,7 @@ class newwindow(QtWidgets.QMainWindow):
                     current_height += self.ui.main_table_necessary_percents.height() + 10
                 else:
                     break
-            elif(elem.text() == "Прибыль с использованием заемных средств в объеме 85 % от стоимости проекта"):#+
+            elif(elem.text() == f'Прибыль с использованием заемных средств в объеме {self.tmp_percent} % от стоимости проекта'):#+
                 if(check_height(current_height + self.ui.table_85_percent_debt_money.height() + 10 + self.ui.label_85_percent_debt_money.height() + 5)):
                     self.ui.label_85_percent_debt_money.show()
                     self.ui.label_85_percent_debt_money.move(10, current_height)
@@ -820,7 +806,8 @@ class newwindow(QtWidgets.QMainWindow):
         #Заполним рентабилность активов 
         for i in range(4):
             value = (self.sell_plan_sum_of_each_str[i] - self.S * self.c) / (self.own_money + self.credit_money)
-            self.ui.Table_with_flat_sell_plan.setItem(i + 5, decades + 1, QTableWidgetItem(str(value)))
+            self.rentable_array.append(value)
+            #self.ui.Table_with_flat_sell_plan.setItem(i + 5, decades + 1, QTableWidgetItem(str(value)))
 
     #Эскроу счета
     def fill_escrow_rate(self):
@@ -951,7 +938,7 @@ class newwindow(QtWidgets.QMainWindow):
 
 
         for i in range(4):
-            rent = float(self.ui.Table_with_flat_sell_plan.item(i + 5, decades + 1).text())
+            rent = self.rentable_array[i]
             rate = float(self.ui.credit_is_got_fully_at_the_beginning.item(i, decades + 1).text())
             effect = 0.8 * (rent - rate / 100) * self.credit_money / self.own_money
             self.ui.credit_is_got_fully_at_the_beginning.setItem(i, decades + 2, QTableWidgetItem(str(effect))) # Эффект финансового рычага
@@ -1018,7 +1005,7 @@ class newwindow(QtWidgets.QMainWindow):
         self.ui.credit_line_chooses_evenly.setItem(3, decades + 1, QTableWidgetItem(str(round(sum(self.fourth_strategy_credit_line) / self.credit_money * 100, 2))))
 
         for i in range(4):
-            rent = float(self.ui.Table_with_flat_sell_plan.item(i + 5, decades + 1).text())
+            rent = self.rentable_array[i]
             rate = float(self.ui.credit_line_chooses_evenly.item(i, decades + 1).text())
             effect = 0.8 * (rent - rate / 100) * self.credit_money / self.own_money
             self.ui.credit_line_chooses_evenly.setItem(i, decades + 2, QTableWidgetItem(str(effect))) # Эффект финансового рычага

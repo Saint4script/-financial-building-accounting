@@ -13,7 +13,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QTableWidgetItem
 
 class Ui_NewWindow(object):
-    def setupUi(self, MainWindow):
+    def setupUi(self, MainWindow, percent):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(1400, 1000)
         MainWindow.setMinimumSize(QtCore.QSize(1200, 800))
@@ -73,17 +73,15 @@ class Ui_NewWindow(object):
         self.statusbar.setObjectName("statusbar")
         MainWindow.setStatusBar(self.statusbar)
 
-        self.retranslateUi(MainWindow)
+        self.retranslateUi(MainWindow, percent)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
-    def retranslateUi(self, MainWindow):
+    def retranslateUi(self, MainWindow, percent):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "AdditionalWindow"))
         self.pushButton.setText(_translate("MainWindow", "Назад"))
         __sortingEnabled = self.listWidget.isSortingEnabled()
         self.listWidget.setSortingEnabled(False)
-
-#<html><head/><body><p><span style=\" font-size:10pt;\">Средняя площадь квартир(м</span><span style=\" font-size:10pt; vertical-align:super;\">2</span><span style=\" font-size:10pt;\">)</span></p></body></html>
 
         item = self.listWidget.item(0)
         item.setText(_translate("MainWindow", "Цена 1м²"))
@@ -98,7 +96,7 @@ class Ui_NewWindow(object):
         item = self.listWidget.item(5)
         item.setText(_translate("MainWindow", "Если кредитная линия выбирается по мере необходимости строительного процесса, то платежи по процентам за пользование заемными средствами в конце периода"))
         item = self.listWidget.item(6)
-        item.setText(_translate("MainWindow", "Прибыль с использованием заемных средств в объеме 85 % от стоимости проекта"))
+        item.setText(_translate("MainWindow", f'Прибыль с использованием заемных средств в объеме {percent} % от стоимости проекта'))
         item = self.listWidget.item(7)
         item.setText(_translate("MainWindow", "Финансовый рычаг при различных стратегиях продаж с использованием заемных средств"))
         item = self.listWidget.item(8)
@@ -128,7 +126,7 @@ class Ui_NewWindow(object):
             label.hide()
 
 
-    def create_tables(self, decades):
+    def create_tables(self, decades, percent):
 
         #Увелечение цены каждый квартал на какое-то кол-во процентов
         self.TableWidget = QtWidgets.QTableWidget(self.centralwidget)
@@ -154,9 +152,9 @@ class Ui_NewWindow(object):
         self.Table_with_flat_sell_plan.resizeColumnsToContents()
         self.Table_with_flat_sell_plan.resizeRowsToContents()
         self.Table_with_flat_sell_plan.setRowCount(14)
-        self.Table_with_flat_sell_plan.setColumnCount(decades + 2)
+        self.Table_with_flat_sell_plan.setColumnCount(decades + 1)#+2
         self.Table_with_flat_sell_plan.setHorizontalHeaderItem(decades, QTableWidgetItem("Итого"))
-        self.Table_with_flat_sell_plan.setHorizontalHeaderItem(decades + 1, QTableWidgetItem("Рентабильность активов"))
+        #self.Table_with_flat_sell_plan.setHorizontalHeaderItem(decades + 1, QTableWidgetItem("Рентабильность активов"))
         self.Table_with_flat_sell_plan.setColumnWidth(decades + 1, 200)
         self.Table_with_flat_sell_plan.setHorizontalHeaderLabels(["" for i in range(decades)])
         self.Table_with_flat_sell_plan.setVerticalHeaderLabels([ "по стратегии 1 - в начале",
@@ -274,7 +272,7 @@ class Ui_NewWindow(object):
         #продаж с использованием заемных средств в объеме 85 % от стоимости проекта.
         #таблица №2 из статьи, задание 14
         self.table_85_percent_debt_money = QtWidgets.QTableWidget(self.centralwidget)
-        self.table_85_percent_debt_money.setObjectName("table_85_percent_debt_money")  
+        self.table_85_percent_debt_money.setObjectName('table_85_percent_debt_money')  
         #self.table_85_percent_debt_money.move(-3000,-3000) 
         self.table_85_percent_debt_money.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContents)
         self.table_85_percent_debt_money.resizeColumnsToContents()
@@ -287,10 +285,10 @@ class Ui_NewWindow(object):
         self.table_85_percent_debt_money.setAlternatingRowColors(True)
         self.table_85_percent_debt_money.setCornerButtonEnabled(True)
         self.table_85_percent_debt_money.setStyleSheet("QTableCornerButton::section{border-width: 1px; border-color: #BABABA; border-style:solid; border-image: url(images/corner.png)0 0 0 0 stretch stretch}")
-    
+
         self.label_85_percent_debt_money = QtWidgets.QLabel(self.centralwidget)
         self.label_85_percent_debt_money.setStyleSheet("font: 10pt \"MS Shell Dlg 2\";")
-        self.label_85_percent_debt_money.setText("Прибыль до налогообложения строительной организации")
+        self.label_85_percent_debt_money.setText(f"Прибыль с использованием заемных средств в объеме {percent}% от стоимости проекта")
         #self.label_85_percent_debt_money.setStyleSheet("background-color:rgb(207, 255, 245)")
 
         #15.	
