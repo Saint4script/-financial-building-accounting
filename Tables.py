@@ -10,7 +10,7 @@
 import math
 from PyQt5.QtCore import QDate
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtWidgets import QTableWidgetItem
+from PyQt5.QtWidgets import QTableWidgetItem, QFrame
 
 class Ui_NewWindow(object):
     def setupUi(self, MainWindow, percent):
@@ -281,10 +281,9 @@ class Ui_NewWindow(object):
         self.table_85_percent_debt_money.setColumnCount(4)
         self.table_85_percent_debt_money.setVerticalHeaderLabels(["в начале строительства", "равномерно в течение строительства", "по мере производственной необходимости"])
         self.table_85_percent_debt_money.setHorizontalHeaderLabels(["в начале", "в середине", "в конце", "равномерно"])
-        #self.table_85_percent_debt_money.setStyleSheet("background-color:rgb(225, 255, 160)")
         self.table_85_percent_debt_money.setAlternatingRowColors(True)
         self.table_85_percent_debt_money.setCornerButtonEnabled(True)
-        self.table_85_percent_debt_money.setStyleSheet("QTableCornerButton::section{border-width: 1px; border-color: #BABABA; border-style:solid; border-image: url(images/corner.png)0 0 0 0 stretch stretch}")
+        #self.table_85_percent_debt_money.setStyleSheet("QTableCornerButton::section{border-width: 1px; border-color: #BABABA; border-style:solid; border-image: url(images/corner.png)0 0 0 0 stretch stretch}")
 
         self.label_85_percent_debt_money = QtWidgets.QLabel(self.centralwidget)
         self.label_85_percent_debt_money.setStyleSheet("font: 10pt \"MS Shell Dlg 2\";")

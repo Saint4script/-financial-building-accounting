@@ -243,18 +243,17 @@ class newwindow(QtWidgets.QMainWindow):
         #self.mainWindow = mywindow()
         self.k, self.S, self.n, self.s, self.p1,self.z, self.build_time, self.own_money, self.c, self.date_start, self.project_cost = application.get_dimensions()
         self.decades = math.ceil(self.build_time / 3)
-        self.tmp_percent = (1 - self.own_money / self.project_cost) * 100 # для динамического отображения процентов в лейбле и листе
+        self.tmp_percent = round((1 - self.own_money / self.project_cost) * 100, 2) # для динамического отображения процентов в лейбле и листе
         self.credit_money = self.project_cost - self.own_money #заемные средства
         self.rentable_array = []
+
+        self.ui.setupUi(self, self.tmp_percent)
+        self.ui.create_tables(self.decades, self.tmp_percent)
+
         #Центрируем окно
         cp = QDesktopWidget().availableGeometry().center()
         self.move(int(round(cp.x() - self.width() / 2)), int(round(cp.y() - self.height() / 2 - 20)))
     
-         
-
-        self.ui.setupUi(self,self.tmp_percent)
-        self.ui.create_tables(self.decades, self.tmp_percent)
-
         #делаем все ячейки в таблицe read-only
         def read_only_tables(table):
             for i in range(table.rowCount()):
@@ -266,10 +265,40 @@ class newwindow(QtWidgets.QMainWindow):
                     else:
                         table.setItem(i, j, QTableWidgetItem(""))  #Поэтому надо положить в нее хотя бы пустую строку
                         table.item(i, j).setFlags(QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsEnabled)
-                    brush = QtGui.QBrush(QtGui.QColor(233, 145, 255))
-                    brush.setStyle(QtCore.Qt.SolidPattern)
+                    bruh = QtGui.QBrush(QtGui.QColor(0, 251, 255))
+                    bruh.setStyle(QtCore.Qt.SolidPattern)
                     if(i % 2 == 0):
-                        table.item(i, j).setBackground(brush)
+                        table.item(i, j).setBackground(bruh)
+            headerH = table.horizontalHeader()
+            headerH.setStyleSheet(
+            "QHeaderView::section{"
+                "border-top:0px solid #D8D8D8;"
+                "border-left:0px solid #D8D8D8;"
+                "border-right:1px solid #D8D8D8;"
+                "border-bottom: 1px solid black;"
+                "background-color:white;"
+                "padding:4px;"
+            "}")
+            headerV = table.verticalHeader()
+            headerV.setStyleSheet(
+            "QHeaderView::section{"
+                "border-top:0px solid #D8D8D8;"
+                "border-left:0px solid #D8D8D8;"
+                "border-right:1px solid black;"
+                "border-bottom: 0px solid black;"
+                "background-color:white;"
+                "padding:4px;"
+            "}")
+            table.setHorizontalHeader(headerH)
+            table.setVerticalHeader(headerV)
+            table.setStyleSheet("QTableCornerButton::section{"
+                "border-top:0px solid #D8D8D8;"
+                "border-left:0px solid #D8D8D8;"
+                "border-right:1px solid black;"
+                "border-bottom: 1px solid black;"
+                "background-color:white;"
+                "padding:4px;"
+            "}")
 
         #Выравнивание контента в ячейках таблиц по центру
         def align_items(table):
@@ -296,18 +325,22 @@ class newwindow(QtWidgets.QMainWindow):
 
         # Выделение лучшего элемента в таблице 
         def find_best(table):
-            max = float(table.item(0, 0).text().replace(" ", ""))
+            maxim = float(table.item(0, 0).text().replace(" ", ""))
             for i in range(table.rowCount()):
                 for j in range(table.columnCount()):
-                    if (max < float(table.item(i, j).text().replace(" ", ""))):
-                        max = float(table.item(i, j).text().replace(" ", ""))
+                    if (maxim < float(table.item(i, j).text().replace(" ", ""))):
+                        maxim = float(table.item(i, j).text().replace(" ", ""))
             for i in range(table.rowCount()):
                 for j in range(table.columnCount()):
-                    if(float(table.item(i, j).text().replace(" ", "")) == max):
+                    if(float(table.item(i, j).text().replace(" ", "")) == maxim):
                         font = QtGui.QFont()
                         font.setBold(True)
                         font.setWeight(75)
                         table.item(i, j).setFont(font)
+                    bruh = QtGui.QBrush(QtGui.QColor(233, 145, 255))
+                    bruh.setStyle(QtCore.Qt.SolidPattern)
+                    if(i % 2 == 0):
+                        table.item(i, j).setBackground(bruh) 
 
 
         #Увелечение цены каждый квартал на какое-то кол-во процентов
@@ -381,6 +414,13 @@ class newwindow(QtWidgets.QMainWindow):
         #от строительной организации и банка при кредитовании строительной организации 
         self.fill_table_budget_money_income()
         
+        #Выравнивание и запрет на редактирование эл-в таблиц
+        tables = self.ui.centralwidget.findChildren(QtWidgets.QTableWidget)
+        for table in tables:
+            read_only_tables(table)
+            align_items(table)
+
+
         tables_for_users = [
             self.ui.table_85_percent_debt_money,
             self.ui.table_financial_leverage_with_debt,
@@ -395,11 +435,7 @@ class newwindow(QtWidgets.QMainWindow):
             decorate_numbers(table)
             find_best(table)
 
-        #Выравнивание и запрет на редактирование эл-в таблиц
-        tables = self.ui.centralwidget.findChildren(QtWidgets.QTableWidget)
-        for table in tables:
-            read_only_tables(table)
-            align_items(table)
+        
 
         
 
@@ -497,7 +533,7 @@ class newwindow(QtWidgets.QMainWindow):
         selected_items = self.ui.listWidget.selectedItems()
 
         def check_height(height):
-            if(height > 1000):
+            if(height > self.height()):
                 message = 'Слишком много таблиц'
                 QtWidgets.QMessageBox.warning(self, 'Уведомление', message,
                                                         QtWidgets.QMessageBox.Ok)
