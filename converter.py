@@ -316,12 +316,8 @@ class newwindow(QtWidgets.QMainWindow):
             for i in range(table.rowCount()):
                 for j in range(table.columnCount()):
                     x = float(table.item(i, j).text())
-                    # print(x)
-                    # if(x % int(x) == 0.0):
-                    #     tmp = int(x)
-                    # else:
-                    #     tmp = x
-                    table.setItem(i, j, QTableWidgetItem('{0:,}'.format(x).replace(',', ' ')))
+                    table.item(i,j).setText('{0:,}'.format(x).replace(',', ' '))
+                    
 
         # Выделение лучшего элемента в таблице 
         def find_best(table):
@@ -434,6 +430,7 @@ class newwindow(QtWidgets.QMainWindow):
         for table in tables_for_users:
             decorate_numbers(table)
             find_best(table)
+            
 
         
 
