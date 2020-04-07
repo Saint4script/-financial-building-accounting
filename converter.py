@@ -270,6 +270,7 @@ class newwindow(QtWidgets.QMainWindow):
                     if(i % 2 == 0):
                         table.item(i, j).setBackground(bruh)
             headerH = table.horizontalHeader()
+            headerH.setMinimumSectionSize(160)
             headerH.setStyleSheet(
             "QHeaderView::section{"
                 "border-top:0px solid #D8D8D8;"
@@ -278,6 +279,7 @@ class newwindow(QtWidgets.QMainWindow):
                 "border-bottom: 1px solid black;"
                 "background-color:white;"
                 "padding:4px;"
+                "font: 16pt \"MS Shell Dlg 2\";"
             "}")
             headerV = table.verticalHeader()
             headerV.setStyleSheet(
@@ -288,6 +290,7 @@ class newwindow(QtWidgets.QMainWindow):
                 "border-bottom: 0px solid black;"
                 "background-color:white;"
                 "padding:4px;"
+                "font: 16pt \"MS Shell Dlg 2\";"
             "}")
             table.setHorizontalHeader(headerH)
             table.setVerticalHeader(headerV)
