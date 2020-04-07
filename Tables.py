@@ -73,6 +73,9 @@ class Ui_NewWindow(object):
         self.statusbar.setObjectName("statusbar")
         MainWindow.setStatusBar(self.statusbar)
 
+        
+        
+
         self.retranslateUi(MainWindow, percent)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
@@ -124,6 +127,7 @@ class Ui_NewWindow(object):
             table.hide()
         for label in labels:
             label.hide()
+        
 
 
     def create_tables(self, decades, percent):
@@ -271,6 +275,8 @@ class Ui_NewWindow(object):
         #14. Прибыль до налогообложения строительной организации при различных стратегиях
         #продаж с использованием заемных средств в объеме 85 % от стоимости проекта.
         #таблица №2 из статьи, задание 14
+        
+
         self.table_85_percent_debt_money = QtWidgets.QTableWidget(self.centralwidget)
         self.table_85_percent_debt_money.setObjectName('table_85_percent_debt_money')  
         #self.table_85_percent_debt_money.move(-3000,-3000) 
@@ -283,8 +289,9 @@ class Ui_NewWindow(object):
         self.table_85_percent_debt_money.setHorizontalHeaderLabels(["В начале", "В середине", "В конце", "Равномерно"])
         self.table_85_percent_debt_money.setAlternatingRowColors(True)
         self.table_85_percent_debt_money.setCornerButtonEnabled(True)
-        self.table_85_percent_debt_money.setStyleSheet("QTableCornerButton::section{border-width: 1px; border-color: #BABABA; border-style:solid; border-image: url(images/corner.png)0 0 0 0 stretch stretch}")
-
+        #self.table_85_percent_debt_money.setStyleSheet("QTableCornerButton::section{border-width: 1px; border-color: #BABABA; border-style:solid; border-image: url(images/corner1.png)0 0 0 0 stretch stretch}")
+        #self.table_85_percent_debt_money.setStyleSheet("QTableCornerButton::section{border-width: 1px; border-color: #BABABA; border-style:solid; background-image: url(images/corner1.png)}")
+       
         self.label_85_percent_debt_money = QtWidgets.QLabel(self.centralwidget)
         self.label_85_percent_debt_money.setStyleSheet("font: 10pt \"MS Shell Dlg 2\";")
         self.label_85_percent_debt_money.setText(f"Прибыль с использованием заемных средств в объеме {percent}% от стоимости проекта")
@@ -437,5 +444,57 @@ class Ui_NewWindow(object):
         self.label_budget_money_income.setStyleSheet("font: 10pt \"MS Shell Dlg 2\";")
         self.label_budget_money_income.setText("Прикидка поступления денежных средств в бюджет за счет налоговых отчислений от строительной организации и банка при кредитовании строительной организации")
         #self.label_budget_money_income.setStyleSheet("background-color:rgb(207, 255, 245)")
-    
+
+        size = QtCore.QRect(500, 500, 273, 30)
+        self.img1 = QtWidgets.QLabel(self.centralwidget)
+        self.img1.setGeometry(size)
+        self.img1.setScaledContents(True)
+        self.img1.setPixmap(QtGui.QPixmap("images/сorner1.png"))
+        self.img1.setObjectName("img1")
+
+        self.img2 = QtWidgets.QLabel(self.centralwidget)
+        self.img2.setGeometry(size)
+        self.img2.setScaledContents(True)
+        self.img2.setPixmap(QtGui.QPixmap("images/сorner1.png"))
+        self.img2.setObjectName("img2")
+
+        self.img3 = QtWidgets.QLabel(self.centralwidget)
+        self.img3.setGeometry(size)
+        self.img3.setScaledContents(True)
+        self.img3.setPixmap(QtGui.QPixmap("images/сorner1.png"))
+        self.img3.setObjectName("img3")
+
+        self.img4 = QtWidgets.QLabel(self.centralwidget)
+        self.img4.setGeometry(size)
+        self.img4.setScaledContents(True)
+        self.img4.setPixmap(QtGui.QPixmap("images/сorner1.png"))
+        self.img4.setObjectName("img4")
+
+        self.img5 = QtWidgets.QLabel(self.centralwidget)
+        self.img5.setGeometry(size)
+        self.img5.setScaledContents(True)
+        self.img5.setPixmap(QtGui.QPixmap("images/сorner1.png"))
+        self.img5.setObjectName("img5")
+
+        self.img6 = QtWidgets.QLabel(self.centralwidget)
+        self.img6.setGeometry(size)
+        self.img6.setScaledContents(True)
+        self.img6.setPixmap(QtGui.QPixmap("images/сorner1.png"))
+        self.img6.setObjectName("img6")
+
+        self.img7 = QtWidgets.QLabel(self.centralwidget)
+        self.img7.setGeometry(size)
+        self.img7.setScaledContents(True)
+        self.img7.setPixmap(QtGui.QPixmap("images/сorner1.png"))
+        self.img7.setObjectName("img7")
+
+        self.img8 = QtWidgets.QLabel(self.centralwidget)
+        self.img8.setGeometry(size)
+        self.img8.setScaledContents(True)
+        self.img8.setPixmap(QtGui.QPixmap("images/сorner1.png"))
+        self.img8.setObjectName("img8")
+
+        
+
+
         self.hide_tables()
