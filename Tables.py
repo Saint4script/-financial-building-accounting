@@ -20,6 +20,9 @@ class Ui_NewWindow(object):
         MainWindow.setLayoutDirection(QtCore.Qt.LeftToRight)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
+        font = QtGui.QFont()
+        font.setFamily("Times New Roman")
+        self.centralwidget.setFont(font)
         self.pushButton = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton.setGeometry(QtCore.QRect(770, 10, 181, 31))
         self.pushButton.setStyleSheet("font: 10pt \"MS Shell Dlg 2\";")
@@ -438,6 +441,9 @@ class Ui_NewWindow(object):
         self.table_budget_money_income.setHorizontalHeaderLabels(["В начале", "В середине", "В конце", "Равномерно"])
         #self.table_budget_money_income.setStyleSheet("background-color:rgb(225, 255, 160)")
         self.table_budget_money_income.setAlternatingRowColors(True)
+        font = QtGui.QFont()
+        font.setFamily("Comic Sans MS")
+        self.table_budget_money_income.setFont(font)
         #self.table_budget_money_income.horizontalHeader().setStretchLastSection(True)
 
         self.label_budget_money_income = QtWidgets.QLabel(self.centralwidget)
@@ -445,7 +451,15 @@ class Ui_NewWindow(object):
         self.label_budget_money_income.setText("Прикидка поступления денежных средств в бюджет за счет налоговых отчислений от строительной организации и банка при кредитовании строительной организации")
         #self.label_budget_money_income.setStyleSheet("background-color:rgb(207, 255, 245)")
 
-        size = QtCore.QRect(500, 500, 273, 30)
+        self.hide_tables()
+
+    def labels_for_corner(self):
+        self.table_budget_money_income.show()
+        btn = self.table_budget_money_income.findChild(QtWidgets.QAbstractButton)
+        self.table_budget_money_income.hide()
+        
+
+        size = QtCore.QRect(500, 500, btn.width() - 1, 30)
         self.img1 = QtWidgets.QLabel(self.centralwidget)
         self.img1.setGeometry(size)
         self.img1.setScaledContents(True)
@@ -491,10 +505,5 @@ class Ui_NewWindow(object):
         self.img8 = QtWidgets.QLabel(self.centralwidget)
         self.img8.setGeometry(size)
         self.img8.setScaledContents(True)
-        self.img8.setPixmap(QtGui.QPixmap("images/сorner1.png"))
+        self.img8.setPixmap(QtGui.QPixmap("images/Sashe.png"))
         self.img8.setObjectName("img8")
-
-        
-
-
-        self.hide_tables()

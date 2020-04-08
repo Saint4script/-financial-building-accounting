@@ -70,8 +70,8 @@ class mywindow(QtWidgets.QMainWindow):
         #картинки на кнопки + code
         #self.TableWidget.setStyleSheet("QTableCornerButton::section{border-image:url(Corner.png)}")
 
-        path = os.path.dirname(os.path.abspath(__file__))
-        path1 = os.path.join(path, 'arrow.png')
+        #path = os.path.dirname(os.path.abspath(__file__))
+        #path1 = os.path.join(path, 'arrow.png')
 
         self.ui.show_calendar.clicked.connect(self.show_hide_calendar)
         self.ui.show_percents_table.clicked.connect(self.show_mini_percents_table)
@@ -410,7 +410,10 @@ class newwindow(QtWidgets.QMainWindow):
         #Прикидка поступления денежных средств в бюджет за счет налоговых отчислений
         #от строительной организации и банка при кредитовании строительной организации 
         self.fill_table_budget_money_income()
+
         
+
+
         #Выравнивание и запрет на редактирование эл-в таблиц
         tables = self.ui.centralwidget.findChildren(QtWidgets.QTableWidget)
         for table in tables:
@@ -433,13 +436,10 @@ class newwindow(QtWidgets.QMainWindow):
             find_best(table)
             
 
-        
-
-        
-
         self.ui.pushButton.clicked.connect(self._exit)
         self.ui.show_tables.clicked.connect(self.choose_tables)
         self.ui.clear_tables.clicked.connect(self.clear_tables)
+        
 
     #Это мы уже видели
     def fill_horizontal_headers(self, table):
@@ -522,6 +522,7 @@ class newwindow(QtWidgets.QMainWindow):
 
     #Отображение ВЫБРАННЫХ таблиц
     def choose_tables(self):
+        self.ui.labels_for_corner()
         current_height = 200
         tables = self.ui.centralwidget.findChildren(QtWidgets.QTableWidget)
         labels = self.ui.centralwidget.findChildren(QtWidgets.QLabel)
@@ -565,6 +566,7 @@ class newwindow(QtWidgets.QMainWindow):
                     self.ui.Table_with_flat_sell_plan.move(10,current_height)
                     current_height += self.ui.Table_with_flat_sell_plan.height() + 10
                     self.ui.Table_with_flat_sell_plan.resize(1200, self.ui.Table_with_flat_sell_plan.height())
+                    self.ui.labels_for_corner()
                     #self.ui.Table_with_flat_sell_plan.adjustSize()
                 else:
                     break
@@ -723,6 +725,8 @@ class newwindow(QtWidgets.QMainWindow):
                     self.ui.img8.move(11, current_height + 2)
                     self.ui.img8.show()
                     self.ui.table_budget_money_income.show()
+                    btn = self.ui.table_budget_money_income.findChildren(QtWidgets.QAbstractButton)
+                    print(btn[0].width())
                     self.ui.table_budget_money_income.move(10, current_height)
                     self.ui.table_budget_money_income.resize(900, self.ui.table_budget_money_income.height())
                     self.ui.table_budget_money_income.adjustSize()
@@ -1241,6 +1245,8 @@ class newwindow(QtWidgets.QMainWindow):
                 else:
                     elem = QTableWidgetItem('0')
                 self.ui.table_budget_money_income.setItem(j, i, elem)
+
+    
         
 
 
