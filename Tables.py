@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'Tables.ui'
 #
-# Created by: PyQt5 UI code generator 5.13.0
+# Created by: PyQt5 UI code generator 5.13.0 and some shit-codded bastards, we are sorry 4 that
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -292,8 +292,8 @@ class Ui_NewWindow(object):
         self.table_85_percent_debt_money.setHorizontalHeaderLabels(["В начале", "В середине", "В конце", "Равномерно"])
         self.table_85_percent_debt_money.setAlternatingRowColors(True)
         self.table_85_percent_debt_money.setCornerButtonEnabled(True)
-        #self.table_85_percent_debt_money.setStyleSheet("QTableCornerButton::section{border-width: 1px; border-color: #BABABA; border-style:solid; border-image: url(images/corner1.png)0 0 0 0 stretch stretch}")
-        #self.table_85_percent_debt_money.setStyleSheet("QTableCornerButton::section{border-width: 1px; border-color: #BABABA; border-style:solid; background-image: url(images/corner1.png)}")
+        #self.table_85_percent_debt_money.setStyleSheet("QTableCornerButton::section{border-width: 1px; border-color: #BABABA; border-style:solid; border-image: url(images/2c.png)0 0 0 0 stretch stretch}")
+        #self.table_85_percent_debt_money.setStyleSheet("QTableCornerButton::section{border-width: 1px; border-color: #BABABA; border-style:solid; background-image: url(images/2c.png)}")
        
         self.label_85_percent_debt_money = QtWidgets.QLabel(self.centralwidget)
         self.label_85_percent_debt_money.setStyleSheet("font: 10pt \"MS Shell Dlg 2\";")
@@ -441,9 +441,6 @@ class Ui_NewWindow(object):
         self.table_budget_money_income.setHorizontalHeaderLabels(["В начале", "В середине", "В конце", "Равномерно"])
         #self.table_budget_money_income.setStyleSheet("background-color:rgb(225, 255, 160)")
         self.table_budget_money_income.setAlternatingRowColors(True)
-        font = QtGui.QFont()
-        font.setFamily("Comic Sans MS")
-        self.table_budget_money_income.setFont(font)
         #self.table_budget_money_income.horizontalHeader().setStretchLastSection(True)
 
         self.label_budget_money_income = QtWidgets.QLabel(self.centralwidget)
@@ -457,53 +454,104 @@ class Ui_NewWindow(object):
         self.table_budget_money_income.show()
         btn = self.table_budget_money_income.findChild(QtWidgets.QAbstractButton)
         self.table_budget_money_income.hide()
-        
 
-        size = QtCore.QRect(500, 500, btn.width() - 1, 30)
+        size = QtCore.QRect(500, 500, btn.width() - 1, 36)
         self.img1 = QtWidgets.QLabel(self.centralwidget)
         self.img1.setGeometry(size)
         self.img1.setScaledContents(True)
-        self.img1.setPixmap(QtGui.QPixmap("images/сorner1.png"))
+        self.img1.setPixmap(QtGui.QPixmap("images/user_table_corner.svg"))
         self.img1.setObjectName("img1")
 
         self.img2 = QtWidgets.QLabel(self.centralwidget)
         self.img2.setGeometry(size)
         self.img2.setScaledContents(True)
-        self.img2.setPixmap(QtGui.QPixmap("images/сorner1.png"))
+        self.img2.setPixmap(QtGui.QPixmap("images/user_table_corner.svg"))
         self.img2.setObjectName("img2")
 
         self.img3 = QtWidgets.QLabel(self.centralwidget)
         self.img3.setGeometry(size)
         self.img3.setScaledContents(True)
-        self.img3.setPixmap(QtGui.QPixmap("images/сorner1.png"))
+        self.img3.setPixmap(QtGui.QPixmap("images/user_table_corner.svg"))
         self.img3.setObjectName("img3")
 
         self.img4 = QtWidgets.QLabel(self.centralwidget)
         self.img4.setGeometry(size)
         self.img4.setScaledContents(True)
-        self.img4.setPixmap(QtGui.QPixmap("images/сorner1.png"))
+        self.img4.setPixmap(QtGui.QPixmap("images/user_table_corner.svg"))
         self.img4.setObjectName("img4")
 
         self.img5 = QtWidgets.QLabel(self.centralwidget)
         self.img5.setGeometry(size)
         self.img5.setScaledContents(True)
-        self.img5.setPixmap(QtGui.QPixmap("images/сorner1.png"))
+        self.img5.setPixmap(QtGui.QPixmap("images/user_table_corner.svg"))
         self.img5.setObjectName("img5")
 
         self.img6 = QtWidgets.QLabel(self.centralwidget)
         self.img6.setGeometry(size)
         self.img6.setScaledContents(True)
-        self.img6.setPixmap(QtGui.QPixmap("images/сorner1.png"))
+        self.img6.setPixmap(QtGui.QPixmap("images/user_table_corner.svg"))
         self.img6.setObjectName("img6")
 
         self.img7 = QtWidgets.QLabel(self.centralwidget)
         self.img7.setGeometry(size)
         self.img7.setScaledContents(True)
-        self.img7.setPixmap(QtGui.QPixmap("images/сorner1.png"))
+        self.img7.setPixmap(QtGui.QPixmap("images/user_table_corner.svg"))
         self.img7.setObjectName("img7")
 
         self.img8 = QtWidgets.QLabel(self.centralwidget)
         self.img8.setGeometry(size)
         self.img8.setScaledContents(True)
-        self.img8.setPixmap(QtGui.QPixmap("images/Sashe.png"))
+        self.img8.setPixmap(QtGui.QPixmap("images/user_table_corner.svg"))
         self.img8.setObjectName("img8")
+
+        self.TableWidget.show()
+        btn9 = self.TableWidget.findChild(QtWidgets.QAbstractButton)
+        self.TableWidget.hide()
+        size9 = QtCore.QRect(500, 500, btn9.width() - 1, 36)
+        self.img9 = QtWidgets.QLabel(self.centralwidget)
+        self.img9.setGeometry(size9)
+        self.img9.setScaledContents(True)
+        self.img9.setPixmap(QtGui.QPixmap("images/1table_corner.svg"))
+        self.img9.setObjectName("img9")
+        
+        self.Table_with_flat_sell_plan.show()
+        btn10 = self.Table_with_flat_sell_plan.findChild(QtWidgets.QAbstractButton)
+        self.Table_with_flat_sell_plan.hide()
+        size10 = QtCore.QRect(500, 500, btn10.width() - 1, 36)
+        self.img10 = QtWidgets.QLabel(self.centralwidget)
+        self.img10.setGeometry(size10)
+        self.img10.setScaledContents(True)
+        self.img10.setPixmap(QtGui.QPixmap("images/monster_table_corner.svg"))
+        self.img10.setObjectName("img10")
+
+        self.main_table_necessary_percents.show()
+        btn11 = self.main_table_necessary_percents.findChild(QtWidgets.QAbstractButton)
+        self.main_table_necessary_percents.hide()
+        size11 = QtCore.QRect(500, 500, btn11.width() - 1, 36)
+        self.img11 = QtWidgets.QLabel(self.centralwidget)
+        self.img11.setGeometry(size11)
+        self.img11.setScaledContents(True)
+        self.img11.setPixmap(QtGui.QPixmap("images/asmr_table_corner.svg"))
+        self.img11.setObjectName("img11")
+
+        self.credit_line_chooses_evenly.show()
+        btn12 = self.credit_line_chooses_evenly.findChild(QtWidgets.QAbstractButton)
+        self.credit_line_chooses_evenly.hide()
+        size12 = QtCore.QRect(500, 500, btn12.width() - 1, 36)
+        self.img12 = QtWidgets.QLabel(self.centralwidget)
+        self.img12.setGeometry(size12)
+        self.img12.setScaledContents(True)
+        self.img12.setPixmap(QtGui.QPixmap("images/uuu.svg"))
+        self.img12.setObjectName("img12")
+
+        self.img13 = QtWidgets.QLabel(self.centralwidget)
+        self.img13.setGeometry(size12)
+        self.img13.setScaledContents(True)
+        self.img13.setPixmap(QtGui.QPixmap("images/uuu.svg"))
+        self.img13.setObjectName("img13")
+
+        self.img14 = QtWidgets.QLabel(self.centralwidget)
+        self.img14.setGeometry(size12)
+        self.img14.setScaledContents(True)
+        self.img14.setPixmap(QtGui.QPixmap("images/uuu.svg"))
+        self.img14.setObjectName("img14")

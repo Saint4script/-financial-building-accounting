@@ -536,7 +536,7 @@ class newwindow(QtWidgets.QMainWindow):
         selected_items = self.ui.listWidget.selectedItems()
 
         def check_height(height):
-            if(height > self.height()):
+            if(height > self.height() - 10):
                 message = 'Слишком много таблиц'
                 QtWidgets.QMessageBox.warning(self, 'Уведомление', message,
                                                         QtWidgets.QMessageBox.Ok)
@@ -545,53 +545,56 @@ class newwindow(QtWidgets.QMainWindow):
             return True
 
         for elem in selected_items:
-            if(elem.text() == 'Цена 1м²'):
+            if(elem.text() == 'Цена 1м²'): #9 img
                 if(check_height(current_height + self.ui.TableWidget.height() + 10 + self.ui.label_TableWidget.height() + 5)):
                     self.ui.label_TableWidget.show()
                     self.ui.label_TableWidget.move(10, current_height)
                     current_height += self.ui.label_85_percent_debt_money.height() + 5
+                    self.ui.img9.move(11, current_height + 2)
+                    self.ui.img9.show()
                     self.ui.TableWidget.show()
                     self.ui.TableWidget.move(10,current_height)
                     current_height += self.ui.TableWidget.height() + 10
                     self.ui.TableWidget.resize(1200, self.ui.TableWidget.height())
-                    #self.ui.TableWidget.adjustSize()
                 else:
                     break
-            elif(elem.text() == 'План продаж'):
+            elif(elem.text() == 'План продаж'): #10 img
                 if(check_height(current_height + self.ui.Table_with_flat_sell_plan.height() + 10 + self.ui.label_with_flat_sell_plan.height() + 5)):
                     self.ui.label_with_flat_sell_plan.show()
                     self.ui.label_with_flat_sell_plan.move(10, current_height)
                     current_height += self.ui.label_85_percent_debt_money.height() + 5
+                    self.ui.img10.move(11, current_height + 2)
+                    self.ui.img10.show()
                     self.ui.Table_with_flat_sell_plan.show()
                     self.ui.Table_with_flat_sell_plan.move(10,current_height)
                     current_height += self.ui.Table_with_flat_sell_plan.height() + 10
                     self.ui.Table_with_flat_sell_plan.resize(1200, self.ui.Table_with_flat_sell_plan.height())
-                    self.ui.labels_for_corner()
-                    #self.ui.Table_with_flat_sell_plan.adjustSize()
                 else:
                     break
             elif(elem.text() == 'Определение процентной ставки на эскроу'):
                 if(check_height(current_height + self.ui.escrow_rate.height() + 10 + self.ui.label_escrow_rate.height() + 5)):
                     self.ui.label_escrow_rate.show()
                     self.ui.label_escrow_rate.move(10, current_height)
-                    current_height += self.ui.label_85_percent_debt_money.height() + 5
+                    current_height += self.ui.label_85_percent_debt_money.height() + 5 #12img
+                    self.ui.img12.move(11, current_height + 2)
+                    self.ui.img12.show()
                     self.ui.escrow_rate.show()
                     self.ui.escrow_rate.move(10,current_height)
                     current_height += self.ui.escrow_rate.height() + 10
                     self.ui.escrow_rate.resize(1200, self.ui.escrow_rate.height())
-                    #self.ui.escrow_rate.adjustSize()
                 else:
                     break
             elif(elem.text() == "Если кредит получен единовременно в начале, то платежи по процентам за пользование заемными средствами в конце периода"):
                 if(check_height(current_height + self.ui.credit_is_got_fully_at_the_beginning.height() + 10 + self.ui.label_credit_is_got_fully_at_the_beginning.height() + 5)):
                     self.ui.label_credit_is_got_fully_at_the_beginning.show()
                     self.ui.label_credit_is_got_fully_at_the_beginning.move(10, current_height)
-                    current_height += self.ui.label_85_percent_debt_money.height() + 5
+                    current_height += self.ui.label_85_percent_debt_money.height() + 5 #12 img
+                    self.ui.img12.move(11, current_height + 2)
+                    self.ui.img12.show()
                     self.ui.credit_is_got_fully_at_the_beginning.show()
                     self.ui.credit_is_got_fully_at_the_beginning.move(10, current_height)
                     current_height += self.ui.credit_is_got_fully_at_the_beginning.height() + 10
                     self.ui.credit_is_got_fully_at_the_beginning.resize(1200, self.ui.credit_is_got_fully_at_the_beginning.height())
-                    #self.ui.credit_is_got_fully_at_the_beginning.adjustSize()
                 else:
                     break
             elif(elem.text() == "Если кредитная линия выбирается равномерно в течении срока строительства, то платежи по процентам за пользование заемными средствами в конце периода"):
@@ -599,11 +602,12 @@ class newwindow(QtWidgets.QMainWindow):
                     self.ui.label_credit_line_chooses_evenly.show()
                     self.ui.label_credit_line_chooses_evenly.move(10, current_height)
                     current_height += self.ui.label_85_percent_debt_money.height() + 5
+                    self.ui.img12.move(11, current_height + 2)                # 12 img
+                    self.ui.img12.show()
                     self.ui.credit_line_chooses_evenly.show()
                     self.ui.credit_line_chooses_evenly.move(10, current_height)
                     current_height += self.ui.credit_line_chooses_evenly.height() + 10
                     self.ui.credit_line_chooses_evenly.resize(1200, self.ui.credit_line_chooses_evenly.height())
-                    #self.ui.credit_line_chooses_evenly.adjustSize()
                 else:
                     break
             elif(elem.text() == "Если кредитная линия выбирается по мере необходимости строительного процесса, то платежи по процентам за пользование заемными средствами в конце периода"):
@@ -611,10 +615,11 @@ class newwindow(QtWidgets.QMainWindow):
                     self.ui.label_main_table_necessary_percents.show()
                     self.ui.label_main_table_necessary_percents.move(10, current_height)
                     current_height += self.ui.label_85_percent_debt_money.height() + 5
+                    self.ui.img11.move(11, current_height + 2)
+                    self.ui.img11.show()
                     self.ui.main_table_necessary_percents.show()
                     self.ui.main_table_necessary_percents.move(10, current_height)
                     self.ui.main_table_necessary_percents.resize(1200, self.ui.main_table_necessary_percents.height())
-                    #self.ui.main_table_necessary_percents.adjustSize()
                     current_height += self.ui.main_table_necessary_percents.height() + 10
                 else:
                     break
@@ -629,7 +634,6 @@ class newwindow(QtWidgets.QMainWindow):
                     self.ui.table_85_percent_debt_money.move(10, current_height)
                     self.ui.table_85_percent_debt_money.resize(900, self.ui.table_85_percent_debt_money.height())
                     self.ui.table_85_percent_debt_money.adjustSize()
-                    
                     current_height += self.ui.table_85_percent_debt_money.height() + 10
                 else:
                     break
@@ -726,7 +730,6 @@ class newwindow(QtWidgets.QMainWindow):
                     self.ui.img8.show()
                     self.ui.table_budget_money_income.show()
                     btn = self.ui.table_budget_money_income.findChildren(QtWidgets.QAbstractButton)
-                    print(btn[0].width())
                     self.ui.table_budget_money_income.move(10, current_height)
                     self.ui.table_budget_money_income.resize(900, self.ui.table_budget_money_income.height())
                     self.ui.table_budget_money_income.adjustSize()
