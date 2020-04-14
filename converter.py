@@ -588,9 +588,9 @@ class newwindow(QtWidgets.QMainWindow):
                 if(check_height(current_height + self.ui.credit_is_got_fully_at_the_beginning.height() + 10 + self.ui.label_credit_is_got_fully_at_the_beginning.height() + 5)):
                     self.ui.label_credit_is_got_fully_at_the_beginning.show()
                     self.ui.label_credit_is_got_fully_at_the_beginning.move(10, current_height)
-                    current_height += self.ui.label_85_percent_debt_money.height() + 5 #12 img
-                    self.ui.img12.move(11, current_height + 2)
-                    self.ui.img12.show()
+                    current_height += self.ui.label_85_percent_debt_money.height() + 5 #13 img
+                    self.ui.img13.move(11, current_height + 2)
+                    self.ui.img13.show()
                     self.ui.credit_is_got_fully_at_the_beginning.show()
                     self.ui.credit_is_got_fully_at_the_beginning.move(10, current_height)
                     current_height += self.ui.credit_is_got_fully_at_the_beginning.height() + 10
@@ -602,8 +602,8 @@ class newwindow(QtWidgets.QMainWindow):
                     self.ui.label_credit_line_chooses_evenly.show()
                     self.ui.label_credit_line_chooses_evenly.move(10, current_height)
                     current_height += self.ui.label_85_percent_debt_money.height() + 5
-                    self.ui.img12.move(11, current_height + 2)                # 12 img
-                    self.ui.img12.show()
+                    self.ui.img14.move(11, current_height + 2)                # 14 img
+                    self.ui.img14.show()
                     self.ui.credit_line_chooses_evenly.show()
                     self.ui.credit_line_chooses_evenly.move(10, current_height)
                     current_height += self.ui.credit_line_chooses_evenly.height() + 10
